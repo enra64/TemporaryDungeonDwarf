@@ -81,6 +81,7 @@ namespace DungeonDwarf.world
         /// <param name="newPosition"></param>
         public void Update(Vector2u newPosition)
         {
+            //commit test
             if (!tilePosition.Equals(newPosition)){
             mySprite.Position = new Vector2f(newPosition.X * mySprite.GetLocalBounds().Width, newPosition.Y * mySprite.GetLocalBounds().Height);
             tilePosition = newPosition;
