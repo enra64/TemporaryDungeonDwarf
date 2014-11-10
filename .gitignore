@@ -46,6 +46,9 @@ build/
 *.log
 *.scc
 
+#psd files
+*.psd
+
 # Visual C++ cache files
 ipch/
 *.aps

@@ -1,0 +1,65 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SFML.Graphics;
+using SFML;
+using SFML.Window;
+
+namespace DungeonDwarf
+{
+    class Player
+    {
+        public Vector2f playerPosition, playerSize;
+        private RenderWindow win;
+        private Sprite playerSprite;
+        public float Speed = 1f;
+        private float xScale = 0.8f, yScale = 0.8f;
+        private world.TileMap tileMap;
+        //constructor
+        public Player(RenderWindow _w, float _s, world.TileMap _map)
+        {
+            tileMap = _map;
+            //renderwindow 
+            win = _w;
+            //start speed
+            Speed = _s;
+            //add player texture and sprite
+            Texture playerTexture = new Texture("textures/world/earthTile.png");
+            playerSprite = new Sprite(playerTexture);
+            //scale
+            playerSprite.Scale = new Vector2f(xScale, yScale);
+            playerSize.X = playerTexture.Size.X * xScale;
+            playerSize.Y = playerTexture.Size.Y * yScale;
+            playerPosition = new Vector2f(10f, win.Size.Y / 3);
+            playerSprite.Position = playerPosition;
+        }
+
+        public void Move()
+        {
+            if (!tileMap.Collides(playerPosition, playerSize))
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.W) && playerPosition.Y > 0)
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Speed)))
+                        playerPosition.Y -= Speed;
+                if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > 0)
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Speed, 0f)))
+                        playerPosition.X -= Speed;
+                if (Keyboard.IsKeyPressed(Keyboard.Key.S) && playerPosition.Y < win.Size.Y - playerSize.Y)
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Speed)))
+                        playerPosition.Y += Speed;
+                if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < win.Size.X - playerSize.X)
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Speed, 0)))
+                        playerPosition.X += Speed;
+                playerSprite.Position = playerPosition;
+            }
+            
+        }
+
+        public void Draw()
+        {
+            win.Draw(playerSprite);
+        }
+    }
+}
