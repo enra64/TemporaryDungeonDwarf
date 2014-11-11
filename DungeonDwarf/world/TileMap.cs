@@ -19,13 +19,13 @@ namespace DungeonDwarf.world
         private Tile[,] tileArray;
         private Texture[] textureList=new Texture[3];
 
-        public TileMap(RenderWindow _w, Vector2u _t, string _lL)
+        public TileMap(RenderWindow _w, Vector2u tileAmount, string _levelLocation)
         {
             win = _w;
-            allTiles = _t;
+            allTiles = tileAmount;
             tileTypes = new int[allTiles.X, allTiles.Y];
             tileArray = new Tile[allTiles.X, allTiles.Y];
-            fillTileArray(_lL);
+            fillTileArray(_levelLocation);
             //load all textures
             loadTextures();
             //now get a tile for each of these

@@ -38,7 +38,7 @@ namespace DungeonDwarf
         /// </summary>
         public const float GLOBAL_GRAVITY = 10f;
         /// <summary>
-        /// This is an important Variable. On each update and during the Initialization (e.g. dont worry about availability)
+        /// DIS BE OF UTMOST IMPORTANCY. On each update and during the Initialization (e.g. dont worry about availability)
         /// this will get updated to contain the current offset of the view. 
         /// ALL POSITIONS _MUST_ BE RELATIVE TO THIS (except if you are sure you want to draw absolute to the window origin),
         /// meaning that if you for example want to position an enemy at top left of the currently seen view, you can not use
