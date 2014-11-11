@@ -104,7 +104,7 @@ namespace DungeonDwarf
             Console.WriteLine(t - viewOrigin);
 
             //moves the player
-            currentPlayer.Move();
+            currentPlayer.Update();
         }
 
         private static void moveView()

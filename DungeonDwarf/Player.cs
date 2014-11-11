@@ -42,7 +42,7 @@ namespace DungeonDwarf
         }
 
         // !!! x offset by view change new 0 implementing
-        public void Move()
+        public void Update()
         {
             //calculate offset
             currentOffset = win.GetView().Center.X-originalOffset;
