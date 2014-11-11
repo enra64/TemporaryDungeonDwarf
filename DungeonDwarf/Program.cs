@@ -15,6 +15,9 @@ namespace DungeonDwarf
         static View currentView;
         static world.TileMap tileMap;
         static Player currentPlayer;
+        //holds first view position
+        static float viewOrigin;
+
         static void Main(string[] args)
         {
             /*
@@ -28,7 +31,6 @@ namespace DungeonDwarf
             
             //create window
             currentRenderWindow = new RenderWindow(new VideoMode(800, 600), "Dungeon Dwarf", Styles.Default);
-
             //sets framerate to a maximum of 45; changing the value will likely result in bad things
             currentRenderWindow.SetFramerateLimit(45);
             //add event handler for klicking the X icon
@@ -65,12 +67,14 @@ namespace DungeonDwarf
         private static void Initialize(){
             //set beginning view.
             currentView = new View(new FloatRect(0, 0, 800, 600));
+            //set view origin
+            viewOrigin = currentRenderWindow.GetView().Center.X;
             /*
              * Please write your code after this comment, because rule number one is:
              * dont fuck up the view.
              */
-            //init tile map
-            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(20, 10), "world/levels/v2.oel");
+            //init tile map//trying to push new changes -.-
+            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(200, 10), "world/levels/longTest1.oel", viewOrigin);
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
         }
@@ -93,6 +97,11 @@ namespace DungeonDwarf
 
             //view testing code
             moveView();
+
+            //testing view move
+
+            float t = currentRenderWindow.GetView().Center.X;
+            Console.WriteLine(t - viewOrigin);
 
             //moves the player
             currentPlayer.Move();
