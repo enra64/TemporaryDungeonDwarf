@@ -15,6 +15,7 @@ namespace DungeonDwarf.world
     {
         public RenderWindow win;
         public Vector2u tiles;
+        public float viewOrigin;
         private int[,] tileTypes;
         private Tile[,] tileArray;
         private Texture[] textureList=new Texture[3];
@@ -22,8 +23,9 @@ namespace DungeonDwarf.world
         //tile type consts
         public const int EARTH = 0, EARTHTOP = 1, AIR = 2;
 
-        public TileMap(RenderWindow _w, Vector2u _t, string _lL)
+        public TileMap(RenderWindow _w, Vector2u _t, string _lL, float _viewOrigin)
         {
+            viewOrigin = _viewOrigin;
             win = _w;
             tiles = _t;
             tileTypes = new int[tiles.X, tiles.Y];
@@ -50,7 +52,7 @@ namespace DungeonDwarf.world
         }
 
         /// <summary>
-        /// fills tile array using maps created by ogmo
+        /// fills tile array using maps created by ogmo "ignore this"
         /// </summary>
         /// <param name="levelLocation"></param>
         private void fillTileArray(string levelLocation)
@@ -60,7 +62,7 @@ namespace DungeonDwarf.world
             var query = xDoc.Descendants("level").Select(s => new
             {
                 EARTH = s.Element("earth").Value,
-                EARTHTOP = s.Element("earthtop").Value,
+                EARTHTOP = s.Element("earthTop").Value,
                 AIR = s.Element("air").Value
             }).FirstOrDefault();
             //get strings from array, removing all linebreaks
@@ -121,8 +123,47 @@ namespace DungeonDwarf.world
             return Collides(position, size);
         }
 
+        /// <summary>
+        /// You give a float x position, and get the highest colliding y float position.
+        /// This function does not yet handle view position.
+        /// </summary>
+        /// <param name="xPosition"></param>
+        /// <returns></returns>
+        public float GetMinYAtX(float xPosition)
+        {
+            //get highest tile at x position
+            int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
+            for (int y = 0; y < tiles.Y; y++)
+            {
+                Tile t = tileArray[tilePosition[0], y];
+                if (t.collide)
+                    return t.tilePosition.Y;
+            }
+            return win.Size.Y;
+        }
+
+        /// <summary>
+        /// returns the x and y grid position your given center position lies in
+        /// </summary>
+        /// <param name="center"></param>
+        /// <returns></returns>
+        public int[] GetCurrentTile(Vector2f center)
+        {
+            for (int y = 0; y < tiles.Y; y++)
+            {
+                for (int x = 0; x < tiles.X; x++)
+                {
+                    Tile t = tileArray[x, y];
+                    if (t.getRect().Contains(center.X, center.Y))
+                        return new int[] { x, y };
+                }
+            }
+            return new int[] { -1, -1 };
+        }
+
         public void Update()
         {
+            //we need 
         }
 
         public void Draw()

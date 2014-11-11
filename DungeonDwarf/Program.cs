@@ -70,7 +70,7 @@ namespace DungeonDwarf
              * dont fuck up the view.
              */
             //init tile map
-            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(20, 10), "world/levels/v2.oel");
+            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(20, 10), "world/levels/v2.oel", 2f);
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
         }
