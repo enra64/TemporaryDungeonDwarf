@@ -15,7 +15,7 @@ namespace DungeonDwarf.world
     {
         public RenderWindow win;
         public Vector2u allTiles, tilesPerView=new Vector2u(20, 10);
-        public float viewOrigin;
+        public Vector2f viewOrigin;
         private int[,] tileTypes;
         private Tile[,] tileArray;
         private Texture[] textureList=new Texture[3];
@@ -23,7 +23,7 @@ namespace DungeonDwarf.world
         //tile type consts
         public const int EARTH = 0, EARTHTOP = 1, AIR = 2;
 
-        public TileMap(RenderWindow _w, Vector2u _t, string _lL, float _viewOrigin)
+        public TileMap(RenderWindow _w, Vector2u _t, string _lL, Vector2f _viewOrigin)
         {
             viewOrigin = _viewOrigin;
             win = _w;

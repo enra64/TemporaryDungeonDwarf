@@ -16,7 +16,7 @@ namespace DungeonDwarf
         static world.TileMap tileMap;
         static Player currentPlayer;
         //holds first view position
-        static float viewOrigin;
+        static Vector2f viewOrigin;
         static FloatRect moveableRectangle;
 
         static void Main(string[] args)
@@ -69,7 +69,7 @@ namespace DungeonDwarf
             //set beginning view.
             currentView = new View(new FloatRect(0, 0, 800, 600));
             //set view origin
-            viewOrigin = currentRenderWindow.GetView().Center.X;
+            viewOrigin = currentRenderWindow.GetView().Center;
             /*
              * Please write your code after this comment, because rule number one is:
              * dont fuck up the view.
@@ -107,7 +107,8 @@ namespace DungeonDwarf
             //testing view move
 
             float t = currentRenderWindow.GetView().Center.X;
-            Console.WriteLine(t - viewOrigin);
+            Vector2f offset = currentRenderWindow.GetView().Center-viewOrigin;
+            Console.WriteLine("X: " + offset.X + ", Y: " + offset.Y);
 
             //moves the player
             currentPlayer.Update();
