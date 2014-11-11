@@ -67,9 +67,6 @@ namespace DungeonDwarf.world
             string earth = query.EARTH.Replace("\n", String.Empty);
             string earthtop = query.EARTHTOP.Replace("\n", String.Empty);
             string air = query.AIR.Replace("\n", String.Empty);
-            /*Console.Write(earth);
-            Console.Write(earthtop);
-            Console.Write(air);*/
             //get byte arrays from strings
             System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
             byte[] earthArray = enc.GetBytes(earth);
@@ -80,7 +77,7 @@ namespace DungeonDwarf.world
             for(int y=0;y<tiles.Y;y++){
                 for (int x = 0; x < tiles.X; x++){
                     long oneDimensionalArrayPosition=y * tiles.X + x;
-                    if (earthArray[oneDimensionalArrayPosition] == 49)
+                    if (earthArray[oneDimensionalArrayPosition] == 49)//ASCII one
                         tileTypes[x, y] = EARTH;
                     else if (earthTopArray[oneDimensionalArrayPosition] == 49)
                         tileTypes[x, y] = EARTHTOP;
