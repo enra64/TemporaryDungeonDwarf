@@ -14,7 +14,7 @@ namespace DungeonDwarf.world
     class TileMap
     {
         public RenderWindow win;
-        public Vector2u tiles;
+        public Vector2u allTiles, tilesPerView=new Vector2u(20, 10);
         public float viewOrigin;
         private int[,] tileTypes;
         private Tile[,] tileArray;
@@ -27,19 +27,19 @@ namespace DungeonDwarf.world
         {
             viewOrigin = _viewOrigin;
             win = _w;
-            tiles = _t;
-            tileTypes = new int[tiles.X, tiles.Y];
-            tileArray = new Tile[tiles.X, tiles.Y];
+            allTiles = _t;
+            tileTypes = new int[allTiles.X, allTiles.Y];
+            tileArray = new Tile[allTiles.X, allTiles.Y];
             fillTileArray(_lL);
             //load all textures
             loadTextures();
             //now get a tile for each of these
-            for (int y = 0; y < tiles.Y; y++)
+            for (int y = 0; y < allTiles.Y; y++)
             {
-                for (int x = 0; x < tiles.X; x++)
+                for (int x = 0; x < allTiles.X; x++)
                 {
                     //add a tile for each array.
-                    tileArray[x, y] = new Tile(win, tiles, new Vector2u((uint)x, (uint)y), tileTypes[x, y], textureList[tileTypes[x, y]]);
+                    tileArray[x, y] = new Tile(win, allTiles, tilesPerView, new Vector2u((uint)x, (uint)y), tileTypes[x, y], textureList[tileTypes[x, y]]);
                 }
             }
         }
@@ -76,9 +76,9 @@ namespace DungeonDwarf.world
             byte[] airArray = enc.GetBytes(air);
 
             //get tiles from byte arrays
-            for(int y=0;y<tiles.Y;y++){
-                for (int x = 0; x < tiles.X; x++){
-                    long oneDimensionalArrayPosition=y * tiles.X + x;
+            for(int y=0;y<allTiles.Y;y++){
+                for (int x = 0; x < allTiles.X; x++){
+                    long oneDimensionalArrayPosition=y * allTiles.X + x;
                     if (earthArray[oneDimensionalArrayPosition] == 49)//ASCII one
                         tileTypes[x, y] = EARTH;
                     else if (earthTopArray[oneDimensionalArrayPosition] == 49)
@@ -133,7 +133,7 @@ namespace DungeonDwarf.world
         {
             //get highest tile at x position
             int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
-            for (int y = 0; y < tiles.Y; y++)
+            for (int y = 0; y < allTiles.Y; y++)
             {
                 Tile t = tileArray[tilePosition[0], y];
                 if (t.collide)
@@ -149,9 +149,9 @@ namespace DungeonDwarf.world
         /// <returns></returns>
         public int[] GetCurrentTile(Vector2f center)
         {
-            for (int y = 0; y < tiles.Y; y++)
+            for (int y = 0; y < allTiles.Y; y++)
             {
-                for (int x = 0; x < tiles.X; x++)
+                for (int x = 0; x < allTiles.X; x++)
                 {
                     Tile t = tileArray[x, y];
                     if (t.getRect().Contains(center.X, center.Y))

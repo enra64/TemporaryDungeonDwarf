@@ -25,7 +25,7 @@ namespace DungeonDwarf.world
         /// </summary>
         /// <param name="gridPosition"></param>
         /// <param name="_tileType"></param>
-        public Tile(RenderWindow _w, Vector2u _tileCount, Vector2u gridPosition, int _tileType, Texture _myTexture)
+        public Tile(RenderWindow _w, Vector2u _tileCount, Vector2u _tilePerWindowCount, Vector2u gridPosition, int _tileType, Texture _myTexture)
         {
             //decides whether to collide or not
             decideCollide(_tileType);
@@ -38,7 +38,7 @@ namespace DungeonDwarf.world
             mySprite = new Sprite(_myTexture);
             //scale sprite for 20x10 (or accordingly, value is variable) grid
             //cast EVERYTHING TO FLOAT BECAUSE BAUM THATS WHY
-            mySprite.Scale = new Vector2f(((float)win.Size.X / (float)tileCount.X) / (float)_myTexture.Size.X, ((float)win.Size.Y / (float)tileCount.Y) / (float)_myTexture.Size.Y);
+            mySprite.Scale = new Vector2f(((float)win.Size.X / (float)_tilePerWindowCount.X) / (float)_myTexture.Size.X, ((float)win.Size.Y / (float)_tilePerWindowCount.Y) / (float)_myTexture.Size.Y);
             //set position correctly (hopefully at least)
             //pos calculation: tileposition * texturesize * scaling
             mySprite.Position = new Vector2f((float)tilePosition.X * _myTexture.Size.X * mySprite.Scale.X, (float)tilePosition.Y * _myTexture.Size.Y * mySprite.Scale.Y);

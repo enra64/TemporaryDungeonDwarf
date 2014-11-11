@@ -17,6 +17,7 @@ namespace DungeonDwarf
         static Player currentPlayer;
         //holds first view position
         static float viewOrigin;
+        static FloatRect moveableRectangle;
 
         static void Main(string[] args)
         {
@@ -77,6 +78,11 @@ namespace DungeonDwarf
             tileMap = new world.TileMap(currentRenderWindow, new Vector2u(200, 10), "world/levels/longTest1.oel", viewOrigin);
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
+
+            //create a rectangle the player can move in without changing the view
+            Vector2f tempCurrentPlayerCenter=currentPlayer.GetCenter();
+            //this is said rectangle
+            moveableRectangle = new FloatRect(tempCurrentPlayerCenter.X - currentRenderWindow.Size.X / 6, tempCurrentPlayerCenter.Y - currentRenderWindow.Size.Y / 4, currentRenderWindow.Size.X / 3, currentRenderWindow.Size.Y / 2);
         }
 
         /// <summary>
@@ -95,7 +101,7 @@ namespace DungeonDwarf
             //currentRenderWindow.SetView(currentView);
             tileMap.Update();
 
-            //view testing code
+            //move view with player
             moveView();
 
             //testing view move
@@ -109,13 +115,30 @@ namespace DungeonDwarf
 
         private static void moveView()
         {
-            if (Keyboard.IsKeyPressed(Keyboard.Key.K))
-            {
-                currentView.Move(new Vector2f(-10f, 0));
-            }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.L))
-            {
-                currentView.Move(new Vector2f(10f, 0));
+            //get player center
+            Vector2f playerCenter = currentPlayer.GetCenter();
+            //player left rectangle
+            if (!moveableRectangle.Contains(playerCenter.X, playerCenter.Y)){
+                //create offset variable for easier handling
+                Vector2f offset = new Vector2f(0, 0);
+                //decide below, above, left, right
+                //check below
+                if (playerCenter.Y > moveableRectangle.Top + moveableRectangle.Height)
+                    offset.Y += Player.MOVE_SPEED;
+                //check above
+                if (playerCenter.Y < moveableRectangle.Top)
+                    offset.Y -= Player.MOVE_SPEED;
+                //check right of
+                if (playerCenter.X > moveableRectangle.Left + moveableRectangle.Width)
+                    offset.X += Player.MOVE_SPEED;
+                //check left of
+                if (playerCenter.X < moveableRectangle.Left)
+                    offset.X -= Player.MOVE_SPEED;
+
+                //offset rectangle and view
+                moveableRectangle.Left += offset.X;
+                moveableRectangle.Top += offset.Y;
+                currentView.Move(offset);
             }
         }
 
@@ -132,6 +155,14 @@ namespace DungeonDwarf
              * What is draw-called first, will be at most backgroundy, so think about where you place your calls.
              * BEGIN
              */
+            //DEBUG
+            RectangleShape r = new RectangleShape(new Vector2f(moveableRectangle.Width, moveableRectangle.Height));
+            r.Position = new Vector2f(moveableRectangle.Left, moveableRectangle.Top);
+            r.FillColor = Color.Transparent;
+            r.OutlineColor = Color.Green;
+            r.OutlineThickness = 2f;
+            currentRenderWindow.Draw(r);
+            //DEBUG CALL END
             currentPlayer.Draw();
             /*END
              * Doing last call, do not call anything after this

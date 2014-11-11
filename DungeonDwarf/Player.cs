@@ -14,7 +14,7 @@ namespace DungeonDwarf
         public Vector2f playerPosition, playerSize;
         private RenderWindow win;
         private Sprite playerSprite;
-        private const float SPEED = 10f;
+        public const float MOVE_SPEED = 10f;//public for main by arne
         private const float GRAVITY = 5f;
         private const float JUMP_SPEED = 15f;
         private float xScale = 0.8f, yScale = 0.8f;
@@ -37,8 +37,17 @@ namespace DungeonDwarf
             playerSprite.Scale = new Vector2f(xScale, yScale);
             playerSize.X = playerTexture.Size.X * xScale;
             playerSize.Y = playerTexture.Size.Y * yScale;
-            playerPosition = new Vector2f(10f, 270f);
+            playerPosition = new Vector2f(270f, 270f);
             playerSprite.Position = playerPosition;
+        }
+
+        /// <summary>
+        /// Returns the center of the player
+        /// </summary>
+        /// <returns></returns>
+        public Vector2f GetCenter()
+        {
+            return new Vector2f(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
         }
 
         // !!! x offset by view change new 0 implementing
@@ -53,11 +62,11 @@ namespace DungeonDwarf
                 //    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Speed)))
                 //        playerPosition.Y += Speed;
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-SPEED, 0f)))
-                        playerPosition.X -= SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-MOVE_SPEED, 0f)))
+                        playerPosition.X -= MOVE_SPEED;
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset) - playerSize.X)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(SPEED, 0)))
-                        playerPosition.X += SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(MOVE_SPEED, 0)))
+                        playerPosition.X += MOVE_SPEED;
                 
                 //jump
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > 0)
