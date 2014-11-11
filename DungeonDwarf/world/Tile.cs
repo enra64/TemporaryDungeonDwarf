@@ -47,7 +47,6 @@ namespace DungeonDwarf.world
 
         public FloatRect getRect()
         {
-            
             FloatRect globalBounds = mySprite.GetGlobalBounds();
             globalBounds.Left = mySprite.Position.X;
             globalBounds.Top = mySprite.Position.Y;
