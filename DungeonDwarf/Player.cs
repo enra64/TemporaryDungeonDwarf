@@ -66,20 +66,20 @@ namespace DungeonDwarf
                 //    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Speed)))
                 //        playerPosition.Y += Speed;
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.MOVE_SPEED, 0f)))
-                        playerPosition.X -= Global.MOVE_SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f)))
+                        playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.MOVE_SPEED, 0)))
-                        playerPosition.X += Global.MOVE_SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0)))
+                        playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
                 
                 //jump
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > currentOffset.Y)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.JUMP_SPEED)))
-                        playerPosition.Y -= Global.JUMP_SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
+                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
 
                 //Gravity stuff
-                if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GRAVITY)))
-                    playerPosition.Y += Global.GRAVITY;
+                if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
+                    playerPosition.Y += Global.GLOBAL_GRAVITY;
                 
                 playerSprite.Position = playerPosition;
             }
