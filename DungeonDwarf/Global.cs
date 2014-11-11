@@ -8,6 +8,8 @@ namespace DungeonDwarf
 {
     class Global
     {
+        //global = public constant dump
+        
         public const float MOVE_SPEED = 10f;
         public const float GRAVITY = 5f;
         public const float JUMP_SPEED = 15f;
