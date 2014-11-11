@@ -40,13 +40,13 @@ namespace DungeonDwarf.world
             //cast EVERYTHING TO FLOAT BECAUSE BAUM THATS WHY
             mySprite.Scale = new Vector2f(((float)win.Size.X / (float)tileCount.X) / (float)_myTexture.Size.X, ((float)win.Size.Y / (float)tileCount.Y) / (float)_myTexture.Size.Y);
             //set position correctly (hopefully at least)
+            //pos calculation: tileposition * texturesize * scaling
             mySprite.Position = new Vector2f((float)tilePosition.X * _myTexture.Size.X * mySprite.Scale.X, (float)tilePosition.Y * _myTexture.Size.Y * mySprite.Scale.Y);
             //debugging
             //mySprite.Position = new Vector2f(20f, 20f);
         }
 
-        public FloatRect getRect()
-        {
+        public FloatRect getRect(){
             FloatRect globalBounds = mySprite.GetGlobalBounds();
             globalBounds.Left = mySprite.Position.X;
             globalBounds.Top = mySprite.Position.Y;
@@ -82,8 +82,8 @@ namespace DungeonDwarf.world
         {
             //commit test
             if (!tilePosition.Equals(newPosition)){
-            mySprite.Position = new Vector2f(newPosition.X * mySprite.GetLocalBounds().Width, newPosition.Y * mySprite.GetLocalBounds().Height);
-            tilePosition = newPosition;
+                mySprite.Position = new Vector2f(newPosition.X * mySprite.GetLocalBounds().Width, newPosition.Y * mySprite.GetLocalBounds().Height);
+                tilePosition = newPosition;
             }
         }
 

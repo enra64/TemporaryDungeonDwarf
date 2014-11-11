@@ -15,6 +15,7 @@ namespace DungeonDwarf.world
     {
         public RenderWindow win;
         public Vector2u tiles;
+        public float viewOrigin;
         private int[,] tileTypes;
         private Tile[,] tileArray;
         private Texture[] textureList=new Texture[3];
@@ -22,8 +23,9 @@ namespace DungeonDwarf.world
         //tile type consts
         public const int EARTH = 0, EARTHTOP = 1, AIR = 2;
 
-        public TileMap(RenderWindow _w, Vector2u _t, string _lL)
+        public TileMap(RenderWindow _w, Vector2u _t, string _lL, float _viewOrigin)
         {
+            viewOrigin = _viewOrigin;
             win = _w;
             tiles = _t;
             tileTypes = new int[tiles.X, tiles.Y];
@@ -60,7 +62,7 @@ namespace DungeonDwarf.world
             var query = xDoc.Descendants("level").Select(s => new
             {
                 EARTH = s.Element("earth").Value,
-                EARTHTOP = s.Element("earthtop").Value,
+                EARTHTOP = s.Element("earthTop").Value,
                 AIR = s.Element("air").Value
             }).FirstOrDefault();
             //get strings from array, removing all linebreaks
@@ -164,6 +166,7 @@ namespace DungeonDwarf.world
 
         public void Update()
         {
+            //we need 
         }
 
         public void Draw()

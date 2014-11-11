@@ -59,6 +59,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="textures\world\earthTileTop.psd" />
+    <None Include="world\levels\longTest1.oel">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="world\levels\v1.oel">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

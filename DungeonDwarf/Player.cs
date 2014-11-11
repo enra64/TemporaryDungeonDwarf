@@ -18,10 +18,15 @@ namespace DungeonDwarf
         private const float GRAVITY = 5f;
         private float xScale = 0.8f, yScale = 0.8f;
         private world.TileMap tileMap;
+        private float currentOffset, originalOffset;
+        
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
         {
             tileMap = _map;
+            //enable offset calculation: get view origin from tilemap
+            originalOffset = tileMap.viewOrigin;
+
             //renderwindow 
             win = _w;
             //add player texture and sprite
@@ -35,18 +40,20 @@ namespace DungeonDwarf
             playerSprite.Position = playerPosition;
         }
 
-        public void Move()
+        public void Update()
         {
-            if (!tileMap.Collides(playerPosition, playerSize))
-            {   
-                //down commented out
+            //calculate offset
+            currentOffset = win.GetView().Center.X-originalOffset;
+
+            if (!tileMap.Collides(playerPosition, playerSize)){
+                //down movement commented out
                 //if (Keyboard.IsKeyPressed(Keyboard.Key.S) && playerPosition.Y < win.Size.Y - playerSize.Y)
                 //    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Speed)))
                 //        playerPosition.Y += Speed;
-                if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > 0)
+                if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-SPEED, 0f)))
                         playerPosition.X -= SPEED;
-                if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < win.Size.X - playerSize.X)
+                if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset) - playerSize.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(SPEED, 0)))
                         playerPosition.X += SPEED;
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > 0)
