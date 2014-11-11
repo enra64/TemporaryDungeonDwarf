@@ -64,7 +64,7 @@ namespace DungeonDwarf
         /// </summary>
         private static void Initialize(){
             //set beginning view.
-            //currentView = new View(new FloatRect(0, 0, 400, 400));
+            currentView = new View(new FloatRect(0, 0, 800, 600));
             /*
              * Please write your code after this comment, because rule number one is:
              * dont fuck up the view.
@@ -91,8 +91,23 @@ namespace DungeonDwarf
             //currentRenderWindow.SetView(currentView);
             tileMap.Update();
 
+            //view testing code
+            moveView();
+
             //moves the player
             currentPlayer.Move();
+        }
+
+        private static void moveView()
+        {
+            if (Keyboard.IsKeyPressed(Keyboard.Key.K))
+            {
+                currentView.Move(new Vector2f(-10f, 0));
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.L))
+            {
+                currentView.Move(new Vector2f(10f, 0));
+            }
         }
 
         /// <summary>
@@ -101,6 +116,7 @@ namespace DungeonDwarf
         private static void Draw(){
             //clear window
             currentRenderWindow.Clear(new Color(0, 153, 153));
+            currentRenderWindow.SetView(currentView);
             tileMap.Draw();
             /*
              * Your drawing calls may begin only now.
