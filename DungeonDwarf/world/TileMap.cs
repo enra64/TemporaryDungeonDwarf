@@ -20,9 +20,6 @@ namespace DungeonDwarf.world
         private Tile[,] tileArray;
         private Texture[] textureList=new Texture[3];
 
-        //tile type consts
-        public const int EARTH = 0, EARTHTOP = 1, AIR = 2;
-
         public TileMap(RenderWindow _w, Vector2u _t, string _lL, Vector2f _viewOrigin)
         {
             viewOrigin = _viewOrigin;
@@ -44,11 +41,14 @@ namespace DungeonDwarf.world
             }
         }
 
+        /// <summary>
+        /// Load all textures here.
+        /// </summary>
         private void loadTextures()
         {
-            textureList[0] = new Texture("textures/world/earthTile.png");
-            textureList[1] = new Texture("textures/world/earthTileTop.png");
-            textureList[2] = new Texture("textures/world/air.png");
+            textureList[Tile.EARTH_TILE] = new Texture("textures/world/earthTile.png");
+            textureList[Tile.EARTH_TOP_TILE] = new Texture("textures/world/earthTileTop.png");
+            textureList[Tile.AIR_TILE] = new Texture("textures/world/air.png");
         }
 
         /// <summary>
@@ -80,13 +80,13 @@ namespace DungeonDwarf.world
                 for (int x = 0; x < allTiles.X; x++){
                     long oneDimensionalArrayPosition=y * allTiles.X + x;
                     if (earthArray[oneDimensionalArrayPosition] == 49)//ASCII one
-                        tileTypes[x, y] = EARTH;
+                        tileTypes[x, y] = Tile.EARTH_TILE;
                     else if (earthTopArray[oneDimensionalArrayPosition] == 49)
-                        tileTypes[x, y] = EARTHTOP;
+                        tileTypes[x, y] = Tile.EARTH_TOP_TILE;
                     else if (airArray[oneDimensionalArrayPosition] == 49)
-                        tileTypes[x, y] = AIR;
+                        tileTypes[x, y] = Tile.AIR_TILE;
                     else
-                        tileTypes[x, y] = AIR;
+                        tileTypes[x, y] = Tile.AIR_TILE;
                 }
             }
             
@@ -104,7 +104,7 @@ namespace DungeonDwarf.world
         {
             FloatRect aRect = new FloatRect(position.X, position.Y, size.X, size.Y);
             foreach (Tile t in tileArray)
-                if (aRect.Intersects(t.getRect()) && t.collide)
+                if (aRect.Intersects(t.getRect()) && t.Collidable)
                     return true;
             return false;
         }
@@ -136,8 +136,8 @@ namespace DungeonDwarf.world
             for (int y = 0; y < allTiles.Y; y++)
             {
                 Tile t = tileArray[tilePosition[0], y];
-                if (t.collide)
-                    return t.tilePosition.Y;
+                if (t.Collidable)
+                    return t.GridPosition.Y;
             }
             return win.Size.Y;
         }

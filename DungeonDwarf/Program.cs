@@ -98,31 +98,27 @@ namespace DungeonDwarf
         /// It is thus called in each main loop iteration.
         /// </summary>
         private static void Update(){
-            //currentRenderWindow.SetView(currentView);
+            //update tile map, should probably stay first call of function
             tileMap.Update();
-
             //move view with player
             moveView();
-
-            //testing view move
-
-            float t = currentRenderWindow.GetView().Center.X;
-            Vector2f offset = currentRenderWindow.GetView().Center-viewOrigin;
-            Console.WriteLine("X: " + offset.X + ", Y: " + offset.Y);
 
             //moves the player
             currentPlayer.Update();
         }
 
+        /// <summary>
+        /// moves the view according to the player position.
+        /// If the player only moves a small amount, we do not move.
+        /// </summary>
         private static void moveView()
         {
             //get player center
             Vector2f playerCenter = currentPlayer.GetCenter();
-            //player left rectangle
+            //player is in the rectangle no more
             if (!moveableRectangle.Contains(playerCenter.X, playerCenter.Y)){
                 //create offset variable for easier handling
                 Vector2f offset = new Vector2f(0, 0);
-                //decide below, above, left, right
                 //check below
                 if (playerCenter.Y > moveableRectangle.Top + moveableRectangle.Height)
                     offset.Y += Player.MOVE_SPEED;
@@ -147,28 +143,44 @@ namespace DungeonDwarf
         /// Draws everything. This is also called each game tick.
         /// </summary>
         private static void Draw(){
+            /*
+             * HE WHO DOES NOT READ THE STARRY COMMENTS (aka oneliners are _mostly_ unimportant) SHALL BE SLAIN
+             * TO DEATH
+             * AND STUFF
+             */
             //clear window
             currentRenderWindow.Clear(new Color(0, 153, 153));
+            //apply view to window
             currentRenderWindow.SetView(currentView);
+            //draw map/level
             tileMap.Draw();
             /*
              * Your drawing calls may begin only now.
-             * What is draw-called first, will be at most backgroundy, so think about where you place your calls.
-             * BEGIN
+             * What is draw-called first, will be most backgroundy, so think about where you place your calls.
+             * BEGIN YOUR CALLS AFTER THIS
              */
+            
+            currentPlayer.Draw();
+            /* END YOUR CALLS HERE
+             * Doing last call, do not call anything after this
+             */
+            currentRenderWindow.Display();
+        }
+
+        //you can ignore this function
+        private void MovementRectDebug()
+        {
             //DEBUG
+            float t = currentRenderWindow.GetView().Center.X;
+            Vector2f offset = currentRenderWindow.GetView().Center - viewOrigin;
+            Console.WriteLine("X: " + offset.X + ", Y: " + offset.Y);
+
             RectangleShape r = new RectangleShape(new Vector2f(moveableRectangle.Width, moveableRectangle.Height));
             r.Position = new Vector2f(moveableRectangle.Left, moveableRectangle.Top);
             r.FillColor = Color.Transparent;
             r.OutlineColor = Color.Green;
             r.OutlineThickness = 2f;
             currentRenderWindow.Draw(r);
-            //DEBUG CALL END
-            currentPlayer.Draw();
-            /*END
-             * Doing last call, do not call anything after this
-             */
-            currentRenderWindow.Display();
         }
     }
 }
