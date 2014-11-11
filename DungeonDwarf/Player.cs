@@ -38,6 +38,11 @@ namespace DungeonDwarf
             playerSize.Y = playerTexture.Size.Y * yScale;
             playerPosition = new Vector2f(270f, 270f);
             playerSprite.Position = playerPosition;
+        
+            ////animated sprite
+            //Texture playerTexture = new Texture("textures/world/earthTile.png");
+            //enum direction {jump, left, right};
+        
         }
 
         /// <summary>
