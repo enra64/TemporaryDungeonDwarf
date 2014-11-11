@@ -12,6 +12,8 @@ namespace DungeonDwarf
     class Player
     {
         public Vector2f playerPosition, playerSize;
+        
+        //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
         private Sprite playerSprite;
         private float xScale = 0.8f, yScale = 0.8f;
