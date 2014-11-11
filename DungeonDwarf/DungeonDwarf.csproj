@@ -33,13 +33,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="sfmlnet-audio-2">
-      <HintPath>..\..\..\..\Downloads\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-audio-2.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\lib\sfmlnet-audio-2.dll</HintPath>
     </Reference>
     <Reference Include="sfmlnet-graphics-2">
-      <HintPath>..\..\..\..\Downloads\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-graphics-2.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\lib\sfmlnet-graphics-2.dll</HintPath>
     </Reference>
     <Reference Include="sfmlnet-window-2">
-      <HintPath>..\..\..\..\Downloads\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-window-2.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\lib\sfmlnet-window-2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,10 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="textures\world\earthTileTop.psd" />
-    <None Include="world\levels\longTest1.oel">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="world\levels\v1.oel">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -70,21 +66,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="csfml-audio-2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-graphics-2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-window-2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="libsndfile-1.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="openal32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="textures\world\air.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
