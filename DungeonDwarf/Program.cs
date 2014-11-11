@@ -121,16 +121,16 @@ namespace DungeonDwarf
                 Vector2f offset = new Vector2f(0, 0);
                 //check below
                 if (playerCenter.Y > moveableRectangle.Top + moveableRectangle.Height)
-                    offset.Y += Player.MOVE_SPEED;
+                    offset.Y += Global.MOVE_SPEED;
                 //check above
                 if (playerCenter.Y < moveableRectangle.Top)
-                    offset.Y -= Player.MOVE_SPEED;
+                    offset.Y -= Global.MOVE_SPEED;
                 //check right of
                 if (playerCenter.X > moveableRectangle.Left + moveableRectangle.Width)
-                    offset.X += Player.MOVE_SPEED;
+                    offset.X += Global.MOVE_SPEED;
                 //check left of
                 if (playerCenter.X < moveableRectangle.Left)
-                    offset.X -= Player.MOVE_SPEED;
+                    offset.X -= Global.MOVE_SPEED;
 
                 //offset rectangle and view
                 moveableRectangle.Left += offset.X;

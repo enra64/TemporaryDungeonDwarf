@@ -14,9 +14,6 @@ namespace DungeonDwarf
         public Vector2f playerPosition, playerSize;
         private RenderWindow win;
         private Sprite playerSprite;
-        public const float MOVE_SPEED = 10f;//public for main by arne
-        private const float GRAVITY = 5f;
-        private const float JUMP_SPEED = 15f;
         private float xScale = 0.8f, yScale = 0.8f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
@@ -50,7 +47,7 @@ namespace DungeonDwarf
             return new Vector2f(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
         }
 
-        // !!! x offset by view change new 0 implementing
+        
         public void Update()
         {
             //calculate offset
@@ -62,20 +59,20 @@ namespace DungeonDwarf
                 //    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Speed)))
                 //        playerPosition.Y += Speed;
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-MOVE_SPEED, 0f)))
-                        playerPosition.X -= MOVE_SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.MOVE_SPEED, 0f)))
+                        playerPosition.X -= Global.MOVE_SPEED;
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(MOVE_SPEED, 0)))
-                        playerPosition.X += MOVE_SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.MOVE_SPEED, 0)))
+                        playerPosition.X += Global.MOVE_SPEED;
                 
                 //jump
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > currentOffset.Y)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -JUMP_SPEED)))
-                        playerPosition.Y -= JUMP_SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.JUMP_SPEED)))
+                        playerPosition.Y -= Global.JUMP_SPEED;
 
                 //Gravity stuff
-                if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, GRAVITY)))
-                        playerPosition.Y += GRAVITY;
+                if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GRAVITY)))
+                    playerPosition.Y += Global.GRAVITY;
                 
                 playerSprite.Position = playerPosition;
             }
