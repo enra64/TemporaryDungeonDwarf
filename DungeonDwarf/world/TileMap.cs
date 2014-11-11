@@ -15,14 +15,12 @@ namespace DungeonDwarf.world
     {
         public RenderWindow win;
         public Vector2u allTiles, tilesPerView=new Vector2u(20, 10);
-        public Vector2f viewOrigin;
         private int[,] tileTypes;
         private Tile[,] tileArray;
         private Texture[] textureList=new Texture[3];
 
-        public TileMap(RenderWindow _w, Vector2u _t, string _lL, Vector2f _viewOrigin)
+        public TileMap(RenderWindow _w, Vector2u _t, string _lL)
         {
-            viewOrigin = _viewOrigin;
             win = _w;
             allTiles = _t;
             tileTypes = new int[allTiles.X, allTiles.Y];

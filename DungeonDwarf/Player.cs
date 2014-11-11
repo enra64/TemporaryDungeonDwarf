@@ -25,7 +25,8 @@ namespace DungeonDwarf
         {
             tileMap = _map;
             //enable offset calculation: get view origin from tilemap
-            originalOffset = tileMap.viewOrigin;
+            //originalOffset = tileMap.viewOrigin;
+            originalOffset = Global.BEGIN_WINDOW_ORIGIN;
 
             //renderwindow 
             win = _w;
@@ -57,8 +58,8 @@ namespace DungeonDwarf
         
         public void Update()
         {
-            //calculate offset
-            currentOffset = win.GetView().Center-originalOffset;
+            //get offset
+            currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
             if (!tileMap.Collides(playerPosition, playerSize)){
                 //down movement commented out
@@ -83,7 +84,6 @@ namespace DungeonDwarf
                 
                 playerSprite.Position = playerPosition;
             }
-            
         }
 
         public void Draw()

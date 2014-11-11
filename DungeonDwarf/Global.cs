@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DungeonDwarf
 {
-    class Global
+    static class Global
     {
         //global = public constant dump
         /* 
@@ -26,15 +26,17 @@ namespace DungeonDwarf
         /// <summary>
         /// Speed to propel upwards during jumps by player
         /// </summary>
-        public const float PLAYER_JUMP_SPEED = 15f;
+        public const float PLAYER_JUMP_SPEED = 25f;
 
         /*
          * GLOBAL CONFIGURATION VARIABLES
+         * Hint: Due to the fact that these Variables are static, you neither can nor need to
+         * instance this class to access them.
          */
         /// <summary>
         /// Gravity that is supposed to be used by everyone.
         /// </summary>
-        public const float GLOBAL_GRAVITY = 5f;
+        public const float GLOBAL_GRAVITY = 10f;
         /// <summary>
         /// This is an important Variable. On each update and during the Initialization (e.g. dont worry about availability)
         /// this will get updated to contain the current offset of the view. 
@@ -42,6 +44,11 @@ namespace DungeonDwarf
         /// meaning that if you for example want to position an enemy at top left of the currently seen view, you can not use
         /// position(0,0), but have to use position(CURRENT_WINDOW_ORIGIN.X, CURRENT_WINDOW_ORIGIN.Y)
         /// </summary>
-        public Vector2f CURRENT_WINDOW_ORIGIN;
+        public static Vector2f CURRENT_WINDOW_ORIGIN;
+        /// <summary>
+        /// This stores the original window origin, you should be able to use CURRENT_WINDOW_ORIGIN instead to save on
+        /// calculations
+        /// </summary>
+        public static Vector2f BEGIN_WINDOW_ORIGIN;
     }
 }

@@ -68,14 +68,17 @@ namespace DungeonDwarf
         private static void Initialize(){
             //set beginning view.
             currentView = new View(new FloatRect(0, 0, 800, 600));
-            //set view origin
-            viewOrigin = currentRenderWindow.GetView().Center;
+            //set view origin and current in static global class
+            Global.BEGIN_WINDOW_ORIGIN = currentRenderWindow.GetView().Center;
+            Global.CURRENT_WINDOW_ORIGIN = currentRenderWindow.GetView().Center;
             /*
              * Please write your code after this comment, because rule number one is:
              * dont fuck up the view.
+             * rule number two, by the way, is: Sometimes I do do mistakes, but please
+             * think twice before adding you calls before this comment
              */
             //init tile map//trying to push new changes -.-
-            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(200, 10), "world/levels/longTest1.oel", viewOrigin);
+            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(200, 10), "world/levels/longTest1.oel");
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
@@ -102,7 +105,8 @@ namespace DungeonDwarf
             tileMap.Update();
             //move view with player
             moveView();
-
+            //store current offset in global
+            Global.CURRENT_WINDOW_ORIGIN=currentView.Center-Global.BEGIN_WINDOW_ORIGIN;
             //moves the player
             currentPlayer.Update();
         }
