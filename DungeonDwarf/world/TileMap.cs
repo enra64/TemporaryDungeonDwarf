@@ -29,11 +29,9 @@ namespace DungeonDwarf.world
             //load all textures
             loadTextures();
             //now get a tile for each of these
-            for (int y = 0; y < allTiles.Y; y++)
-            {
-                for (int x = 0; x < allTiles.X; x++)
-                {
-                    //add a tile for each array.
+            for (int y = 0; y < allTiles.Y; y++){
+                for (int x = 0; x < allTiles.X; x++){
+                    //add a tile for each array position.
                     tileArray[x, y] = new Tile(win, allTiles, tilesPerView, new Vector2u((uint)x, (uint)y), tileTypes[x, y], textureList[tileTypes[x, y]]);
                 }
             }
@@ -50,7 +48,7 @@ namespace DungeonDwarf.world
         }
 
         /// <summary>
-        /// fills tile array using maps created by ogmo "ignore this"
+        /// fills tile array using maps created by ogmo
         /// </summary>
         /// <param name="levelLocation"></param>
         private void fillTileArray(string levelLocation)
@@ -161,7 +159,7 @@ namespace DungeonDwarf.world
 
         public void Update()
         {
-            //we need 
+            //well the tilemap basically does not get updated at this point anymore...
         }
 
         public void Draw()
