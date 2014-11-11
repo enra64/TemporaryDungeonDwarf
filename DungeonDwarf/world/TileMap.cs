@@ -52,7 +52,7 @@ namespace DungeonDwarf.world
         }
 
         /// <summary>
-        /// fills tile array using maps created by ogmo
+        /// fills tile array using maps created by ogmo "ignore this"
         /// </summary>
         /// <param name="levelLocation"></param>
         private void fillTileArray(string levelLocation)

@@ -16,6 +16,7 @@ namespace DungeonDwarf
         private Sprite playerSprite;
         private const float SPEED = 10f;
         private const float GRAVITY = 5f;
+        private const float JUMP_SPEED = 15f;
         private float xScale = 0.8f, yScale = 0.8f;
         private world.TileMap tileMap;
         private float currentOffset, originalOffset;
@@ -40,7 +41,8 @@ namespace DungeonDwarf
             playerSprite.Position = playerPosition;
         }
 
-        public void Update()
+        // !!! x offset by view change new 0 implementing
+        public void Move()
         {
             //calculate offset
             currentOffset = win.GetView().Center.X-originalOffset;
@@ -56,9 +58,11 @@ namespace DungeonDwarf
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset) - playerSize.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(SPEED, 0)))
                         playerPosition.X += SPEED;
+                
+                //jump
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > 0)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -SPEED)))
-                        playerPosition.Y -= SPEED;
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -JUMP_SPEED)))
+                        playerPosition.Y -= JUMP_SPEED;
 
                 //Gravity stuff
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, GRAVITY)))
