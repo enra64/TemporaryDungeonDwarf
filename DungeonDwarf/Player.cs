@@ -98,9 +98,10 @@ namespace DungeonDwarf
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
                         textureVector.X = 0;
                         textureVector.Y = 0;
-                        delayedTexture(1000, ()=> textureVector.X = 1);
-                        delayedTexture(2000, ()=> textureVector.X = 2);
-                        delayedTexture(3000, ()=> textureVector.X = 3);
+                        delayedTexture(250, ()=> textureVector.X = 1);
+                        delayedTexture(500, ()=> textureVector.X = 2);
+                        delayedTexture(750, ()=> textureVector.X = 3);
+                        delayedTexture(1000, ()=> textureVector.X = 0);
                       
                     }
                 
@@ -110,9 +111,10 @@ namespace DungeonDwarf
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
                         textureVector.X = 0;
                         textureVector.Y = 1;
-                        delayedTexture(1000, ()=> textureVector.X = 1);
-                        delayedTexture(2000, ()=> textureVector.X = 2);
-                        delayedTexture(3000, ()=> textureVector.X = 3);
+                        delayedTexture(250, ()=> textureVector.X = 1);
+                        delayedTexture(500, ()=> textureVector.X = 2);
+                        delayedTexture(750, ()=> textureVector.X = 3);
+                        delayedTexture(1000, ()=> textureVector.X = 0);
                     }
                
                 //jump
