@@ -18,6 +18,7 @@ namespace DungeonDwarf.world
         public Vector2u allTiles, tilesPerView=new Vector2u(20, 10);
         private int[,] tileTypes;
         private Tile[,] tileArray;
+        private bool[,] Collidable;
         private Texture[] textureList=new Texture[3];
         private Texture textureMap=new Texture("textures/world/tilemap.png");
         private VertexArray tileMap;
@@ -27,6 +28,7 @@ namespace DungeonDwarf.world
             allTiles = tileAmount;
             tileTypes = new int[allTiles.X, allTiles.Y];
             tileArray = new Tile[allTiles.X, allTiles.Y];
+            Collidable = new bool[allTiles.X, allTiles.Y];
             fillTileArray(_levelLocation);
             //load all textures
             loadTextures();
@@ -52,13 +54,16 @@ namespace DungeonDwarf.world
                     switch (tileTypes[x, y])
                     {
                         case Global.EARTH_TILE:
+                            Collidable[x, y] = true;
                             xOffset = 100;
                             break;
                         case Global.EARTH_TOP_TILE:
                             xOffset = 200;
+                            Collidable[x, y] = true;
                             break;
                         default:
                             xOffset = 0;
+                            Collidable[x, y] = false;
                             break;
                     }
 
