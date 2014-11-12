@@ -6,7 +6,6 @@ using System;
 using System.Text;
 using System.Timers;
 
-
 namespace DungeonDwarf
 {
     class Player
@@ -22,10 +21,7 @@ namespace DungeonDwarf
 
 
         //animated sprite
-        enum direction {jump, left, right};
         private Vector2i textureVector = new Vector2i(1, 1);
-        private static Timer animTimer = new Timer(3000);
-        
 
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
@@ -60,6 +56,11 @@ namespace DungeonDwarf
         }
 
         //confusing stuff -> timer "=>" what is this doing???
+        /// <summary>
+        /// int delay 1000 = 1 sec
+        /// After 1 sec it does any Action
+        /// </summary>
+        /// <returns></returns>
         private void delayedTexture(int delay, Action action)
         {
             Timer timer = new Timer();
@@ -71,7 +72,10 @@ namespace DungeonDwarf
             };
             timer.Start();
         }
-        
+        /// <summary>
+        /// Update for Player
+        /// </summary>
+        /// <returns></returns>
         public void Update()
         {
             
@@ -85,12 +89,7 @@ namespace DungeonDwarf
 
             playerSprite.Position = playerPosition;
             
-            //Timer for anim
-            animTimer.AutoReset = true;
-            animTimer.Enabled = true;
-            animTimer.Start();
-            
-            //movement
+            //movement !!Now with stupid stuff I added, because I don't start THINKING before I code!!
             if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
@@ -98,9 +97,9 @@ namespace DungeonDwarf
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
                         textureVector.X = 0;
                         textureVector.Y = 0;
-                        delayedTexture(10000, ()=> textureVector.X = 1);
-                        delayedTexture(20000, ()=> textureVector.X = 2);
-                        delayedTexture(30000, ()=> textureVector.X = 3);
+                        delayedTexture(1000, ()=> textureVector.X = 1);
+                        delayedTexture(2000, ()=> textureVector.X = 2);
+                        delayedTexture(3000, ()=> textureVector.X = 3);
                       
                     }
                 
@@ -110,9 +109,9 @@ namespace DungeonDwarf
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
                         textureVector.X = 0;
                         textureVector.Y = 1;
-                        delayedTexture(10000, ()=> textureVector.X = 1);
-                        delayedTexture(20000, ()=> textureVector.X = 2);
-                        delayedTexture(30000, ()=> textureVector.X = 3);
+                        delayedTexture(1000, ()=> textureVector.X = 1);
+                        delayedTexture(2000, ()=> textureVector.X = 2);
+                        delayedTexture(3000, ()=> textureVector.X = 3);
                     }
                
                 //jump
