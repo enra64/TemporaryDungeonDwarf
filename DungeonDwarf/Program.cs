@@ -15,6 +15,7 @@ namespace DungeonDwarf
         static View currentView;
         static world.TileMap tileMap;
         static Player currentPlayer;
+        static Enemy zeroEnemy;
         //holds first view position
         static Vector2f viewOrigin;
         static FloatRect moveableRectangle;
@@ -81,6 +82,7 @@ namespace DungeonDwarf
             tileMap = new world.TileMap(currentRenderWindow, new Vector2u(200, 10), "world/levels/longTest1.oel");
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
+            zeroEnemy = new Enemy(currentRenderWindow, currentPlayer.playerPosition, tileMap);
 
             //create a rectangle the player can move in without changing the view
             Vector2f tempCurrentPlayerCenter=currentPlayer.GetCenter();
@@ -109,6 +111,7 @@ namespace DungeonDwarf
             Global.CURRENT_WINDOW_ORIGIN=currentView.Center-Global.BEGIN_WINDOW_ORIGIN;
             //moves the player
             currentPlayer.Update();
+            zeroEnemy.update(currentPlayer.playerPosition);
         }
 
         /// <summary>
@@ -163,7 +166,7 @@ namespace DungeonDwarf
              * What is draw-called first, will be most backgroundy, so think about where you place your calls.
              * BEGIN YOUR CALLS AFTER THIS
              */
-            
+            zeroEnemy.draw();
             currentPlayer.Draw();
             /* END YOUR CALLS HERE
              * Doing last call, do not call anything after this
