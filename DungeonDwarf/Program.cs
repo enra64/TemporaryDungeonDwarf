@@ -126,6 +126,7 @@ namespace DungeonDwarf
         /// moves the view according to the player position.
         /// If the player only moves a small amount, we do not move.
         /// </summary>
+
         private static void moveView()
         {
             //get player center
@@ -185,6 +186,7 @@ namespace DungeonDwarf
         //you can ignore this function
         private void MovementRectDebug()
         {
+            //Debug
             //DEBUG
             float t = currentRenderWindow.GetView().Center.X;
             Vector2f offset = currentRenderWindow.GetView().Center - viewOrigin;
