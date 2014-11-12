@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enemy.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
@@ -88,6 +89,9 @@
     <Content Include="openal32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="textures\enemies\zeroEnemy.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="textures\player\player_spritesheet.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -108,7 +112,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="textures\enemies\" />
     <Folder Include="textures\weapons\far\" />
     <Folder Include="textures\weapons\near\" />
   </ItemGroup>
