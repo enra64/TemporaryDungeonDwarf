@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 /********
  * Simple Enemy which follows the player, it can jump! WOW!
  * 
+ * Already pretty great :D (seriously, cool that it can jump :D) but if you 
+ * hide exactly below the enemy he just stops above you :(
  ********/
 namespace DungeonDwarf
 {
