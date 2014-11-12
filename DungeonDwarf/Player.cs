@@ -93,8 +93,8 @@ namespace DungeonDwarf
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
                 playerSprite.TextureRect = new IntRect(textureVector.X * 62, textureVector.Y * 55, 62, 55);
-                playerSize.X = (textureVector.X * 55)* xScale;
-                playerSize.Y = (textureVector.Y * 56)* yScale;
+                playerSize.X = (textureVector.X * 62)* xScale;
+                playerSize.Y = (textureVector.Y * 55)* yScale;
                 
                 
                 playerSprite.Position = playerPosition;
