@@ -169,8 +169,7 @@ namespace DungeonDwarf.world
         /// </summary>
         /// <param name="xPosition"></param>
         /// <returns></returns>
-        public float GetMinYAtX(float xPosition)
-        {
+        public float GetMinYAtX(float xPosition){
             //get highest tile at x position
             int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
             if (tilePosition[0] < 0)
@@ -187,8 +186,7 @@ namespace DungeonDwarf.world
         /// </summary>
         /// <param name="center"></param>
         /// <returns></returns>
-        public int[] GetCurrentTile(Vector2f center)
-        {
+        public int[] GetCurrentTile(Vector2f center){
             for (int y = 0; y < tileAmount.Y; y++){
                 for (int x = 0; x < tileAmount.X; x++){
                     //check each rectangles' position
