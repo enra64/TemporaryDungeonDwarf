@@ -16,8 +16,6 @@ namespace DungeonDwarf
         static world.TileMap tileMap;
         static Player currentPlayer;
         static Enemy zeroEnemy;
-        //holds first view position
-        static Vector2f viewOrigin;
         static FloatRect moveableRectangle;
 
         static void Main(string[] args)
@@ -156,10 +154,14 @@ namespace DungeonDwarf
                 if (playerCenter.X < moveableRectangle.Left)
                     offset.X -= Global.PLAYER_MOVEMENT_SPEED;
 
-                //offset rectangle and view
-                moveableRectangle.Left += offset.X;
-                moveableRectangle.Top += offset.Y;
-                currentView.Move(offset);
+                //only offset to lvl limits
+                if ((currentView.Center.X + offset.X) > 390){
+                    //offset rectangle and view
+                    currentView.Move(offset);
+                    moveableRectangle.Top += offset.Y;
+                    moveableRectangle.Left += offset.X;
+
+                }
             }
         }
 
@@ -197,7 +199,7 @@ namespace DungeonDwarf
             //Debug
             //DEBUG
             float t = currentRenderWindow.GetView().Center.X;
-            Vector2f offset = currentRenderWindow.GetView().Center - viewOrigin;
+            Vector2f offset = currentRenderWindow.GetView().Center - Global.BEGIN_WINDOW_ORIGIN;
             Console.WriteLine("X: " + offset.X + ", Y: " + offset.Y);
 
             RectangleShape r = new RectangleShape(new Vector2f(moveableRectangle.Width, moveableRectangle.Height));
