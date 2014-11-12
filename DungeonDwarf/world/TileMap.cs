@@ -227,11 +227,11 @@ namespace DungeonDwarf.world
         public void Draw()
         {
             //timekeeping is commented out
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             tileMap.Draw(win, renderStates);
-            //sw.Stop();
-            //Console.WriteLine("tilemap rendering took " + sw.Elapsed.Duration()+" ms");
+            sw.Stop();
+            Console.WriteLine("tilemap rendering took " + sw.Elapsed.Duration()+" ms");
         }
     }
 }

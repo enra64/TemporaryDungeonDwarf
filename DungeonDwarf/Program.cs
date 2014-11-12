@@ -115,11 +115,19 @@ namespace DungeonDwarf
         private static void Update(){
             //move view with player
             moveView();
-            //store current offset in global
+            //store current offset in global class
             Global.CURRENT_WINDOW_ORIGIN=currentView.Center-Global.BEGIN_WINDOW_ORIGIN;
             //moves the player
             currentPlayer.Update();
+            //check for key input
+            KeyCheck();
             zeroEnemy.update(currentPlayer.playerPosition);
+        }
+
+        static void KeyCheck()
+        {
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                currentRenderWindow.Close();
         }
 
         /// <summary>

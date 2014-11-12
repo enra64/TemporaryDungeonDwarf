@@ -97,8 +97,7 @@ namespace DungeonDwarf
                 //jump
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && (playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X))>-55f){
                     Console.WriteLine(playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X));
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                    {
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED))){
                         playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
                         textureVector.X = (int)direction.jump + 1;
                     }
