@@ -22,6 +22,8 @@ namespace DungeonDwarf.world
         private Texture[] textureList=new Texture[3];
         private Texture textureMap=new Texture("textures/world/tilemap.png");
         private VertexArray tileMap;
+        //contains target sie for quads
+        private Vector2f targetQuadSize;
 
         public TileMap(RenderWindow _w, Vector2u tileAmount, string _levelLocation){
             win = _w;
@@ -38,7 +40,7 @@ namespace DungeonDwarf.world
             tileMap = new VertexArray(PrimitiveType.Quads, allTiles.X*allTiles.Y*4);
 
             //wanted size
-            Vector2f targetQuadSize = new Vector2f((float)win.Size.X / tilesPerView.X, (float)win.Size.Y / tilesPerView.Y);
+            targetQuadSize = new Vector2f((float)win.Size.X / tilesPerView.X, (float)win.Size.Y / tilesPerView.Y);
 
             //set vertices
             //vertexes
@@ -51,8 +53,7 @@ namespace DungeonDwarf.world
                     uint currentPosition = 4 * ((y * allTiles.X) + x);
                     //control textures
                     float xOffset = 0;
-                    switch (tileTypes[x, y])
-                    {
+                    switch (tileTypes[x, y]){
                         case Global.EARTH_TILE:
                             Collidable[x, y] = true;
                             xOffset = 100;
@@ -79,9 +80,20 @@ namespace DungeonDwarf.world
             for (int y = 0; y < allTiles.Y; y++){
                 for (int x = 0; x < allTiles.X; x++){
                     //add a tile for each array position.
-                    tileArray[x, y] = new Tile(win, allTiles, tilesPerView, new Vector2u((uint)x, (uint)y), tileTypes[x, y], textureList[tileTypes[x, y]]);
+                    //tileArray[x, y] = new Tile(win, allTiles, tilesPerView, new Vector2u((uint)x, (uint)y), tileTypes[x, y], textureList[tileTypes[x, y]]);
                 }
             }
+        }
+
+        /// <summary>
+        /// returns the rectangle of the vertex at position x, y
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private FloatRect GetRectangle(int x, int y)
+        {
+            return new FloatRect(targetQuadSize.X * x, targetQuadSize.Y * y, targetQuadSize.X * (x + 1), targetQuadSize.Y * (y + 1));
         }
 
         /// <summary>
@@ -146,9 +158,18 @@ namespace DungeonDwarf.world
         public bool Collides(Vector2f position, Vector2f size)
         {
             FloatRect aRect = new FloatRect(position.X, position.Y, size.X, size.Y);
+
+            for (int y = 0; y < allTiles.Y; y++){
+                for (int x = 0; x < allTiles.X; x++){
+                    //check each rectangles' position
+                    if (GetRectangle(x, y).Intersects(aRect) && Collidable[x, y])
+                        return true;
+                }
+            }
+            /*
             foreach (Tile t in tileArray)
                 if (aRect.Intersects(t.getRect()) && t.Collidable)
-                    return true;
+                    return true;*/
             return false;
         }
 
@@ -178,9 +199,13 @@ namespace DungeonDwarf.world
             int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
             for (int y = 0; y < allTiles.Y; y++)
             {
+                /*
                 Tile t = tileArray[tilePosition[0], y];
                 if (t.Collidable)
                     return t.GridPosition.Y;
+                 * */
+                if (Collidable[tilePosition[0], y])
+                    return y;
             }
             return win.Size.Y;
         }
@@ -192,12 +217,22 @@ namespace DungeonDwarf.world
         /// <returns></returns>
         public int[] GetCurrentTile(Vector2f center)
         {
-            for (int y = 0; y < allTiles.Y; y++)
+            /*for (int y = 0; y < allTiles.Y; y++)
             {
                 for (int x = 0; x < allTiles.X; x++)
                 {
                     Tile t = tileArray[x, y];
                     if (t.getRect().Contains(center.X, center.Y))
+                        return new int[] { x, y };
+                }
+            }
+            */
+            for (int y = 0; y < allTiles.Y; y++)
+            {
+                for (int x = 0; x < allTiles.X; x++)
+                {
+                    //check each rectangles' position
+                    if (GetRectangle(x, y).Contains(center.X, center.Y));
                         return new int[] { x, y };
                 }
             }
