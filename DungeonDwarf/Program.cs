@@ -64,6 +64,7 @@ namespace DungeonDwarf
         {
             //update tile count
             tileMap.Update();
+            currentView.Size = new Vector2f(800, 600);
         }
 
         private static void windowClosed(object sender, EventArgs e){
