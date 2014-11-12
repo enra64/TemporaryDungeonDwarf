@@ -20,6 +20,8 @@ namespace DungeonDwarf
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
 
+        private bool canJump = true;
+
         //animated sprite
         enum direction {jump, left, right};
         private Vector2i textureVector = new Vector2i(1, 1);
@@ -87,12 +89,14 @@ namespace DungeonDwarf
                
                 //jump
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > currentOffset.Y)
+                {
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
                         playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X=(int)direction.jump;
+                        textureVector.X = (int)direction.jump + 1;
                     }
                 
+                }
                 //Gravity stuff
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
