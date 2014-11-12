@@ -213,7 +213,7 @@ namespace DungeonDwarf.world
             currentQuadSize.X = idealQuadSize.X * (800f / (float)win.Size.Y);
 
             //sad implication: we have to scale the position of literally everything when we do this
-            Global.GLOBAL_SCALE = currentQuadSize.X / idealQuadSize.X;
+            Global.GLOBAL_SCALE = currentQuadSize.X / idealQuadSize.X;//returns a smaller value
 
             for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++){
                 for (uint x = 0; x < tileAmount.X; x++){

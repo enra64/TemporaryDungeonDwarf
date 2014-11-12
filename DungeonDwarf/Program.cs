@@ -202,6 +202,7 @@ namespace DungeonDwarf
              */
             zeroEnemy.draw();
             currentPlayer.Draw();
+            MovementRectDebug();
             /* END YOUR CALLS HERE
              * Doing last call, do not call anything after this
              */
@@ -209,13 +210,13 @@ namespace DungeonDwarf
         }
 
         //you can ignore this function
-        private void MovementRectDebug()
+        private static void MovementRectDebug()
         {
             //Debug
             //DEBUG
             float t = currentRenderWindow.GetView().Center.X;
             Vector2f offset = currentRenderWindow.GetView().Center - Global.BEGIN_WINDOW_ORIGIN;
-            Console.WriteLine("X: " + offset.X + ", Y: " + offset.Y);
+            //Console.WriteLine("X: " + offset.X + ", Y: " + offset.Y);
 
             RectangleShape r = new RectangleShape(new Vector2f(moveableRectangle.Width, moveableRectangle.Height));
             r.Position = new Vector2f(moveableRectangle.Left, moveableRectangle.Top);

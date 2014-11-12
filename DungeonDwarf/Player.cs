@@ -18,7 +18,9 @@ namespace DungeonDwarf
         private float xScale = 1f, yScale = 1f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
-
+        //jump logic variables
+        private bool hasJumped = false;
+        private int jumpCount = 0;
 
         //animated sprite
         private Vector2i textureVector = new Vector2i(0, 1);
@@ -78,7 +80,6 @@ namespace DungeonDwarf
         /// <returns></returns>
         public void Update()
         {
-            
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
@@ -90,6 +91,7 @@ namespace DungeonDwarf
             playerSprite.Position = playerPosition;
 
             //movement !!Now with stupid stuff I added, because I don't start THINKING before I code!!
+            //xD :D
             //Sprite gets animated again and again if Key is pressed
             if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
@@ -116,23 +118,56 @@ namespace DungeonDwarf
                         delayedTexture(750, ()=> textureVector.X = 3);
                         delayedTexture(1000, ()=> textureVector.X = 0);
                     }
-               
-                //jump
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && (playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X))>-55f){
-                    Console.WriteLine(playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X));
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED))){
-                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X = 1;
-                        textureVector.Y = 1;
-                    }
                 
+                //debug key: output current player bott vs ground top diff
+                if (Keyboard.IsKeyPressed(Keyboard.Key.O))
+                {
+                    Console.WriteLine(playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X));
                 }
+
+                /*
+                 * Jump Logic
+                 */
+                //after pressing space, the further jumping is now no longer user controllable.
+                //maybe reduce jumpspeed by height, does however seemingly clash with the collision
+                //detection :/
+                if (jumpCount<3){
+                    jumpCount++;
+                    playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                    //dont know if i need these, just remove it if this is unneeded
+                    textureVector.X = 1;
+                    textureVector.Y = 1;
+                    Console.WriteLine("enhanced jumping");
+                }
+
+                //reset jump boolean on ground touch
+                if (playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X) == 0)
+                    hasJumped = false;
+
+                //only jump if jump sequence is not already initiated
+                if (hasJumped == false){
+                    //jump at key press
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Space)){
+                        //jump if there is enough space above
+                        if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
+                        {
+                            //set hasJumped to avoid flickering
+                            hasJumped = true;
+                            //set upwards traveling variable to enable higher jump heights
+                            jumpCount = 0;
+                            playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                            textureVector.X = 1;
+                            textureVector.Y = 1;
+                        }
+                    }
+                }
+                
                 //Gravity stuff
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
-
-                Console.WriteLine(textureVector.X);
+                
+                //Console.WriteLine("(Player) Current Texture Vector: "+textureVector.X);
             }
         }
 
