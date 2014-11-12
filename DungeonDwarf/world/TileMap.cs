@@ -83,15 +83,15 @@ namespace DungeonDwarf.world
         /// <param name="y"></param>
         /// <returns></returns>
         private FloatRect GetRectangle(int x, int y){
-            return new FloatRect(targetQuadSize.X * x, targetQuadSize.Y * y, targetQuadSize.X * (x + 1), targetQuadSize.Y * (y + 1));
+            return new FloatRect(targetQuadSize.X * x, targetQuadSize.Y * y,
+                targetQuadSize.X, targetQuadSize.Y);
         }
 
         /// <summary>
         /// fills tile type array using maps created by ogmo
         /// </summary>
         /// <param name="levelLocation"></param>
-        private void fillTileTypeArray(string levelLocation)
-        {
+        private void fillTileTypeArray(string levelLocation){
             //great. get tiles from a f*ckin xml file...
             XDocument xDoc = XDocument.Load(levelLocation);
             var query = xDoc.Descendants("level").Select(s => new
@@ -135,16 +135,14 @@ namespace DungeonDwarf.world
         /// <param name="position"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public bool Collides(Vector2f position, Vector2f size)
-        {
+        public bool Collides(Vector2f position, Vector2f size){
             FloatRect aRect = new FloatRect(position.X, position.Y, size.X, size.Y);
 
             for (int y = 0; y < allTiles.Y; y++){
                 for (int x = 0; x < allTiles.X; x++){
                     //check each rectangles' position
-                    if (aRect.Intersects(GetRectangle(x, y)) && Collidable[x, y])
-                    {
-                        Console.WriteLine("intersection: x: " + x + ", y: " + y);
+                    FloatRect currentTile = GetRectangle(x, y);
+                    if (aRect.Intersects(currentTile) && Collidable[x, y]){
                         return true;
                     }
                 }
