@@ -24,7 +24,7 @@ namespace DungeonDwarf
         Texture playerTextureanim = new Texture("textures/player/player_spritesheet.png");
         enum direction {jump, left, right};
         private Vector2i textureVector;
-        IntRect textureRect = new IntRect();
+        IntRect textureRect;
         
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
@@ -92,7 +92,8 @@ namespace DungeonDwarf
                 //Gravity stuff
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
-                
+
+                textureRect = new IntRect(textureVector.X * 51, textureVector.Y * 51, 51, 51);
                 playerSprite.Position = playerPosition;
             }
         }
