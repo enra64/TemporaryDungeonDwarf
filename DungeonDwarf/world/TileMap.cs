@@ -8,6 +8,7 @@ using SFML;
 using SFML.Window;
 using SFML.Graphics;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace DungeonDwarf.world
 {
@@ -18,9 +19,10 @@ namespace DungeonDwarf.world
         private int[,] tileTypes;
         private Tile[,] tileArray;
         private Texture[] textureList=new Texture[3];
+        private Texture textureMap=new Texture("textures/world/tilemap.png");
+        private VertexArray tileMap;
 
-        public TileMap(RenderWindow _w, Vector2u tileAmount, string _levelLocation)
-        {
+        public TileMap(RenderWindow _w, Vector2u tileAmount, string _levelLocation){
             win = _w;
             allTiles = tileAmount;
             tileTypes = new int[allTiles.X, allTiles.Y];
@@ -28,6 +30,46 @@ namespace DungeonDwarf.world
             fillTileArray(_levelLocation);
             //load all textures
             loadTextures();
+
+            //do the same in vertex
+            //create array of all vertices
+            tileMap = new VertexArray(PrimitiveType.Quads, allTiles.X*allTiles.Y*4);
+
+            //wanted size
+            Vector2f targetQuadSize = new Vector2f((float)win.Size.X / tilesPerView.X, (float)win.Size.Y / tilesPerView.Y);
+
+            //set vertices
+            //vertexes
+            //whatever
+            for (uint y = 0; y < allTiles.Y; y++)
+            {
+                for (uint x = 0; x < allTiles.X; x++)
+                {
+                    //because: 4 vertexes/quad * (current y times how many x per view) * x
+                    uint currentPosition = 4 * ((y * allTiles.X) + x);
+                    //control textures
+                    float xOffset = 0;
+                    switch (tileTypes[x, y])
+                    {
+                        case Global.EARTH_TILE:
+                            xOffset = 100;
+                            break;
+                        case Global.EARTH_TOP_TILE:
+                            xOffset = 200;
+                            break;
+                        default:
+                            xOffset = 0;
+                            break;
+                    }
+
+                    //map vertex positions
+                    tileMap[currentPosition + 0] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * y), new Vector2f(xOffset, 0));//top left vertex
+                    tileMap[currentPosition + 1] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * y), new Vector2f(xOffset+100, 0));//top right vertex
+                    tileMap[currentPosition + 2] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * (y + 1)), new Vector2f(xOffset+100, 100));//bot right vertex
+                    tileMap[currentPosition + 3] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
+                }
+            }
+            
             //now get a tile for each of these
             for (int y = 0; y < allTiles.Y; y++){
                 for (int x = 0; x < allTiles.X; x++){
@@ -157,15 +199,22 @@ namespace DungeonDwarf.world
             return new int[] { -1, -1 };
         }
 
-        public void Update()
-        {
+        public void Update(){
             //well the tilemap basically does not get updated at this point anymore...
         }
 
         public void Draw()
         {
-            foreach (Tile t in tileArray)
-                t.Draw();
+            //foreach (Tile t in tileArray)
+            //    t.Draw();
+            RenderStates s = RenderStates.Default;
+            s.Texture = textureMap;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            tileMap.Draw(win, s);
+            sw.Stop();
+            Console.WriteLine("tilemap rendering took " + sw.ElapsedMilliseconds+" ms");
+
         }
     }
 }

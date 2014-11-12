@@ -29,6 +29,11 @@ namespace DungeonDwarf
         public const float PLAYER_JUMP_SPEED = 25f;
 
         /*
+         * TILE TYPES VS THEIR ID
+         */
+        public const int AIR_TILE = 2, EARTH_TILE = 0, EARTH_TOP_TILE = 1;
+
+        /*
          * GLOBAL CONFIGURATION VARIABLES
          * Hint: Due to the fact that these Variables are static, you neither can nor need to
          * instance this class to access them.
