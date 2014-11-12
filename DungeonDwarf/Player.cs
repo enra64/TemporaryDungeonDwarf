@@ -21,7 +21,7 @@ namespace DungeonDwarf
 
 
         //animated sprite
-        private Vector2i textureVector = new Vector2i(1, 1);
+        private Vector2i textureVector = new Vector2i(0, 1);
 
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
