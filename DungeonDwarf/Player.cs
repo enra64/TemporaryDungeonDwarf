@@ -145,7 +145,7 @@ namespace DungeonDwarf
             colliderRect.FillColor = Color.Transparent;
             colliderRect.OutlineColor = Color.Green;
             colliderRect.OutlineThickness = 2f;
-            
+
             win.Draw(colliderRect);
             win.Draw(playerSprite);
         }
