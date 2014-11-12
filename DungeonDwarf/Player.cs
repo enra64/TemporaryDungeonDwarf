@@ -88,8 +88,9 @@ namespace DungeonDwarf
 
 
             playerSprite.Position = playerPosition;
-            
+
             //movement !!Now with stupid stuff I added, because I don't start THINKING before I code!!
+            //Sprite gets animated again and again if Key is pressed
             if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
