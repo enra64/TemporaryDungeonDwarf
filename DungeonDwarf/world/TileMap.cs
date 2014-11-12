@@ -176,7 +176,7 @@ namespace DungeonDwarf.world
             int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
             for (int y = 0; y < tileAmount.Y; y++){
                 if (Collidable[tilePosition[0], y])
-                    return 2;
+                    return GetRectangle(tilePosition[0], y).Top;
             }
             return win.Size.Y;
         }
