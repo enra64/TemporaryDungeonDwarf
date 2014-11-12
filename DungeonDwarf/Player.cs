@@ -6,7 +6,6 @@ using System;
 using System.Text;
 using System.Timers;
 
-
 namespace DungeonDwarf
 {
     class Player
