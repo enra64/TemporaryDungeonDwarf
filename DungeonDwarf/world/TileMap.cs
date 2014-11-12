@@ -203,10 +203,8 @@ namespace DungeonDwarf.world
             //calculate how many tiles in x direction should be drawn
             tilesPerView=new Vector2u(win.Size.X/60, 10);
 
-            for (uint y = 0; y < tileAmount.Y; y++)
-            {
-                for (uint x = 0; x < tileAmount.X; x++)
-                {
+            for (uint y = 0; y < tileAmount.Y; y++){
+                for (uint x = 0; x < tileAmount.X; x++){
                     //because: 4 vertexes/quad * (current y times how many x per view) * x
                     uint currentPosition = 4 * ((y * tileAmount.X) + x);
                     //get old texture coordinates
