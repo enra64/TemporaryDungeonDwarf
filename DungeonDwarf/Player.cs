@@ -68,8 +68,8 @@ namespace DungeonDwarf
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
             playerSprite.TextureRect = new IntRect(textureVector.X * 60, textureVector.Y * 55, 60, 55);
-            playerSize.X = (1* 35) * xScale;
-            playerSize.Y = (1 * 55) * yScale;
+            playerSize.X = (60) * xScale;
+            playerSize.Y = (55) * yScale;
 
 
             playerSprite.Position = playerPosition;
@@ -85,6 +85,7 @@ namespace DungeonDwarf
                     { 
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
                         textureVector.X = (int)direction.left;
+                        textureVector.Y = 0;
                     }
                 
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
@@ -92,6 +93,7 @@ namespace DungeonDwarf
                     { 
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
                         textureVector.X = (int)direction.right;
+                        textureVector.Y = 1;
                     }
                
                 //jump
@@ -100,6 +102,7 @@ namespace DungeonDwarf
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED))){
                         playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
                         textureVector.X = (int)direction.jump + 1;
+                        textureVector.Y = 1;
                     }
                 
                 }
