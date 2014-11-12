@@ -26,7 +26,7 @@ namespace DungeonDwarf.world
 
         private Texture textureMap=new Texture("textures/world/tilemap.png");
         //contains target size for quads
-        private Vector2f targetQuadSize;
+        private Vector2f idealQuadSize, currentQuadSize;
         //vertex drawing stuff
         private VertexArray tileMap;
         private RenderStates renderStates = RenderStates.Default;
@@ -47,8 +47,11 @@ namespace DungeonDwarf.world
             //wanted size is a square, not a rectangle
             //targetQuadSize = new Vector2f((float)win.Size.X / tilesPerView.X, (float)win.Size.Y / tilesPerView.Y);
             //y is too small
-            targetQuadSize = new Vector2f((float)win.Size.Y / tilesPerView.Y, (float)win.Size.Y / tilesPerView.Y);
-            Global.GLOBAL_SCALE = targetQuadSize.X/textureMap.Size.Y;
+            idealQuadSize = new Vector2f((float)win.Size.Y / tilesPerView.Y, (float)win.Size.Y / tilesPerView.Y);
+            Global.GLOBAL_SCALE = idealQuadSize.X/textureMap.Size.Y;
+
+            //initialize the current quad size
+            currentQuadSize = idealQuadSize;
 
             //draw vertexicesarrays. y+5 for interpolating ground
             for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++){
@@ -80,14 +83,11 @@ namespace DungeonDwarf.world
                                 Collidable[x, y] = false;
                             break;
                     }
-                    
-                    
-
                     //map vertex positions
-                    tileMap[currentPosition + 0] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * y), new Vector2f(xOffset, 0));//top left vertex
-                    tileMap[currentPosition + 1] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * y), new Vector2f(xOffset+100, 0));//top right vertex
-                    tileMap[currentPosition + 2] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * (y + 1)), new Vector2f(xOffset+100, 100));//bot right vertex
-                    tileMap[currentPosition + 3] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
+                    tileMap[currentPosition + 0] = new Vertex(new Vector2f(idealQuadSize.X * x, idealQuadSize.Y * y), new Vector2f(xOffset, 0));//top left vertex
+                    tileMap[currentPosition + 1] = new Vertex(new Vector2f(idealQuadSize.X * (x + 1), idealQuadSize.Y * y), new Vector2f(xOffset+100, 0));//top right vertex
+                    tileMap[currentPosition + 2] = new Vertex(new Vector2f(idealQuadSize.X * (x + 1), idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+100, 100));//bot right vertex
+                    tileMap[currentPosition + 3] = new Vertex(new Vector2f(idealQuadSize.X * x, idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
                     
                 }
             }
@@ -100,8 +100,8 @@ namespace DungeonDwarf.world
         /// <param name="y"></param>
         /// <returns></returns>
         private FloatRect GetRectangle(int x, int y){
-            return new FloatRect(targetQuadSize.X * x, targetQuadSize.Y * y,
-                targetQuadSize.X, targetQuadSize.Y);
+            return new FloatRect(currentQuadSize.X * x, currentQuadSize.Y * y,
+                currentQuadSize.X, currentQuadSize.Y);
         }
 
         /// <summary>
@@ -208,13 +208,14 @@ namespace DungeonDwarf.world
             return new int[] { -1, -1 };
         }
 
-        public void Update(){
-            //draw more x tiles if the screen has been resized...
-            
-            //calculate how many tiles in x direction should be drawn
-            tilesPerView=new Vector2u(win.Size.X/60, 10);
+        public void UpdateWindowResize(){
+            //this idea fortunately does work. (reducing x size)
+            currentQuadSize.X = idealQuadSize.X * (800f / (float)win.Size.Y);
 
-            for (uint y = 0; y < tileAmount.Y; y++){
+            //sad implication: we have to scale the position of literally everything when we do this
+            Global.GLOBAL_SCALE = currentQuadSize.X / idealQuadSize.X;
+
+            for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++){
                 for (uint x = 0; x < tileAmount.X; x++){
                     //because: 4 vertexes/quad * (current y times how many x per view) * x
                     uint currentPosition = 4 * ((y * tileAmount.X) + x);
@@ -224,10 +225,10 @@ namespace DungeonDwarf.world
                     Vector2f texCo3 = tileMap[currentPosition + 2].TexCoords;
                     Vector2f texCo4 = tileMap[currentPosition + 3].TexCoords;
                     //map vertex positions
-                    tileMap[currentPosition + 0] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * y), texCo1);//top left vertex
-                    tileMap[currentPosition + 1] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * y), texCo2);//top right vertex
-                    tileMap[currentPosition + 2] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * (y + 1)), texCo3);//bot right vertex
-                    tileMap[currentPosition + 3] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * (y + 1)), texCo4);//bot left vertex
+                    tileMap[currentPosition + 0] = new Vertex(new Vector2f(currentQuadSize.X * x, currentQuadSize.Y * y), texCo1);//top left vertex
+                    tileMap[currentPosition + 1] = new Vertex(new Vector2f(currentQuadSize.X * (x + 1), currentQuadSize.Y * y), texCo2);//top right vertex
+                    tileMap[currentPosition + 2] = new Vertex(new Vector2f(currentQuadSize.X * (x + 1), currentQuadSize.Y * (y + 1)), texCo3);//bot right vertex
+                    tileMap[currentPosition + 3] = new Vertex(new Vector2f(currentQuadSize.X * x, currentQuadSize.Y * (y + 1)), texCo4);//bot left vertex
                 }
             }
         }
