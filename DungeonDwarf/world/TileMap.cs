@@ -24,6 +24,7 @@ namespace DungeonDwarf.world
         private VertexArray tileMap;
         //contains target sie for quads
         private Vector2f targetQuadSize;
+        private RenderStates renderStates = RenderStates.Default;
 
         public TileMap(RenderWindow _w, Vector2u tileAmount, string _levelLocation){
             win = _w;
@@ -31,11 +32,11 @@ namespace DungeonDwarf.world
             tileTypes = new int[allTiles.X, allTiles.Y];
             tileArray = new Tile[allTiles.X, allTiles.Y];
             Collidable = new bool[allTiles.X, allTiles.Y];
-            fillTileArray(_levelLocation);
-            //load all textures
-            loadTextures();
+            fillTileTypeArray(_levelLocation);
 
-            //do the same in vertex
+            //load texture for tilemap
+            renderStates.Texture = textureMap;
+
             //create array of all vertices
             tileMap = new VertexArray(PrimitiveType.Quads, allTiles.X*allTiles.Y*4);
 
@@ -45,10 +46,8 @@ namespace DungeonDwarf.world
             //set vertices
             //vertexes
             //whatever
-            for (uint y = 0; y < allTiles.Y; y++)
-            {
-                for (uint x = 0; x < allTiles.X; x++)
-                {
+            for (uint y = 0; y < allTiles.Y; y++){
+                for (uint x = 0; x < allTiles.X; x++){
                     //because: 4 vertexes/quad * (current y times how many x per view) * x
                     uint currentPosition = 4 * ((y * allTiles.X) + x);
                     //control textures
@@ -83,26 +82,15 @@ namespace DungeonDwarf.world
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        private FloatRect GetRectangle(int x, int y)
-        {
+        private FloatRect GetRectangle(int x, int y){
             return new FloatRect(targetQuadSize.X * x, targetQuadSize.Y * y, targetQuadSize.X * (x + 1), targetQuadSize.Y * (y + 1));
         }
 
         /// <summary>
-        /// Load all textures here.
-        /// </summary>
-        private void loadTextures()
-        {
-            textureList[Tile.EARTH_TILE] = new Texture("textures/world/earthTile.png");
-            textureList[Tile.EARTH_TOP_TILE] = new Texture("textures/world/earthTileTop.png");
-            textureList[Tile.AIR_TILE] = new Texture("textures/world/air.png");
-        }
-
-        /// <summary>
-        /// fills tile array using maps created by ogmo
+        /// fills tile type array using maps created by ogmo
         /// </summary>
         /// <param name="levelLocation"></param>
-        private void fillTileArray(string levelLocation)
+        private void fillTileTypeArray(string levelLocation)
         {
             //great. get tiles from a f*ckin xml file...
             XDocument xDoc = XDocument.Load(levelLocation);
@@ -154,8 +142,11 @@ namespace DungeonDwarf.world
             for (int y = 0; y < allTiles.Y; y++){
                 for (int x = 0; x < allTiles.X; x++){
                     //check each rectangles' position
-                    if (GetRectangle(x, y).Intersects(aRect) && Collidable[x, y])
+                    if (aRect.Intersects(GetRectangle(x, y)) && Collidable[x, y])
+                    {
+                        Console.WriteLine("intersection: x: " + x + ", y: " + y);
                         return true;
+                    }
                 }
             }
             /*
@@ -173,8 +164,7 @@ namespace DungeonDwarf.world
         /// <param name="size"></param>
         /// <param name="nextMove"></param>
         /// <returns></returns>
-        public bool CheckNextCollide(Vector2f position, Vector2f size, Vector2f nextMove)
-        {
+        public bool CheckNextCollide(Vector2f position, Vector2f size, Vector2f nextMove){
             position+=nextMove;
             return Collides(position, size);
         }
@@ -189,10 +179,9 @@ namespace DungeonDwarf.world
         {
             //get highest tile at x position
             int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
-            for (int y = 0; y < allTiles.Y; y++)
-            {
+            for (int y = 0; y < allTiles.Y; y++){
                 if (Collidable[tilePosition[0], y])
-                    return y;
+                    return 2;
             }
             return win.Size.Y;
         }
@@ -217,19 +206,17 @@ namespace DungeonDwarf.world
         }
 
         public void Update(){
-            //well the tilemap basically does not get updated at this point anymore...
+            //well the tilemap basically does not get updated at this point yet...
         }
 
         public void Draw()
         {
-            RenderStates s = RenderStates.Default;
-            s.Texture = textureMap;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            tileMap.Draw(win, s);
-            sw.Stop();
-            Console.WriteLine("tilemap rendering took " + sw.Elapsed.Duration()+" ms");
-
+            //timekeeping is commented out
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            tileMap.Draw(win, renderStates);
+            //sw.Stop();
+            //Console.WriteLine("tilemap rendering took " + sw.Elapsed.Duration()+" ms");
         }
     }
 }
