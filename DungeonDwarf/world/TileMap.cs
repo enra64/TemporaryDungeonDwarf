@@ -191,8 +191,8 @@ namespace DungeonDwarf.world
             for (int y = 0; y < tileAmount.Y; y++){
                 for (int x = 0; x < tileAmount.X; x++){
                     //check each rectangles' position
-                    if (GetRectangle(x, y).Contains(center.X, center.Y)) ;
-                    return new int[] { x, y };
+                    if (GetRectangle(x, y).Contains(center.X, center.Y))
+                        return new int[] { x, y };
                 }
             }
             return new int[] { -1, -1 };
@@ -200,6 +200,7 @@ namespace DungeonDwarf.world
 
         public void Update(){
             //draw more x tiles if the screen has been resized...
+            
             //calculate how many tiles in x direction should be drawn
             tilesPerView=new Vector2u(win.Size.X/60, 10);
 
