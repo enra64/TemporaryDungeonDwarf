@@ -96,11 +96,12 @@ namespace DungeonDwarf
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
-                        textureVector.X = 0;
+                        //textureVector.X = 0;
                         textureVector.Y = 0;
-                        delayedTexture(1000, ()=> textureVector.X = 1);
-                        delayedTexture(2000, ()=> textureVector.X = 2);
-                        delayedTexture(3000, ()=> textureVector.X = 3);
+                        delayedTexture(250, ()=> textureVector.X = 1);
+                        delayedTexture(500, ()=> textureVector.X = 2);
+                        delayedTexture(750, ()=> textureVector.X = 3);
+                        delayedTexture(1000, ()=> textureVector.X = 0);
                       
                     }
                 
@@ -108,11 +109,12 @@ namespace DungeonDwarf
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
-                        textureVector.X = 0;
+                        //textureVector.X = 0;
                         textureVector.Y = 1;
-                        delayedTexture(1000, ()=> textureVector.X = 1);
-                        delayedTexture(2000, ()=> textureVector.X = 2);
-                        delayedTexture(3000, ()=> textureVector.X = 3);
+                        delayedTexture(250, ()=> textureVector.X = 1);
+                        delayedTexture(500, ()=> textureVector.X = 2);
+                        delayedTexture(750, ()=> textureVector.X = 3);
+                        delayedTexture(1000, ()=> textureVector.X = 0);
                     }
                
                 //jump
@@ -136,14 +138,15 @@ namespace DungeonDwarf
 
         public void Draw()
         {
-            RectangleShape tester = new RectangleShape();
-            tester.Size = new Vector2f(playerSize.X, playerSize.Y);
-            tester.Position = new Vector2f(playerPosition.X, playerPosition.Y);
-            tester.FillColor = Color.Transparent;
-            tester.OutlineColor = Color.Green;
-            tester.OutlineThickness = 2f;
+            //shows playersize
+            RectangleShape colliderRect = new RectangleShape();
+            colliderRect.Size = new Vector2f(playerSize.X, playerSize.Y);
+            colliderRect.Position = new Vector2f(playerPosition.X, playerPosition.Y);
+            colliderRect.FillColor = Color.Transparent;
+            colliderRect.OutlineColor = Color.Green;
+            colliderRect.OutlineThickness = 2f;
             
-            win.Draw(tester);
+            win.Draw(colliderRect);
             win.Draw(playerSprite);
         }
     }
