@@ -67,6 +67,13 @@ namespace DungeonDwarf
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
+            playerSprite.TextureRect = new IntRect(textureVector.X * 62, textureVector.Y * 55, 62, 55);
+            playerSize.X = (textureVector.X * 62) * xScale;
+            playerSize.Y = (textureVector.Y * 55) * yScale;
+
+
+            playerSprite.Position = playerPosition;
+
             if (!tileMap.Collides(playerPosition, playerSize)){
                 //down movement commented out
                 //if (Keyboard.IsKeyPressed(Keyboard.Key.S) && playerPosition.Y < win.Size.Y - playerSize.Y)
@@ -88,7 +95,7 @@ namespace DungeonDwarf
                     }
                
                 //jump
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > currentOffset.Y)
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > currentOffset.Y /*&& tileMap.Collides(playerPosition, playerSize)*/)
                 {
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
@@ -101,12 +108,12 @@ namespace DungeonDwarf
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
-                playerSprite.TextureRect = new IntRect(textureVector.X * 62, textureVector.Y * 55, 62, 55);
-                playerSize.X = (textureVector.X * 62)* xScale;
-                playerSize.Y = (textureVector.Y * 55)* yScale;
+                //playerSprite.TextureRect = new IntRect(textureVector.X * 62, textureVector.Y * 55, 62, 55);
+                //playerSize.X = (textureVector.X * 62)* xScale;
+                //playerSize.Y = (textureVector.Y * 55)* yScale;
                 
                 
-                playerSprite.Position = playerPosition;
+                //playerSprite.Position = playerPosition;
             }
         }
 
