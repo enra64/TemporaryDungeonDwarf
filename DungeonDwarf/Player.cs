@@ -137,11 +137,11 @@ namespace DungeonDwarf
                     //dont know if i need these, just remove it if this is unneeded
                     textureVector.X = 1;
                     textureVector.Y = 1;
-                    Console.WriteLine("enhanced jumping");
+                    //Console.WriteLine("enhanced jumping");
                 }
 
                 //reset jump boolean on ground touch
-                if (playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X) == 0)
+                if (playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X) == 0 || playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X+playerSize.X) == 0)
                     hasJumped = false;
 
                 //only jump if jump sequence is not already initiated
@@ -167,7 +167,7 @@ namespace DungeonDwarf
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
                 
-                //Console.WriteLine("(Player) Current Texture Vector: "+textureVector.X);
+                Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
             }
         }
 
