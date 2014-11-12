@@ -16,13 +16,19 @@ namespace DungeonDwarf.world
     {
         public RenderWindow win;
         public Vector2u tileAmount, tilesPerView=new Vector2u(20, 10);
+
+        //tile specific variables
         private int[,] tileTypes;
         private bool[,] Collidable;
-        private Texture[] textureList=new Texture[3];
+        
+        //single variable: how many tiles below the max y value we _know_ about shall we draw
+        private uint yInterpolationDuration = 5;
+
         private Texture textureMap=new Texture("textures/world/tilemap.png");
-        private VertexArray tileMap;
-        //contains target sie for quads
+        //contains target size for quads
         private Vector2f targetQuadSize;
+        //vertex drawing stuff
+        private VertexArray tileMap;
         private RenderStates renderStates = RenderStates.Default;
 
         public TileMap(RenderWindow _w, Vector2u _tileAmount, string _levelLocation){
@@ -36,7 +42,7 @@ namespace DungeonDwarf.world
             renderStates.Texture = textureMap;
 
             //create array of all vertices
-            tileMap = new VertexArray(PrimitiveType.Quads, tileAmount.X*tileAmount.Y*4);
+            tileMap = new VertexArray(PrimitiveType.Quads, tileAmount.X * (tileAmount.Y + yInterpolationDuration) * 4);
 
             //wanted size is a square, not a rectangle
             //targetQuadSize = new Vector2f((float)win.Size.X / tilesPerView.X, (float)win.Size.Y / tilesPerView.Y);
@@ -44,29 +50,38 @@ namespace DungeonDwarf.world
             targetQuadSize = new Vector2f((float)win.Size.Y / tilesPerView.Y, (float)win.Size.Y / tilesPerView.Y);
             Global.GLOBAL_SCALE = targetQuadSize.X/textureMap.Size.Y;
 
-            //set vertices
-            //vertexes
-            //whatever
-            for (uint y = 0; y < tileAmount.Y; y++){
+            //draw vertexicesarrays. y+5 for interpolating ground
+            for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++){
                 for (uint x = 0; x < tileAmount.X; x++){
                     //because: 4 vertexes/quad * (current y times how many x per view) * x
                     uint currentPosition = 4 * ((y * tileAmount.X) + x);
                     //control textures
                     float xOffset = 0;
-                    switch (tileTypes[x, y]){
+                    int tileType;
+                    if (y < tileAmount.Y)
+                        tileType = tileTypes[x, y];
+                    else
+                        tileType = tileTypes[x, tileAmount.Y-1];
+                    switch (tileType)
+                    {
                         case Global.EARTH_TILE:
-                            Collidable[x, y] = true;
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = true;
                             xOffset = 100;
                             break;
                         case Global.EARTH_TOP_TILE:
                             xOffset = 200;
-                            Collidable[x, y] = true;
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = true;
                             break;
                         default:
                             xOffset = 0;
-                            Collidable[x, y] = false;
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = false;
                             break;
                     }
+                    
+                    
 
                     //map vertex positions
                     tileMap[currentPosition + 0] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * y), new Vector2f(xOffset, 0));//top left vertex
