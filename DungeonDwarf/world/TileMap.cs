@@ -75,14 +75,6 @@ namespace DungeonDwarf.world
                     tileMap[currentPosition + 3] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
                 }
             }
-            
-            //now get a tile for each of these
-            for (int y = 0; y < allTiles.Y; y++){
-                for (int x = 0; x < allTiles.X; x++){
-                    //add a tile for each array position.
-                    //tileArray[x, y] = new Tile(win, allTiles, tilesPerView, new Vector2u((uint)x, (uint)y), tileTypes[x, y], textureList[tileTypes[x, y]]);
-                }
-            }
         }
 
         /// <summary>
@@ -199,11 +191,6 @@ namespace DungeonDwarf.world
             int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
             for (int y = 0; y < allTiles.Y; y++)
             {
-                /*
-                Tile t = tileArray[tilePosition[0], y];
-                if (t.Collidable)
-                    return t.GridPosition.Y;
-                 * */
                 if (Collidable[tilePosition[0], y])
                     return y;
             }
@@ -217,16 +204,6 @@ namespace DungeonDwarf.world
         /// <returns></returns>
         public int[] GetCurrentTile(Vector2f center)
         {
-            /*for (int y = 0; y < allTiles.Y; y++)
-            {
-                for (int x = 0; x < allTiles.X; x++)
-                {
-                    Tile t = tileArray[x, y];
-                    if (t.getRect().Contains(center.X, center.Y))
-                        return new int[] { x, y };
-                }
-            }
-            */
             for (int y = 0; y < allTiles.Y; y++)
             {
                 for (int x = 0; x < allTiles.X; x++)
@@ -245,15 +222,13 @@ namespace DungeonDwarf.world
 
         public void Draw()
         {
-            //foreach (Tile t in tileArray)
-            //    t.Draw();
             RenderStates s = RenderStates.Default;
             s.Texture = textureMap;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             tileMap.Draw(win, s);
             sw.Stop();
-            Console.WriteLine("tilemap rendering took " + sw.ElapsedMilliseconds+" ms");
+            Console.WriteLine("tilemap rendering took " + sw.Elapsed.Duration()+" ms");
 
         }
     }
