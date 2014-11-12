@@ -26,7 +26,7 @@ namespace DungeonDwarf
         /// <summary>
         /// Speed to propel upwards during jumps by player
         /// </summary>
-        public const float PLAYER_JUMP_SPEED = 25f;
+        public const float PLAYER_JUMP_SPEED = 50f;
 
         /*
          * TILE TYPES VS THEIR ID

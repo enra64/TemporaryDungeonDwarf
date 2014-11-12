@@ -16,15 +16,15 @@ namespace DungeonDwarf
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
         private Sprite playerSprite;
-        private float xScale = 0.8f, yScale = 0.8f;
+        private float xScale = 1f, yScale = 1f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
 
+        private bool canJump = true;
+
         //animated sprite
-        Texture playerTextureanim = new Texture("textures/player/player_spritesheet.png");
         enum direction {jump, left, right};
-        private Vector2i textureVector;
-        IntRect textureRect;
+        private Vector2i textureVector = new Vector2i(1, 1);
         
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
@@ -36,17 +36,20 @@ namespace DungeonDwarf
 
             //renderwindow 
             win = _w;
+            
             //add player texture and sprite
-            Texture playerTexture = new Texture("textures/world/earthTile.png");
+            //Texture playerTexture = new Texture("textures/world/earthTile.png");
+            Texture playerTexture = new Texture("textures/player/player_spritesheet.png");
             playerSprite = new Sprite(playerTexture);
-            playerSprite.TextureRect = new IntRect(0, 0, 100, 100);
-            xScale = yScale = Global.GLOBAL_SCALE;
+            //xScale = yScale = Global.GLOBAL_SCALE;
+            
             //scale
             playerSprite.Scale = new Vector2f(xScale, yScale);
-            playerSize.X = playerTexture.Size.X * xScale;
-            playerSize.Y = playerTexture.Size.Y * yScale;
+            //playerSize.X = playerTexture.Size.X * xScale;
+            //playerSize.Y = playerTexture.Size.Y * yScale;
             playerPosition = new Vector2f(270f, 270f);
             playerSprite.Position = playerPosition;
+            
         }
 
         /// <summary>
@@ -58,42 +61,59 @@ namespace DungeonDwarf
             return new Vector2f(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
         }
 
-        
+
         public void Update()
         {
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
+
+            playerSprite.TextureRect = new IntRect(textureVector.X * 62, textureVector.Y * 55, 62, 55);
+            playerSize.X = (textureVector.X * 62) * xScale;
+            playerSize.Y = (textureVector.Y * 55) * yScale;
+
+
+            playerSprite.Position = playerPosition;
 
             if (!tileMap.Collides(playerPosition, playerSize)){
                 //down movement commented out
                 //if (Keyboard.IsKeyPressed(Keyboard.Key.S) && playerPosition.Y < win.Size.Y - playerSize.Y)
                 //    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Speed)))
                 //        playerPosition.Y += Speed;
+               
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
-                        textureVector.Y = (int)direction.left;
+                        textureVector.X = (int)direction.left;
                     }
+                
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0))) 
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
-                        textureVector.Y = (int)direction.right;
+                        textureVector.X = (int)direction.right;
                     }
+               
                 //jump
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > currentOffset.Y)
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && playerPosition.Y > currentOffset.Y /*&& tileMap.Collides(playerPosition, playerSize)*/)
+                {
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
                         playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.Y=(int)direction.jump;
+                        textureVector.X = (int)direction.jump + 1;
                     }
+                
+                }
                 //Gravity stuff
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
-                textureRect = new IntRect(textureVector.X * 51, textureVector.Y * 51, 51, 51);
-                playerSprite.Position = playerPosition;
+                //playerSprite.TextureRect = new IntRect(textureVector.X * 62, textureVector.Y * 55, 62, 55);
+                //playerSize.X = (textureVector.X * 62)* xScale;
+                //playerSize.Y = (textureVector.Y * 55)* yScale;
+                
+                
+                //playerSprite.Position = playerPosition;
             }
         }
 
