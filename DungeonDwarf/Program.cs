@@ -131,13 +131,15 @@ namespace DungeonDwarf
                 currentRenderWindow.Close();
             if (Keyboard.IsKeyPressed(Keyboard.Key.K))
             {
-                zoom -= .0001f;
                 currentView.Zoom(.99f);
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.L))
             {
-                zoom += .0001f;
                 currentView.Zoom(1.01f);
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.J))
+            {
+                currentView.Zoom(1f);
             }
         }
 
