@@ -118,6 +118,13 @@ namespace DungeonDwarf
 
         public void Draw()
         {
+            RectangleShape tester = new RectangleShape();
+            tester.Size = new Vector2f(playerSize.X, playerSize.Y);
+            tester.Position = new Vector2f(playerPosition.X, playerPosition.Y);
+            tester.FillColor = Color.Transparent;
+            tester.OutlineColor = Color.Green;
+            tester.OutlineThickness = 2f;
+            win.Draw(tester);
             win.Draw(playerSprite);
         }
     }

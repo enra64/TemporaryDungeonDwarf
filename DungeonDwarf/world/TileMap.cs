@@ -128,7 +128,6 @@ namespace DungeonDwarf.world
                         tileTypes[x, y] = Tile.AIR_TILE;
                 }
             }
-            
         }
 
         /// <summary>
@@ -174,6 +173,8 @@ namespace DungeonDwarf.world
         {
             //get highest tile at x position
             int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
+            if (tilePosition[0] < 0)
+                return -1;
             for (int y = 0; y < tileAmount.Y; y++){
                 if (Collidable[tilePosition[0], y])
                     return GetRectangle(tilePosition[0], y).Top;

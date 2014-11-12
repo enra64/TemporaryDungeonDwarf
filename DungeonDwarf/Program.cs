@@ -89,7 +89,7 @@ namespace DungeonDwarf
              * think twice before adding you calls before this comment
              */
             //init tile map//trying to push new changes -.-
-            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(200, 10), "world/levels/longTest1.oel");
+            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(400, 10), "world/levels/longTest2.oel");
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
             zeroEnemy = new Enemy(currentRenderWindow, currentPlayer.playerPosition, tileMap);
