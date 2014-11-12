@@ -20,12 +20,12 @@ namespace DungeonDwarf
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
 
-        private bool canJump = true;
 
         //animated sprite
         enum direction {jump, left, right};
         private Vector2i textureVector = new Vector2i(1, 1);
-        
+        TimeSpan textureTime = new TimeSpan(50000000);
+
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
         {
@@ -38,15 +38,12 @@ namespace DungeonDwarf
             win = _w;
             
             //add player texture and sprite
-            //Texture playerTexture = new Texture("textures/world/earthTile.png");
             Texture playerTexture = new Texture("textures/player/player_spritesheet.png");
             playerSprite = new Sprite(playerTexture);
             //xScale = yScale = Global.GLOBAL_SCALE;
             
             //scale
             playerSprite.Scale = new Vector2f(xScale, yScale);
-            //playerSize.X = playerTexture.Size.X * xScale;
-            //playerSize.Y = playerTexture.Size.Y * yScale;
             playerPosition = new Vector2f(270f, 270f);
             playerSprite.Position = playerPosition;
             
@@ -64,6 +61,7 @@ namespace DungeonDwarf
 
         public void Update()
         {
+            
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
@@ -86,6 +84,7 @@ namespace DungeonDwarf
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
                         textureVector.X = (int)direction.left;
                         textureVector.Y = 0;
+                      
                     }
                 
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
@@ -110,12 +109,6 @@ namespace DungeonDwarf
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
-                //playerSprite.TextureRect = new IntRect(textureVector.X * 62, textureVector.Y * 55, 62, 55);
-                //playerSize.X = (textureVector.X * 62)* xScale;
-                //playerSize.Y = (textureVector.Y * 55)* yScale;
-                
-                
-                //playerSprite.Position = playerPosition;
             }
         }
 
@@ -127,6 +120,7 @@ namespace DungeonDwarf
             tester.FillColor = Color.Transparent;
             tester.OutlineColor = Color.Green;
             tester.OutlineThickness = 2f;
+            
             win.Draw(tester);
             win.Draw(playerSprite);
         }
