@@ -32,13 +32,17 @@ namespace DungeonDwarf
             //currentRenderWindow = new RenderWindow(VideoMode.FullscreenModes[0], "Dungeon Dwarf", Styles.Fullscreen);
             
             //create window
-            currentRenderWindow = new RenderWindow(new VideoMode(800, 600), "Dungeon Dwarf", Styles.Default);
+            //currentRenderWindow = new RenderWindow(new VideoMode(800, 600), "Dungeon Dwarf", Styles.Default);
+            currentRenderWindow = new RenderWindow(VideoMode.FullscreenModes[0], "Dungeon Dwarf", Styles.Fullscreen);
             //sets framerate to a maximum of 45; changing the value will likely result in bad things
             currentRenderWindow.SetFramerateLimit(45);
             //add event handler for klicking the X icon
             currentRenderWindow.Closed += windowClosed;
             //vertical sync is enabled, because master graphics n shit
             currentRenderWindow.SetVerticalSyncEnabled(true);
+
+            //add handler to window resized, because we need to recalculate tile count
+            currentRenderWindow.Resized += windowResized;
 
             //first and only call to init, do everything else there
             Initialize();
@@ -56,6 +60,12 @@ namespace DungeonDwarf
                 //only important if you want to close the window. ever.
                 currentRenderWindow.DispatchEvents();
             }
+        }
+
+        private static void windowResized(object sender, SizeEventArgs e)
+        {
+            //update tile count
+            tileMap.Update();
         }
 
         private static void windowClosed(object sender, EventArgs e){
@@ -103,8 +113,6 @@ namespace DungeonDwarf
         /// It is thus called in each main loop iteration.
         /// </summary>
         private static void Update(){
-            //update tile map, should probably stay first call of function
-            tileMap.Update();
             //move view with player
             moveView();
             //store current offset in global

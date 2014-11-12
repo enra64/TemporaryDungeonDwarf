@@ -15,7 +15,7 @@ namespace DungeonDwarf.world
     class TileMap
     {
         public RenderWindow win;
-        public Vector2u allTiles, tilesPerView=new Vector2u(20, 10);
+        public Vector2u tileAmount, tilesPerView=new Vector2u(20, 10);
         private int[,] tileTypes;
         private Tile[,] tileArray;
         private bool[,] Collidable;
@@ -26,30 +26,33 @@ namespace DungeonDwarf.world
         private Vector2f targetQuadSize;
         private RenderStates renderStates = RenderStates.Default;
 
-        public TileMap(RenderWindow _w, Vector2u tileAmount, string _levelLocation){
+        public TileMap(RenderWindow _w, Vector2u _tileAmount, string _levelLocation){
             win = _w;
-            allTiles = tileAmount;
-            tileTypes = new int[allTiles.X, allTiles.Y];
-            tileArray = new Tile[allTiles.X, allTiles.Y];
-            Collidable = new bool[allTiles.X, allTiles.Y];
+            tileAmount = _tileAmount;
+            tileTypes = new int[tileAmount.X, tileAmount.Y];
+            tileArray = new Tile[tileAmount.X, tileAmount.Y];
+            Collidable = new bool[tileAmount.X, tileAmount.Y];
             fillTileTypeArray(_levelLocation);
 
             //load texture for tilemap
             renderStates.Texture = textureMap;
 
             //create array of all vertices
-            tileMap = new VertexArray(PrimitiveType.Quads, allTiles.X*allTiles.Y*4);
+            tileMap = new VertexArray(PrimitiveType.Quads, tileAmount.X*tileAmount.Y*4);
 
-            //wanted size
-            targetQuadSize = new Vector2f((float)win.Size.X / tilesPerView.X, (float)win.Size.Y / tilesPerView.Y);
+            //wanted size is a square, not a rectangle
+            //targetQuadSize = new Vector2f((float)win.Size.X / tilesPerView.X, (float)win.Size.Y / tilesPerView.Y);
+            //y is too small
+            targetQuadSize = new Vector2f((float)win.Size.Y / tilesPerView.Y, (float)win.Size.Y / tilesPerView.Y);
+            Global.GLOBAL_SCALE = targetQuadSize.X/textureMap.Size.Y;
 
             //set vertices
             //vertexes
             //whatever
-            for (uint y = 0; y < allTiles.Y; y++){
-                for (uint x = 0; x < allTiles.X; x++){
+            for (uint y = 0; y < tileAmount.Y; y++){
+                for (uint x = 0; x < tileAmount.X; x++){
                     //because: 4 vertexes/quad * (current y times how many x per view) * x
-                    uint currentPosition = 4 * ((y * allTiles.X) + x);
+                    uint currentPosition = 4 * ((y * tileAmount.X) + x);
                     //control textures
                     float xOffset = 0;
                     switch (tileTypes[x, y]){
@@ -72,6 +75,7 @@ namespace DungeonDwarf.world
                     tileMap[currentPosition + 1] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * y), new Vector2f(xOffset+100, 0));//top right vertex
                     tileMap[currentPosition + 2] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * (y + 1)), new Vector2f(xOffset+100, 100));//bot right vertex
                     tileMap[currentPosition + 3] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
+                    
                 }
             }
         }
@@ -111,9 +115,9 @@ namespace DungeonDwarf.world
             byte[] airArray = enc.GetBytes(air);
 
             //get tiles from byte arrays
-            for(int y=0;y<allTiles.Y;y++){
-                for (int x = 0; x < allTiles.X; x++){
-                    long oneDimensionalArrayPosition=y * allTiles.X + x;
+            for(int y=0;y<tileAmount.Y;y++){
+                for (int x = 0; x < tileAmount.X; x++){
+                    long oneDimensionalArrayPosition=y * tileAmount.X + x;
                     if (earthArray[oneDimensionalArrayPosition] == 49)//ASCII one
                         tileTypes[x, y] = Tile.EARTH_TILE;
                     else if (earthTopArray[oneDimensionalArrayPosition] == 49)
@@ -136,21 +140,14 @@ namespace DungeonDwarf.world
         /// <param name="size"></param>
         /// <returns></returns>
         public bool Collides(Vector2f position, Vector2f size){
+            //create floatrect from input
             FloatRect aRect = new FloatRect(position.X, position.Y, size.X, size.Y);
-
-            for (int y = 0; y < allTiles.Y; y++){
-                for (int x = 0; x < allTiles.X; x++){
+            //check intersection for each tile
+            for (int y = 0; y < tileAmount.Y; y++)
+                for (int x = 0; x < tileAmount.X; x++)
                     //check each rectangles' position
-                    FloatRect currentTile = GetRectangle(x, y);
-                    if (aRect.Intersects(currentTile) && Collidable[x, y]){
+                    if (aRect.Intersects(GetRectangle(x, y)) && Collidable[x, y])
                         return true;
-                    }
-                }
-            }
-            /*
-            foreach (Tile t in tileArray)
-                if (aRect.Intersects(t.getRect()) && t.Collidable)
-                    return true;*/
             return false;
         }
 
@@ -177,7 +174,7 @@ namespace DungeonDwarf.world
         {
             //get highest tile at x position
             int[] tilePosition = GetCurrentTile(new Vector2f(xPosition, 0));
-            for (int y = 0; y < allTiles.Y; y++){
+            for (int y = 0; y < tileAmount.Y; y++){
                 if (Collidable[tilePosition[0], y])
                     return 2;
             }
@@ -191,20 +188,39 @@ namespace DungeonDwarf.world
         /// <returns></returns>
         public int[] GetCurrentTile(Vector2f center)
         {
-            for (int y = 0; y < allTiles.Y; y++)
-            {
-                for (int x = 0; x < allTiles.X; x++)
-                {
+            for (int y = 0; y < tileAmount.Y; y++){
+                for (int x = 0; x < tileAmount.X; x++){
                     //check each rectangles' position
-                    if (GetRectangle(x, y).Contains(center.X, center.Y));
-                        return new int[] { x, y };
+                    if (GetRectangle(x, y).Contains(center.X, center.Y)) ;
+                    return new int[] { x, y };
                 }
             }
             return new int[] { -1, -1 };
         }
 
         public void Update(){
-            //well the tilemap basically does not get updated at this point yet...
+            //draw more x tiles if the screen has been resized...
+            //calculate how many tiles in x direction should be drawn
+            tilesPerView=new Vector2u(win.Size.X/60, 10);
+
+            for (uint y = 0; y < tileAmount.Y; y++)
+            {
+                for (uint x = 0; x < tileAmount.X; x++)
+                {
+                    //because: 4 vertexes/quad * (current y times how many x per view) * x
+                    uint currentPosition = 4 * ((y * tileAmount.X) + x);
+                    //get old texture coordinates
+                    Vector2f texCo1 = tileMap[currentPosition + 0].TexCoords;
+                    Vector2f texCo2 = tileMap[currentPosition + 1].TexCoords;
+                    Vector2f texCo3 = tileMap[currentPosition + 2].TexCoords;
+                    Vector2f texCo4 = tileMap[currentPosition + 3].TexCoords;
+                    //map vertex positions
+                    tileMap[currentPosition + 0] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * y), texCo1);//top left vertex
+                    tileMap[currentPosition + 1] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * y), texCo2);//top right vertex
+                    tileMap[currentPosition + 2] = new Vertex(new Vector2f(targetQuadSize.X * (x + 1), targetQuadSize.Y * (y + 1)), texCo3);//bot right vertex
+                    tileMap[currentPosition + 3] = new Vertex(new Vector2f(targetQuadSize.X * x, targetQuadSize.Y * (y + 1)), texCo4);//bot left vertex
+                }
+            }
         }
 
         public void Draw()

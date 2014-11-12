@@ -39,15 +39,14 @@ namespace DungeonDwarf
             //add player texture and sprite
             Texture playerTexture = new Texture("textures/world/earthTile.png");
             playerSprite = new Sprite(playerTexture);
+            playerSprite.TextureRect = new IntRect(0, 0, 100, 100);
+            xScale = yScale = Global.GLOBAL_SCALE;
             //scale
             playerSprite.Scale = new Vector2f(xScale, yScale);
             playerSize.X = playerTexture.Size.X * xScale;
             playerSize.Y = playerTexture.Size.Y * yScale;
             playerPosition = new Vector2f(270f, 270f);
             playerSprite.Position = playerPosition;
-        
-            
-        
         }
 
         /// <summary>

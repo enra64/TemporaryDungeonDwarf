@@ -56,5 +56,9 @@ namespace DungeonDwarf
         /// calculations
         /// </summary>
         public static Vector2f BEGIN_WINDOW_ORIGIN;
+        /// <summary>
+        /// Could possibly be the scalefactor set by the tilemap
+        /// </summary>
+        public static float GLOBAL_SCALE;
     }
 }
