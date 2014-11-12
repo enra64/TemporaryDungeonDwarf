@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SFML;
 using SFML.Graphics;
-using SFML;
 using SFML.Window;
+
+using System;
+using System.Text;
+using System.Timers;
+
 
 namespace DungeonDwarf
 {
@@ -24,7 +24,8 @@ namespace DungeonDwarf
         //animated sprite
         enum direction {jump, left, right};
         private Vector2i textureVector = new Vector2i(1, 1);
-        TimeSpan textureTime = new TimeSpan(50000000);
+        private static Timer animTimer = new Timer(3000);
+        
 
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
@@ -58,7 +59,19 @@ namespace DungeonDwarf
             return new Vector2f(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
         }
 
-
+        //confusing stuff -> timer "=>" what is this doing???
+        private void delayedTexture(int delay, Action action)
+        {
+            Timer timer = new Timer();
+            timer.Interval = delay;
+            timer.Elapsed += (s, e) =>
+            {
+                action();
+                timer.Stop();
+            };
+            timer.Start();
+        }
+        
         public void Update()
         {
             
@@ -71,19 +84,23 @@ namespace DungeonDwarf
 
 
             playerSprite.Position = playerPosition;
-
-            if (!tileMap.Collides(playerPosition, playerSize)){
-                //down movement commented out
-                //if (Keyboard.IsKeyPressed(Keyboard.Key.S) && playerPosition.Y < win.Size.Y - playerSize.Y)
-                //    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Speed)))
-                //        playerPosition.Y += Speed;
-               
+            
+            //Timer for anim
+            animTimer.AutoReset = true;
+            animTimer.Enabled = true;
+            animTimer.Start();
+            
+            //movement
+            if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
-                        textureVector.X = (int)direction.left;
+                        textureVector.X = 0;
                         textureVector.Y = 0;
+                        delayedTexture(10000, ()=> textureVector.X = 1);
+                        delayedTexture(20000, ()=> textureVector.X = 2);
+                        delayedTexture(30000, ()=> textureVector.X = 3);
                       
                     }
                 
@@ -91,8 +108,11 @@ namespace DungeonDwarf
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
-                        textureVector.X = (int)direction.right;
+                        textureVector.X = 0;
                         textureVector.Y = 1;
+                        delayedTexture(10000, ()=> textureVector.X = 1);
+                        delayedTexture(20000, ()=> textureVector.X = 2);
+                        delayedTexture(30000, ()=> textureVector.X = 3);
                     }
                
                 //jump
@@ -100,7 +120,7 @@ namespace DungeonDwarf
                     Console.WriteLine(playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X));
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED))){
                         playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X = (int)direction.jump + 1;
+                        textureVector.X = 1;
                         textureVector.Y = 1;
                     }
                 
@@ -109,6 +129,8 @@ namespace DungeonDwarf
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
+
+                Console.WriteLine(textureVector.X);
             }
         }
 
