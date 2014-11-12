@@ -17,7 +17,6 @@ namespace DungeonDwarf.world
         public RenderWindow win;
         public Vector2u tileAmount, tilesPerView=new Vector2u(20, 10);
         private int[,] tileTypes;
-        private Tile[,] tileArray;
         private bool[,] Collidable;
         private Texture[] textureList=new Texture[3];
         private Texture textureMap=new Texture("textures/world/tilemap.png");
@@ -30,7 +29,6 @@ namespace DungeonDwarf.world
             win = _w;
             tileAmount = _tileAmount;
             tileTypes = new int[tileAmount.X, tileAmount.Y];
-            tileArray = new Tile[tileAmount.X, tileAmount.Y];
             Collidable = new bool[tileAmount.X, tileAmount.Y];
             fillTileTypeArray(_levelLocation);
 
@@ -119,13 +117,11 @@ namespace DungeonDwarf.world
                 for (int x = 0; x < tileAmount.X; x++){
                     long oneDimensionalArrayPosition=y * tileAmount.X + x;
                     if (earthArray[oneDimensionalArrayPosition] == 49)//ASCII one
-                        tileTypes[x, y] = Tile.EARTH_TILE;
+                        tileTypes[x, y] = Global.EARTH_TILE;
                     else if (earthTopArray[oneDimensionalArrayPosition] == 49)
-                        tileTypes[x, y] = Tile.EARTH_TOP_TILE;
-                    else if (airArray[oneDimensionalArrayPosition] == 49)
-                        tileTypes[x, y] = Tile.AIR_TILE;
+                        tileTypes[x, y] = Global.EARTH_TOP_TILE;
                     else
-                        tileTypes[x, y] = Tile.AIR_TILE;
+                        tileTypes[x, y] = Global.AIR_TILE;
                 }
             }
         }
