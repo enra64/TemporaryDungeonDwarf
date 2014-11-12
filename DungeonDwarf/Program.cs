@@ -17,6 +17,7 @@ namespace DungeonDwarf
         static Player currentPlayer;
         static Enemy zeroEnemy;
         static FloatRect moveableRectangle;
+        static float zoom = .5f;
 
         static void Main(string[] args)
         {
@@ -120,6 +121,7 @@ namespace DungeonDwarf
             currentPlayer.Update();
             //check for key input
             KeyCheck();
+            //update zoom for view
             zeroEnemy.update(currentPlayer.playerPosition);
         }
 
@@ -127,6 +129,16 @@ namespace DungeonDwarf
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                 currentRenderWindow.Close();
+            if (Keyboard.IsKeyPressed(Keyboard.Key.K))
+            {
+                zoom -= .0001f;
+                currentView.Zoom(.99f);
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.L))
+            {
+                zoom += .0001f;
+                currentView.Zoom(1.01f);
+            }
         }
 
         /// <summary>
