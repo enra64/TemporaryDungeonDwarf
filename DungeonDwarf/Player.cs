@@ -107,7 +107,7 @@ namespace DungeonDwarf
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
-                        //textureVector.X = 0;
+                        textureVector.X = 0;
                         textureVector.Y = 1;
                         delayedTexture(1000, ()=> textureVector.X = 1);
                         delayedTexture(2000, ()=> textureVector.X = 2);
