@@ -135,7 +135,7 @@ namespace DungeonDwarf
             if (tileMapUpdater.ElapsedMilliseconds > 500)
             {
                 tileMapUpdater.Restart();
-                //tileMap.Update();
+                tileMap.Update();
             }
             //store current offset in global class
             Global.CURRENT_WINDOW_ORIGIN=currentView.Center-Global.BEGIN_WINDOW_ORIGIN;
