@@ -192,10 +192,11 @@ namespace DungeonDwarf
              * Yes i'll do that. Sry for the confusing stuff :/
              */
             //after pressing space, the further jumping is now no longer user controllable.
-            if (jumpCount < 10 && hasJumped==true)
+            bool abortJump = false;
+            if (jumpCount < 10 && hasJumped==true && !abortJump)
             {
                 jumpCount++;
-                JumpIntelligent(Global.PLAYER_JUMP_SPEED - jumpCount * 3f);
+                abortJump=JumpIntelligent(Global.PLAYER_JUMP_SPEED - jumpCount * 3f);
             }
 
             //reset jump boolean on ground touch
@@ -241,13 +242,19 @@ namespace DungeonDwarf
         /// Call this when jumping to avoid jumping into blocks
         /// </summary>
         /// <param name="amount"></param>
-        private void JumpIntelligent(float amount)
+        private bool JumpIntelligent(float amount)
         {
+            bool abortedJump = false;
             Vector2f testingPosition = playerPosition;
             testingPosition.Y -= amount;
-            while (tileMap.Collides(testingPosition, playerSize))
-                testingPosition.Y += .3f;
+            //decrease jump amount until no collision appears
+            while (tileMap.Collides(testingPosition, playerSize)) { 
+                testingPosition.Y += .2f;
+                abortedJump = true;
+                Console.WriteLine("decrease jumping to " + testingPosition.Y);
+            }
             playerPosition.Y = testingPosition.Y;
+            return abortedJump;
         }
 
         public void Draw()
