@@ -23,7 +23,7 @@ namespace DungeonDwarf
         private int jumpCount = 0;
 
         //animated sprite
-        private Vector2i textureVector = new Vector2i(0, 1);
+        private Vector2i textureVector = new Vector2i(0, 0);
         bool isAnim = false;
         bool isRight = false;
         bool isLeft = false;
@@ -65,7 +65,7 @@ namespace DungeonDwarf
         /// After 1 sec it does any Action
         /// </summary>
         /// <returns></returns>
-        private void delayedTexture(int delay, Action action)
+        private void delayUtil(int delay, Action action)
         {
             Timer timer = new Timer();
             timer.Interval = delay;
@@ -85,9 +85,9 @@ namespace DungeonDwarf
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
-            playerSprite.TextureRect = new IntRect(textureVector.X * 60, textureVector.Y * 55, 60, 55);
+            playerSprite.TextureRect = new IntRect(textureVector.X * 60, textureVector.Y * 57, 60, 57);
             playerSize.X = (60) * xScale;
-            playerSize.Y = (55) * yScale;
+            playerSize.Y = (57) * yScale;
 
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
@@ -104,11 +104,11 @@ namespace DungeonDwarf
                     }
                     if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
-                        delayedTexture(150, () => textureVector.X = 1);
-                        delayedTexture(300, () => textureVector.X = 2);
-                        delayedTexture(450, () => textureVector.X = 3);
-                        delayedTexture(600, () => textureVector.X = 0);
-                        delayedTexture(600, () => isAnim= false);
+                        delayUtil(150, () => textureVector.X = 1);
+                        delayUtil(300, () => textureVector.X = 2);
+                        delayUtil(450, () => textureVector.X = 3);
+                        delayUtil(600, () => textureVector.X = 0);
+                        delayUtil(600, () => isAnim= false);
                     }
                 
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
@@ -123,11 +123,11 @@ namespace DungeonDwarf
                     if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
                     {
                         isAnim = true;
-                        delayedTexture(150, () => textureVector.X = 1);
-                        delayedTexture(300, () => textureVector.X = 2);
-                        delayedTexture(450, () => textureVector.X = 3);
-                        delayedTexture(600, () => textureVector.X = 0);
-                        delayedTexture(600, () => isAnim = false);
+                        delayUtil(150, () => textureVector.X = 1);
+                        delayUtil(300, () => textureVector.X = 2);
+                        delayUtil(450, () => textureVector.X = 3);
+                        delayUtil(600, () => textureVector.X = 0);
+                        delayUtil(600, () => isAnim = false);
                     }
                 
                 
@@ -196,15 +196,13 @@ namespace DungeonDwarf
             /* 
              * HOLY HELL DONT DO THREE IFS FOR THIS SHIT COLLAPSE IT INTO ONE -.-
              * seriously though, that shit is shitty for debugging :(
+             * Yes i'll do that. Sry for the confusing stuff :/
              */
             //after pressing space, the further jumping is now no longer user controllable.
             if (jumpCount < 10)
             {
                 jumpCount++;
                 playerPosition.Y -= Global.PLAYER_JUMP_SPEED - jumpCount * 3f;
-                //dont know if i need these, just remove it if this is unneeded
-                textureVector.X = 1;
-                textureVector.Y = 1;
                 //Console.WriteLine("enhanced jumping");
             }
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
@@ -223,9 +221,8 @@ namespace DungeonDwarf
             {
                 //jump at key press
                 //jump right
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isRight)
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
                 {
-                    //Console.WriteLine("jump right call");
                     //jump if there is enough space above
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
@@ -235,44 +232,30 @@ namespace DungeonDwarf
                         //set upwards traveling variable to enable higher jump heights
                         jumpCount = 0;
                         playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X = 1;
-                        textureVector.Y = 1;
+
+                        if (isRight)
+                        {
+                            //Console.WriteLine("jump right call");
+                            textureVector.X = 1;
+                            textureVector.Y = 1;
+                        }
+                        else if (isLeft)
+                        {
+                            //Console.WriteLine("jump left call");
+                            textureVector.X = 1;
+                            textureVector.Y = 0;
+                        }
+
+                        else if (!isRight && !isLeft)
+                        {
+                            //Console.WriteLine("jump straight call");
+                            textureVector.X = 1;
+                            textureVector.Y = 1;
+                        }
+                        
                     }
                 }
-                //jump left
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isLeft)
-                {
-                    //Console.WriteLine("jump left call");
-                    //jump if there is enough space above
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                    {
-                        //Console.WriteLine("allow jump");
-                        //set hasJumped to avoid flickering
-                        hasJumped = true;
-                        //set upwards traveling variable to enable higher jump heights
-                        jumpCount = 0;
-                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X = 1;
-                        textureVector.Y = 0;
-                    }
-                }
-                //jump in standing
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isRight && !isLeft)
-                {
-                    //Console.WriteLine("jump straight call");
-                    //jump if there is enough space above
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                    {
-                        //Console.WriteLine("allow jump");
-                        //set hasJumped to avoid flickering
-                        hasJumped = true;
-                        //set upwards traveling variable to enable higher jump heights
-                        jumpCount = 0;
-                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X = 1;
-                        textureVector.Y = 1;
-                    }
-                }
+               
             }
         }
 
@@ -284,7 +267,7 @@ namespace DungeonDwarf
             colliderRect.Position = new Vector2f(playerPosition.X, playerPosition.Y);
             colliderRect.FillColor = Color.Transparent;
             colliderRect.OutlineColor = Color.Green;
-            colliderRect.OutlineThickness = 2f;
+            colliderRect.OutlineThickness = 1f;
 
             win.Draw(colliderRect);
             win.Draw(playerSprite);
