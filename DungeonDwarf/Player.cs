@@ -91,7 +91,6 @@ namespace DungeonDwarf
 
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
-            //Sprite gets animated again and again if Key is pressed
             if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
@@ -133,7 +132,9 @@ namespace DungeonDwarf
                 
                 //debug key: output current player bott vs ground top diff
                 if (Keyboard.IsKeyPressed(Keyboard.Key.O))
-                    Console.WriteLine(playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X));
+                {
+                    Console.WriteLine(hasJumped);
+                }
 
                 /*
                  * Jump Logic
@@ -147,32 +148,24 @@ namespace DungeonDwarf
                 //jump glitch now reduced to:
                 //immediate position drop on right to left
                 //left to right jumping not ok
-                if (!hasJumped && (yDiffLeft > -10 || yDiffRight > -10))
+                if ((yDiffLeft > -10 || (yDiffRight > -10 && yDiffFurtherRight==yDiffRight)))
                 {
                     //Console.WriteLine("jump kill: "+yDiffLeft+"/"+yDiffRight);
                     //get current left and right highest positions
                     float leftTopPosition = tileMap.GetMinYAtX(playerPosition.X);
-                    float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 0f));
+                    float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 1f));
                     float targetPosition;
 
                     //Console.WriteLine("targets: " + leftTopPosition + "/" + rightTopPosition);
                     //use the one higher up 
                     if (leftTopPosition > rightTopPosition){
-                        //the right block is a complete block higher than the left one
-                        Console.WriteLine("l" + leftTopPosition + ">r" + rightTopPosition);
-                        if (leftTopPosition - rightTopPosition > 55)
-                        {
-                            //avoid glitching into a block
-                            if (yDiffFurtherRight != yDiffRight)
-                                targetPosition = leftTopPosition;
-                            else
-                                targetPosition = rightTopPosition;
-                        }
-                        else
-                            targetPosition = rightTopPosition;
+                        targetPosition = rightTopPosition;
                     }
                     else
+                    {
                         targetPosition = leftTopPosition;
+                        Console.WriteLine("left approach");
+                    }
 
                     //use changed position
                     playerPosition.Y = targetPosition - playerSize.Y;
@@ -211,7 +204,7 @@ namespace DungeonDwarf
             //forever jumping bug originates here: hasjumped gets reset
                 Console.WriteLine("ground touch l: " + yDiffLeft + " r: " + yDiffRight);
             //if (yDiffLeft > -5 && yDiffRight > -5)
-            if ((yDiffLeft == 0 && yDiffRight == 0) || !( Math.Abs(yDiffRight) > 0 && yDiffLeft < 0 ) || Math.Abs(yDiffLeft) > 0 && yDiffRight > -10)
+            if ((yDiffLeft == 0 || yDiffRight == 0) )
             {
                 hasJumped = false;
             }
