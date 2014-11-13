@@ -85,9 +85,9 @@ namespace DungeonDwarf
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
-            playerSprite.TextureRect = new IntRect(textureVector.X * 60, textureVector.Y * 55, 60, 55);
+            playerSprite.TextureRect = new IntRect(textureVector.X * 60, textureVector.Y * 57, 60, 57);
             playerSize.X = (60) * xScale;
-            playerSize.Y = (55) * yScale;
+            playerSize.Y = (57) * yScale;
 
 
             playerSprite.Position = playerPosition;
