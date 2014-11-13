@@ -219,14 +219,14 @@ namespace DungeonDwarf
                             textureVector.X = 1;
                             textureVector.Y = 1;
                         }
-                        if (isLeft)
+                        else if (isLeft)
                         {
                             //Console.WriteLine("jump left call");
                             textureVector.X = 1;
                             textureVector.Y = 0;
                         }
 
-                        if (!isRight && !isLeft)
+                        else if (!isRight && !isLeft)
                         {
                             //Console.WriteLine("jump straight call");
                             textureVector.X = 1;
