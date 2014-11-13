@@ -14,7 +14,9 @@ using System.Threading.Tasks;
  * Doesn't have a KI yet lol. -wulfihm
  * 
  * TODO: nicer jumping, cleaner spawning, healthbar, a somewhat decent KI for...(see above), WEAAAAAAAPOOOO000oooOOOns,...and whatever there is to do ;)
- * 
+ *      
+ * ALSO TODO: load your enemies into a list in the main prgoram (List<Enemy> enemeyList= new List<Enemy>();) 
+ *      so that you can easily add or remove enemies (with enemyList.Add(new enemy))
  ********/
 namespace DungeonDwarf
 {

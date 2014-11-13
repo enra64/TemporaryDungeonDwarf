@@ -25,6 +25,7 @@ namespace DungeonDwarf
         //animated sprite
         private Vector2i textureVector = new Vector2i(0, 1);
         bool isAnim = false;
+        //you *could* of course also define isRight as !isLeft -.- :D
         bool isRight = false;
         bool isLeft = false;
 
@@ -106,8 +107,7 @@ namespace DungeonDwarf
                         isRight = false;
                       
                     }
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim )
-                    {
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
                         delayedTexture(150, () => textureVector.X = 1);
                         delayedTexture(300, () => textureVector.X = 2);
@@ -138,77 +138,33 @@ namespace DungeonDwarf
                 
                 //debug key: output current player bott vs ground top diff
                 if (Keyboard.IsKeyPressed(Keyboard.Key.O))
-                {
                     Console.WriteLine(playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X));
-                }
 
                 /*
                  * Jump Logic
                  */
-                //after pressing space, the further jumping is now no longer user controllable.
-                //maybe reduce jumpspeed by height, does however seemingly clash with the collision
-                //detection :/
-                if (jumpCount<10){
-                    jumpCount++;
-                    playerPosition.Y -= Global.PLAYER_JUMP_SPEED-jumpCount*3f;
-                    //dont know if i need these, just remove it if this is unneeded
-                    textureVector.X = 1;
-                    textureVector.Y = 1;
-                    //Console.WriteLine("enhanced jumping");
-                }
-                float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
-                float yDiffRight =playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X+playerSize.X);
-                //reset jump boolean on ground touch
-                if (yDiffLeft > -5  || yDiffRight > -5)
-                    hasJumped = false;
+                JumpLogic();
 
-                //only jump if jump sequence is not already initiated
-                if (hasJumped == false){
-                    //jump at key press
-                    //jump right
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isRight){
-                        //jump if there is enough space above
-                        if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                        {
-                            //set hasJumped to avoid flickering
-                            hasJumped = true;
-                            //set upwards traveling variable to enable higher jump heights
-                            jumpCount = 0;
-                            playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                            textureVector.X = 1;
-                            textureVector.Y = 1;
-                        }
-                    }
-                    //jump left
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isLeft)
-                    {
-                        //jump if there is enough space above
-                        if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                        {
-                            //set hasJumped to avoid flickering
-                            hasJumped = true;
-                            //set upwards traveling variable to enable higher jump heights
-                            jumpCount = 0;
-                            playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                            textureVector.X = 1;
-                            textureVector.Y = 0;
-                        }
-                    }
-                    //jump in standing
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isRight &&!isLeft)
-                    {
-                        //jump if there is enough space above
-                        if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                        {
-                            //set hasJumped to avoid flickering
-                            hasJumped = true;
-                            //set upwards traveling variable to enable higher jump heights
-                            jumpCount = 0;
-                            playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                            textureVector.X = 1;
-                            textureVector.Y = 1;
-                        }
-                    }
+                float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
+                float yDiffRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X + playerSize.X);
+
+                //new jump logic: if we have finished jumping, reset our position relative y 0
+                if (yDiffLeft > -10 || yDiffRight > -10)
+                {
+                    //save both positions
+                    float leftTopPosition = tileMap.GetMinYAtX(playerPosition.X);
+                    float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 1f));
+                    float targetPosition;
+                    
+                    //use the one higher up 
+                    if (leftTopPosition > rightTopPosition)
+                        targetPosition = rightTopPosition;
+                    else
+                        targetPosition = leftTopPosition;
+
+                    //change position now
+                    playerPosition.Y = targetPosition-playerSize.Y;
+                    playerSprite.Position = playerPosition;
                 }
                 
                 //Gravity stuff
@@ -217,6 +173,78 @@ namespace DungeonDwarf
 
                 
                 //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
+            }
+        }
+
+        public void JumpLogic()
+        {
+            //after pressing space, the further jumping is now no longer user controllable.
+            //maybe reduce jumpspeed by height, does however seemingly clash with the collision
+            //detection :/
+            if (jumpCount < 10)
+            {
+                jumpCount++;
+                playerPosition.Y -= Global.PLAYER_JUMP_SPEED - jumpCount * 3f;
+                //dont know if i need these, just remove it if this is unneeded
+                textureVector.X = 1;
+                textureVector.Y = 1;
+                //Console.WriteLine("enhanced jumping");
+            }
+            float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
+            float yDiffRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X + playerSize.X);
+            //reset jump boolean on ground touch
+            if (yDiffLeft > -5 || yDiffRight > -5)
+                hasJumped = false;
+
+            //only jump if jump sequence is not already initiated
+            if (hasJumped == false)
+            {
+                //jump at key press
+                //jump right
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isRight)
+                {
+                    //jump if there is enough space above
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
+                    {
+                        //set hasJumped to avoid flickering
+                        hasJumped = true;
+                        //set upwards traveling variable to enable higher jump heights
+                        jumpCount = 0;
+                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                        textureVector.X = 1;
+                        textureVector.Y = 1;
+                    }
+                }
+                //jump left
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isLeft)
+                {
+                    //jump if there is enough space above
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
+                    {
+                        //set hasJumped to avoid flickering
+                        hasJumped = true;
+                        //set upwards traveling variable to enable higher jump heights
+                        jumpCount = 0;
+                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                        textureVector.X = 1;
+                        textureVector.Y = 0;
+                    }
+                }
+                //jump in standing
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isRight && !isLeft)
+                {
+                    //jump if there is enough space above
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
+                    {
+                        //set hasJumped to avoid flickering
+                        hasJumped = true;
+                        //set upwards traveling variable to enable higher jump heights
+                        jumpCount = 0;
+                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                        textureVector.X = 1;
+                        textureVector.Y = 1;
+                    }
+                }
             }
         }
 
@@ -230,7 +258,7 @@ namespace DungeonDwarf
             colliderRect.OutlineColor = Color.Green;
             colliderRect.OutlineThickness = 2f;
 
-            //win.Draw(colliderRect);
+            win.Draw(colliderRect);
             win.Draw(playerSprite);
         }
     }
