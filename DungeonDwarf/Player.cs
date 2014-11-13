@@ -25,7 +25,6 @@ namespace DungeonDwarf
         //animated sprite
         private Vector2i textureVector = new Vector2i(0, 1);
         bool isAnim = false;
-        //you *could* of course also define isRight as !isLeft -.- :D
         bool isRight = false;
         bool isLeft = false;
 
@@ -34,7 +33,6 @@ namespace DungeonDwarf
         {
             tileMap = _map;
             //enable offset calculation: get view origin from tilemap
-            //originalOffset = tileMap.viewOrigin;
             originalOffset = Global.BEGIN_WINDOW_ORIGIN;
 
             //renderwindow 
@@ -151,6 +149,8 @@ namespace DungeonDwarf
                 //new jump logic: if we have finished jumping, reset our position relative y 0
                 if (yDiffLeft > -10 || yDiffRight > -10)
                 {
+                    //error detected:
+                    //if we jump right next to a block, said jump gets killed immediately :/
                     //save both positions
                     float leftTopPosition = tileMap.GetMinYAtX(playerPosition.X);
                     float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 1f));
@@ -178,9 +178,11 @@ namespace DungeonDwarf
 
         public void JumpLogic()
         {
+            /* 
+             * HOLY HELL DONT DO THREE IFS FOR THIS SHIT COLLAPSE IT INTO ONE -.-
+             * seriously though, that shit is shitty for debugging :(
+             */
             //after pressing space, the further jumping is now no longer user controllable.
-            //maybe reduce jumpspeed by height, does however seemingly clash with the collision
-            //detection :/
             if (jumpCount < 10)
             {
                 jumpCount++;
@@ -203,9 +205,11 @@ namespace DungeonDwarf
                 //jump right
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isRight)
                 {
+                    //Console.WriteLine("jump right call");
                     //jump if there is enough space above
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
+                        //Console.WriteLine("allow jump");
                         //set hasJumped to avoid flickering
                         hasJumped = true;
                         //set upwards traveling variable to enable higher jump heights
@@ -218,9 +222,11 @@ namespace DungeonDwarf
                 //jump left
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isLeft)
                 {
+                    //Console.WriteLine("jump left call");
                     //jump if there is enough space above
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
+                        //Console.WriteLine("allow jump");
                         //set hasJumped to avoid flickering
                         hasJumped = true;
                         //set upwards traveling variable to enable higher jump heights
@@ -233,9 +239,11 @@ namespace DungeonDwarf
                 //jump in standing
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isRight && !isLeft)
                 {
+                    //Console.WriteLine("jump straight call");
                     //jump if there is enough space above
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
+                        //Console.WriteLine("allow jump");
                         //set hasJumped to avoid flickering
                         hasJumped = true;
                         //set upwards traveling variable to enable higher jump heights
