@@ -186,11 +186,6 @@ namespace DungeonDwarf
 
         public void JumpLogic()
         {
-            /* 
-             * HOLY HELL DONT DO THREE IFS FOR THIS SHIT COLLAPSE IT INTO ONE -.-
-             * seriously though, that shit is shitty for debugging :(
-             * Yes i'll do that. Sry for the confusing stuff :/
-             */
             //after pressing space, the further jumping is now no longer user controllable.
             bool abortJump = false;
             if (jumpCount < 10 && hasJumped==true && !abortJump)
