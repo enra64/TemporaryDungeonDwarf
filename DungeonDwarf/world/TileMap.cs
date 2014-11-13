@@ -66,8 +66,7 @@ namespace DungeonDwarf.world
                         tileType = tileTypes[x, y];
                     else
                         tileType = tileTypes[x, tileAmount.Y-1];
-                    switch (tileType)
-                    {
+                    switch (tileType){
                         case Global.EARTH_TILE:
                             if (y < tileAmount.Y)
                                 Collidable[x, y] = true;
@@ -84,7 +83,7 @@ namespace DungeonDwarf.world
                             xOffset = LAVA1OFFSET;
                             break;
                         case Global.EARTH_TOP_TILE:
-                            xOffset = EARTHTILEOFFSET;
+                            xOffset = EARTHTOPTILEOFFSET;
                             if (y < tileAmount.Y)
                                 Collidable[x, y] = true;
                             break;
@@ -145,19 +144,22 @@ namespace DungeonDwarf.world
             byte[] lavaTopArray = enc.GetBytes(lavatop);
 
             //get tiles from byte arrays
+            //somewhat dirty implementation, we can only define tile priority
             for(int y=0;y<tileAmount.Y;y++){
                 for (int x = 0; x < tileAmount.X; x++){
                     long oneDimensionalArrayPosition=y * tileAmount.X + x;
+                    //default to air tile
+                    tileTypes[x, y] = Global.AIR_TILE;
+                    //decide on tiles with higher priority, low to high
                     if (earthArray[oneDimensionalArrayPosition] == 49)//ASCII one: earth
                         tileTypes[x, y] = Global.EARTH_TILE;
+                    if (earthTopArray[oneDimensionalArrayPosition] == 49)//earth top
+                        tileTypes[x, y] = Global.EARTH_TOP_TILE;
                     if (lavaArray[oneDimensionalArrayPosition] == 49)//ASCII one: lava
                         tileTypes[x, y] = Global.LAVATILE;
                     if (lavaTopArray[oneDimensionalArrayPosition] == 49)//ASCII one: lavatop
                         tileTypes[x, y] = Global.LAVA_TOP_TILE;
-                    else if (earthTopArray[oneDimensionalArrayPosition] == 49)//earth top
-                        tileTypes[x, y] = Global.EARTH_TOP_TILE;
-                    else
-                        tileTypes[x, y] = Global.AIR_TILE;
+                    
                 }
             }
         }
