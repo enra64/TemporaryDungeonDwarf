@@ -150,7 +150,6 @@ namespace DungeonDwarf
                 //detection :/
                 if (jumpCount<10){
                     jumpCount++;
-                    playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
                     playerPosition.Y -= Global.PLAYER_JUMP_SPEED-jumpCount*3f;
                     //dont know if i need these, just remove it if this is unneeded
                     textureVector.X = 1;
