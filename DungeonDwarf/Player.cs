@@ -98,13 +98,6 @@ namespace DungeonDwarf
 
             Console.WriteLine(health);
 
-            if (health > MIN_HEALTH)
-                health--;
-            else
-            {
-                Texture deathTex = new Texture("textures/player/death.png");
-                playerSprite = new Sprite(deathTex);
-            }
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
@@ -114,6 +107,9 @@ namespace DungeonDwarf
 
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
+           if (health > MIN_HEALTH)
+           {
+               health--;
             if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
@@ -163,21 +159,28 @@ namespace DungeonDwarf
                  * Jump Logic
                  */
                 JumpLogic();
-
+            
                 //logic for resetting player y if he hovers above ground
                 CorrectYPosLogic();
                 
                 //Highly advanced realtime physics calculation
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
-                
+            
                 //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
 
                 //update position only now
                 playerSprite.Position = playerPosition;
-            }
-        }
+             }   
+            }    
+            
 
+           else
+           {
+               Texture deathTex = new Texture("textures/player/death.png");
+               playerSprite = new Sprite(deathTex);
+           }
+        }
         public void CorrectYPosLogic(){
             //get difference between player left bottom and ground top
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.MinY(playerPosition);
