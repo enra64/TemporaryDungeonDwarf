@@ -181,6 +181,7 @@ namespace DungeonDwarf
             /* 
              * HOLY HELL DONT DO THREE IFS FOR THIS SHIT COLLAPSE IT INTO ONE -.-
              * seriously though, that shit is shitty for debugging :(
+             * Yes i'll do that. Sry for the confusing stuff :/
              */
             //after pressing space, the further jumping is now no longer user controllable.
             if (jumpCount < 10)
@@ -200,9 +201,8 @@ namespace DungeonDwarf
             {
                 //jump at key press
                 //jump right
-                if (isRight && Keyboard.IsKeyPressed(Keyboard.Key.Space))
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
                 {
-                    //Console.WriteLine("jump right call");
                     //jump if there is enough space above
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
@@ -212,44 +212,30 @@ namespace DungeonDwarf
                         //set upwards traveling variable to enable higher jump heights
                         jumpCount = 0;
                         playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X = 1;
-                        textureVector.Y = 1;
+
+                        if (isRight)
+                        {
+                            //Console.WriteLine("jump right call");
+                            textureVector.X = 1;
+                            textureVector.Y = 1;
+                        }
+                        if (isLeft)
+                        {
+                            //Console.WriteLine("jump left call");
+                            textureVector.X = 1;
+                            textureVector.Y = 0;
+                        }
+
+                        if (!isRight && !isLeft)
+                        {
+                            //Console.WriteLine("jump straight call");
+                            textureVector.X = 1;
+                            textureVector.Y = 1;
+                        }
+                        
                     }
                 }
-                //jump left
-                if (isLeft && Keyboard.IsKeyPressed(Keyboard.Key.Space))
-                {
-                    //Console.WriteLine("jump left call");
-                    //jump if there is enough space above
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                    {
-                        //Console.WriteLine("allow jump");
-                        //set hasJumped to avoid flickering
-                        hasJumped = true;
-                        //set upwards traveling variable to enable higher jump heights
-                        jumpCount = 0;
-                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X = 1;
-                        textureVector.Y = 0;
-                    }
-                }
-                //jump in standing
-                if ((!isRight && !isLeft) && Keyboard.IsKeyPressed(Keyboard.Key.Space))
-                {
-                    //Console.WriteLine("jump straight call");
-                    //jump if there is enough space above
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                    {
-                        //Console.WriteLine("allow jump");
-                        //set hasJumped to avoid flickering
-                        hasJumped = true;
-                        //set upwards traveling variable to enable higher jump heights
-                        jumpCount = 0;
-                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                        textureVector.X = 1;
-                        textureVector.Y = 1;
-                    }
-                }
+               
             }
         }
 
