@@ -247,7 +247,7 @@ namespace DungeonDwarf
             colliderRect.Position = new Vector2f(playerPosition.X, playerPosition.Y);
             colliderRect.FillColor = Color.Transparent;
             colliderRect.OutlineColor = Color.Green;
-            colliderRect.OutlineThickness = 2f;
+            colliderRect.OutlineThickness = 1f;
 
             win.Draw(colliderRect);
             win.Draw(playerSprite);
