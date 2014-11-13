@@ -13,7 +13,7 @@ using System.Threading.Tasks;
  * 
  * Doesn't have a KI yet lol. -wulfihm
  * 
- * TODO: nicer jumping, cleaner spawning, healthbar, a somewhat decent KI for...(see above), ................       and whatever there is to do ;)
+ * TODO: nicer jumping, cleaner spawning, healthbar, a somewhat decent KI for...(see above), WEAAAAAAAPOOOO000oooOOOns,...and whatever there is to do ;)
  * 
  ********/
 namespace DungeonDwarf
