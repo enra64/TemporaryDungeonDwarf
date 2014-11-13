@@ -24,6 +24,9 @@ namespace DungeonDwarf
 
         //animated sprite
         private Vector2i textureVector = new Vector2i(0, 1);
+        bool isAnim = false;
+        bool isRight = false;
+        bool isLeft = false;
 
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
@@ -90,7 +93,7 @@ namespace DungeonDwarf
 
             playerSprite.Position = playerPosition;
 
-            //movement !!Now with stupid stuff I added, because I don't start THINKING before I code!!
+            //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
             //Sprite gets animated again and again if Key is pressed
             if (!tileMap.Collides(playerPosition, playerSize)){       
@@ -98,26 +101,40 @@ namespace DungeonDwarf
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
-                        //textureVector.X = 0;
                         textureVector.Y = 0;
-                        delayedTexture(250, ()=> textureVector.X = 1);
-                        delayedTexture(500, ()=> textureVector.X = 2);
-                        delayedTexture(750, ()=> textureVector.X = 3);
-                        delayedTexture(1000, ()=> textureVector.X = 0);
+                        isLeft = true;
+                        isRight = false;
                       
                     }
-                
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim )
+                    {
+                        isAnim = true;
+                        delayedTexture(150, () => textureVector.X = 1);
+                        delayedTexture(300, () => textureVector.X = 2);
+                        delayedTexture(450, () => textureVector.X = 3);
+                        delayedTexture(600, () => textureVector.X = 0);
+                        delayedTexture(600, () => isAnim= false);
+                    }
+
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
-                        //textureVector.X = 0;
                         textureVector.Y = 1;
-                        delayedTexture(250, ()=> textureVector.X = 1);
-                        delayedTexture(500, ()=> textureVector.X = 2);
-                        delayedTexture(750, ()=> textureVector.X = 3);
-                        delayedTexture(1000, ()=> textureVector.X = 0);
+                        isRight = true; 
+                        isLeft = false;
                     }
+                    
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
+                    {
+                        isAnim = true;
+                        delayedTexture(150, () => textureVector.X = 1);
+                        delayedTexture(300, () => textureVector.X = 2);
+                        delayedTexture(450, () => textureVector.X = 3);
+                        delayedTexture(600, () => textureVector.X = 0);
+                        delayedTexture(600, () => isAnim = false);
+                    }
+                
                 
                 //debug key: output current player bott vs ground top diff
                 if (Keyboard.IsKeyPressed(Keyboard.Key.O))
@@ -134,9 +151,6 @@ namespace DungeonDwarf
                 if (jumpCount<3){
                     jumpCount++;
                     playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
-                    //dont know if i need these, just remove it if this is unneeded
-                    textureVector.X = 1;
-                    textureVector.Y = 1;
                     //Console.WriteLine("enhanced jumping");
                 }
 
@@ -147,7 +161,38 @@ namespace DungeonDwarf
                 //only jump if jump sequence is not already initiated
                 if (hasJumped == false){
                     //jump at key press
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Space)){
+                    //jump right
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isRight){
+                        //jump if there is enough space above
+                        if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
+                        {
+                            //set hasJumped to avoid flickering
+                            hasJumped = true;
+                            //set upwards traveling variable to enable higher jump heights
+                            jumpCount = 0;
+                            playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                            textureVector.X = 1;
+                            textureVector.Y = 1;
+                        }
+                    }
+                    //jump left
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isLeft)
+                    {
+                        //jump if there is enough space above
+                        if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
+                        {
+                            //set hasJumped to avoid flickering
+                            hasJumped = true;
+                            //set upwards traveling variable to enable higher jump heights
+                            jumpCount = 0;
+                            playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                            textureVector.X = 1;
+                            textureVector.Y = 0;
+                        }
+                    }
+                    //jump in standing
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isRight &&!isLeft)
+                    {
                         //jump if there is enough space above
                         if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                         {
@@ -181,7 +226,7 @@ namespace DungeonDwarf
             colliderRect.OutlineColor = Color.Green;
             colliderRect.OutlineThickness = 2f;
 
-            win.Draw(colliderRect);
+            //win.Draw(colliderRect);
             win.Draw(playerSprite);
         }
     }
