@@ -203,9 +203,9 @@ namespace DungeonDwarf
             {
                 //jump at key press
                 //jump right
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isRight)
+                if (isRight && Keyboard.IsKeyPressed(Keyboard.Key.Space))
                 {
-                    //Console.WriteLine("jump right call");
+                    Console.WriteLine("jump right call");
                     //jump if there is enough space above
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
@@ -220,9 +220,9 @@ namespace DungeonDwarf
                     }
                 }
                 //jump left
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && isLeft)
+                if (isLeft && Keyboard.IsKeyPressed(Keyboard.Key.Space))
                 {
-                    //Console.WriteLine("jump left call");
+                    Console.WriteLine("jump left call");
                     //jump if there is enough space above
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
@@ -237,7 +237,7 @@ namespace DungeonDwarf
                     }
                 }
                 //jump in standing
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isRight && !isLeft)
+                if (!isRight && !isLeft && Keyboard.IsKeyPressed(Keyboard.Key.Space))
                 {
                     //Console.WriteLine("jump straight call");
                     //jump if there is enough space above
