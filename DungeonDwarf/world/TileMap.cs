@@ -192,6 +192,19 @@ namespace DungeonDwarf.world
             return win.Size.Y;
         }
 
+        public float MinY(Vector2f position)
+        {
+            int[] tilePosition = GetCurrentTile(new Vector2f(position.X, position.Y));
+            if (tilePosition[0] < 0)
+                return -1;
+            for (int y = tilePosition[1]; y < tileAmount.Y; y++)
+            {
+                if (Collidable[tilePosition[0], y])
+                    return GetRectangle(tilePosition[0], y).Top;
+            }
+            return win.Size.Y;
+        }
+
         /// <summary>
         /// returns the x and y grid position your given center position lies in
         /// </summary>

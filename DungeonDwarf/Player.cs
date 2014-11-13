@@ -133,7 +133,7 @@ namespace DungeonDwarf
                 //debug key: output current player bott vs ground top diff
                 if (Keyboard.IsKeyPressed(Keyboard.Key.O))
                 {
-                    Console.WriteLine(hasJumped);
+                    Console.WriteLine(playerPosition.Y);
                 }
 
                 /*
@@ -157,25 +157,29 @@ namespace DungeonDwarf
 
         public void CorrectYPosLogic(){
             //get difference between player left bottom and ground top
-            float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
+            float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.MinY(playerPosition);
             //reset player position if he is just above ground
             //even though leaving out yDiffRigh checking seems illogical, it removes the jumping bug
-            if (yDiffLeft > -10)
+            if (yDiffLeft > -10 && yDiffLeft<60 && yDiffLeft!=0)
             {
-                //get current left and right highest positions
-                float leftTopPosition = tileMap.GetMinYAtX(playerPosition.X);
-                float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 1f));
-                float targetPosition;
+                //avoid getting put above the game
+                if (playerPosition.Y == -50)
+                    playerPosition.Y = 0;
+                else{
+                    Console.WriteLine(yDiffLeft);
+                    //get current left and right highest positions
+                    float leftTopPosition = tileMap.MinY(playerPosition);
+                    float rightTopPosition = tileMap.MinY(new Vector2f(playerPosition.X - 1 + playerSize.X, playerPosition.Y));
+                    float targetPosition;
 
-                //use the block higher up 
-                if (leftTopPosition > rightTopPosition)
-                    targetPosition = rightTopPosition;
-                else
-                    targetPosition = leftTopPosition;
-                    
-
+                    //use the block higher up 
+                    if (leftTopPosition > rightTopPosition)
+                        targetPosition = rightTopPosition;
+                    else
+                        targetPosition = leftTopPosition;
+                    playerPosition.Y = targetPosition - playerSize.Y;
+                }
                 //write changed position
-                playerPosition.Y = targetPosition - playerSize.Y;
                 playerSprite.Position = playerPosition;
             }
         }
@@ -191,8 +195,7 @@ namespace DungeonDwarf
             if (jumpCount < 10 && hasJumped==true)
             {
                 jumpCount++;
-                playerPosition.Y -= Global.PLAYER_JUMP_SPEED - jumpCount * 3f;
-                //Console.WriteLine("enhanced jumping");
+                JumpIntelligent(Global.PLAYER_JUMP_SPEED - jumpCount * 3f);
             }
 
             //reset jump boolean on ground touch
@@ -212,7 +215,7 @@ namespace DungeonDwarf
                         hasJumped = true;
                         //set upwards traveling variable to enable higher jump heights
                         jumpCount = 0;
-                        playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                        JumpIntelligent(Global.PLAYER_JUMP_SPEED);
 
                         //change texture
                         if (isRight){
@@ -232,6 +235,19 @@ namespace DungeonDwarf
                 }
                
             }
+        }
+
+        /// <summary>
+        /// Call this when jumping to avoid jumping into blocks
+        /// </summary>
+        /// <param name="amount"></param>
+        private void JumpIntelligent(float amount)
+        {
+            Vector2f testingPosition = playerPosition;
+            testingPosition.Y -= amount;
+            while (tileMap.Collides(testingPosition, playerSize))
+                testingPosition.Y += .3f;
+            playerPosition.Y = testingPosition.Y;
         }
 
         public void Draw()
