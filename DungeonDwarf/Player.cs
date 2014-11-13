@@ -141,45 +141,41 @@ namespace DungeonDwarf
                  */
                 JumpLogic();
 
-                float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
-                float yDiffRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X + playerSize.X);
-                float yDiffFurtherRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X -1f + playerSize.X);
-
-                //jump glitch now reduced to:
-                //immediate position drop on right to left
-                //left to right jumping not ok
-                if ((yDiffLeft > -10 || (yDiffRight > -10 && yDiffFurtherRight==yDiffRight)))
-                {
-                    //Console.WriteLine("jump kill: "+yDiffLeft+"/"+yDiffRight);
-                    //get current left and right highest positions
-                    float leftTopPosition = tileMap.GetMinYAtX(playerPosition.X);
-                    float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 1f));
-                    float targetPosition;
-
-                    //Console.WriteLine("targets: " + leftTopPosition + "/" + rightTopPosition);
-                    //use the one higher up 
-                    if (leftTopPosition > rightTopPosition){
-                        targetPosition = rightTopPosition;
-                    }
-                    else
-                    {
-                        targetPosition = leftTopPosition;
-                        Console.WriteLine("left approach");
-                    }
-
-                    //use changed position
-                    playerPosition.Y = targetPosition - playerSize.Y;
-                    playerSprite.Position = playerPosition;
-                }
+                //logic for resetting player y if he hovers above ground
+                CorrectYPosLogic();
                 
-                //Gravity stuff
+                //Highly advanced realtime physics calculation
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
-
                 
                 //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
 
                 //update position only now
+                playerSprite.Position = playerPosition;
+            }
+        }
+
+        public void CorrectYPosLogic(){
+            //get difference between player left bottom and ground top
+            float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
+            //reset player position if he is just above ground
+            //even though leaving out yDiffRigh checking seems illogical, it removes the jumping bug
+            if (yDiffLeft > -10)
+            {
+                //get current left and right highest positions
+                float leftTopPosition = tileMap.GetMinYAtX(playerPosition.X);
+                float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 1f));
+                float targetPosition;
+
+                //use the block higher up 
+                if (leftTopPosition > rightTopPosition)
+                    targetPosition = rightTopPosition;
+                else
+                    targetPosition = leftTopPosition;
+                    
+
+                //write changed position
+                playerPosition.Y = targetPosition - playerSize.Y;
                 playerSprite.Position = playerPosition;
             }
         }
@@ -192,56 +188,42 @@ namespace DungeonDwarf
              * Yes i'll do that. Sry for the confusing stuff :/
              */
             //after pressing space, the further jumping is now no longer user controllable.
-            if (jumpCount < 10)
+            if (jumpCount < 10 && hasJumped==true)
             {
                 jumpCount++;
                 playerPosition.Y -= Global.PLAYER_JUMP_SPEED - jumpCount * 3f;
                 //Console.WriteLine("enhanced jumping");
             }
+
+            //reset jump boolean on ground touch
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
             float yDiffRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X + playerSize.X);
-            //reset jump boolean on ground touch
-            //forever jumping bug originates here: hasjumped gets reset
-                Console.WriteLine("ground touch l: " + yDiffLeft + " r: " + yDiffRight);
-            //if (yDiffLeft > -5 && yDiffRight > -5)
             if ((yDiffLeft == 0 || yDiffRight == 0) )
-            {
                 hasJumped = false;
-            }
+            
 
             //only jump if jump sequence is not already initiated
-            if (hasJumped == false)
-            {
+            if (hasJumped == false){
                 //jump at key press
-                //jump right
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
-                {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space)){
                     //jump if there is enough space above
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
-                    {
-                        //Console.WriteLine("allow jump");
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED))){
                         //set hasJumped to avoid flickering
                         hasJumped = true;
                         //set upwards traveling variable to enable higher jump heights
                         jumpCount = 0;
                         playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
 
-                        if (isRight)
-                        {
-                            //Console.WriteLine("jump right call");
+                        //change texture
+                        if (isRight){
                             textureVector.X = 1;
                             textureVector.Y = 1;
                         }
-                        else if (isLeft)
-                        {
-                            //Console.WriteLine("jump left call");
+                        else if (isLeft){
                             textureVector.X = 1;
                             textureVector.Y = 0;
                         }
-
-                        else if (!isRight && !isLeft)
-                        {
-                            //Console.WriteLine("jump straight call");
+                        else {//removed to avoid undetermined texture state if(!isRight && !isLeft){
                             textureVector.X = 1;
                             textureVector.Y = 1;
                         }
