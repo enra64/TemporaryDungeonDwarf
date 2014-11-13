@@ -12,6 +12,13 @@ namespace DungeonDwarf
     {
         public Vector2f playerPosition, playerSize;
         
+        //player stats
+        private const int MAX_HEALTH = 100;
+        private const int MIN_HEALTH = 0;
+        RectangleShape healthBar = new RectangleShape();
+
+
+
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
         private Sprite playerSprite;
@@ -82,6 +89,19 @@ namespace DungeonDwarf
         /// <returns></returns>
         public void Update()
         {
+            //health
+            int health = MAX_HEALTH;
+            healthBar.Size = new Vector2f(health * 2, 20f);
+            healthBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 50f);
+            healthBar.FillColor = Color.Red;
+            healthBar.OutlineColor = Color.Black;
+            healthBar.OutlineThickness = 3f;
+
+
+
+
+
+
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
@@ -263,6 +283,7 @@ namespace DungeonDwarf
             colliderRect.OutlineColor = Color.Green;
             colliderRect.OutlineThickness = 1f;
 
+            win.Draw(healthBar);
             win.Draw(colliderRect);
             win.Draw(playerSprite);
         }
