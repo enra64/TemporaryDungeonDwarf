@@ -24,6 +24,7 @@ namespace DungeonDwarf
 
         //animated sprite
         private Vector2i textureVector = new Vector2i(0, 1);
+        bool isAnim = false;
 
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
@@ -90,7 +91,7 @@ namespace DungeonDwarf
 
             playerSprite.Position = playerPosition;
 
-            //movement !!Now with stupid stuff I added, because I don't start THINKING before I code!!
+            //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
             //Sprite gets animated again and again if Key is pressed
             if (!tileMap.Collides(playerPosition, playerSize)){       
@@ -98,26 +99,37 @@ namespace DungeonDwarf
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
-                        //textureVector.X = 0;
                         textureVector.Y = 0;
-                        delayedTexture(250, ()=> textureVector.X = 1);
-                        delayedTexture(500, ()=> textureVector.X = 2);
-                        delayedTexture(750, ()=> textureVector.X = 3);
-                        delayedTexture(1000, ()=> textureVector.X = 0);
+                        
                       
                     }
-                
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim )
+                    {
+                        isAnim = true;
+                        delayedTexture(250, () => textureVector.X = 1);
+                        delayedTexture(500, () => textureVector.X = 2);
+                        delayedTexture(750, () => textureVector.X = 3);
+                        delayedTexture(1000, () => textureVector.X = 0);
+                        delayedTexture(1000, () => isAnim= false);
+                    }
+
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
                         playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
-                        //textureVector.X = 0;
                         textureVector.Y = 1;
-                        delayedTexture(250, ()=> textureVector.X = 1);
-                        delayedTexture(500, ()=> textureVector.X = 2);
-                        delayedTexture(750, ()=> textureVector.X = 3);
-                        delayedTexture(1000, ()=> textureVector.X = 0);
                     }
+                    
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
+                    {
+                        isAnim = true;
+                        delayedTexture(250, () => textureVector.X = 1);
+                        delayedTexture(500, () => textureVector.X = 2);
+                        delayedTexture(750, () => textureVector.X = 3);
+                        delayedTexture(1000, () => textureVector.X = 0);
+                        delayedTexture(1000, () => isAnim = false);
+                    }
+                
                 
                 //debug key: output current player bott vs ground top diff
                 if (Keyboard.IsKeyPressed(Keyboard.Key.O))
