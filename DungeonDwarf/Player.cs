@@ -222,7 +222,8 @@ namespace DungeonDwarf
                             textureVector.X = 1;
                             textureVector.Y = 0;
                         }
-                        else {//removed to avoid undetermined texture state if(!isRight && !isLeft){
+                        else 
+                        {
                             textureVector.X = 1;
                             textureVector.Y = 1;
                         }
