@@ -27,7 +27,7 @@ namespace DungeonDwarf
         /*
          * TILE TYPES VS THEIR ID
          */
-        public const int AIR_TILE = 2, EARTH_TILE = 0, EARTH_TOP_TILE = 1;
+        public const int AIR_TILE = 2, EARTH_TILE = 0, EARTH_TOP_TILE = 1, LAVA_TOP_TILE=3, LAVATILE=4;
 
         /*
          * GLOBAL CONFIGURATION VARIABLES

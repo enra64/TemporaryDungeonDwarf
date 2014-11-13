@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SFML;
 using SFML.Graphics;
 using SFML.Window;
+using System.Diagnostics;
 
 namespace DungeonDwarf
 {
@@ -19,7 +20,7 @@ namespace DungeonDwarf
         static Enemy enemyOne;
         static Enemy enemyTwo;
         static FloatRect moveableRectangle;
-        static float zoom = .5f;
+        static Stopwatch tileMapUpdater = new Stopwatch();
 
         static void Main(string[] args)
         {
@@ -98,8 +99,10 @@ namespace DungeonDwarf
              * rule number two, by the way, is: Sometimes I do do mistakes, but please
              * think twice before adding you calls before this comment
              */
-            //init tile map//trying to push new changes -.-
-            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(400, 10), "world/levels/longTest2.oel");
+            //init tile map
+            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(400, 10), "world/levels/lavatest.oel");
+            //start tilemap update stopwatch
+            tileMapUpdater.Start();
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
@@ -128,6 +131,12 @@ namespace DungeonDwarf
         private static void Update(){
             //move view with player
             moveView();
+            //update tilemap if due
+            if (tileMapUpdater.ElapsedMilliseconds > 500)
+            {
+                tileMapUpdater.Restart();
+                //tileMap.Update();
+            }
             //store current offset in global class
             Global.CURRENT_WINDOW_ORIGIN=currentView.Center-Global.BEGIN_WINDOW_ORIGIN;
             //moves the player
@@ -220,7 +229,7 @@ namespace DungeonDwarf
             enemyTwo.draw();
 
             currentPlayer.Draw();
-            MovementRectDebug();
+            //MovementRectDebug();
             /* END YOUR CALLS HERE
              * Doing last call, do not call anything after this
              */
@@ -241,7 +250,7 @@ namespace DungeonDwarf
             r.FillColor = Color.Transparent;
             r.OutlineColor = Color.Green;
             r.OutlineThickness = 2f;
-            //currentRenderWindow.Draw(r);
+            currentRenderWindow.Draw(r);
         }
     }
 }

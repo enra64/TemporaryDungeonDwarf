@@ -24,12 +24,13 @@ namespace DungeonDwarf.world
         //single variable: how many tiles below the max y value we _know_ about shall we draw
         private uint yInterpolationDuration = 5;
 
-        private Texture textureMap=new Texture("textures/world/tilemap.png");
+        private Texture textureMap=new Texture("textures/world/spritemap.png");
         //contains target size for quads
         private Vector2f idealQuadSize, currentQuadSize;
         //vertex drawing stuff
         private VertexArray tileMap;
         private RenderStates renderStates = RenderStates.Default;
+        private const int EARTHTILEOFFSET=100, EARTHTOPTILEOFFSET=200, AIROFFSET=0, LAVA1OFFSET=300, LAVA2OFFSET=500, LAVA1TOPOFFSET=400, LAVA2TOPOFFSET=600;
 
         public TileMap(RenderWindow _w, Vector2u _tileAmount, string _levelLocation){
             win = _w;
@@ -70,15 +71,25 @@ namespace DungeonDwarf.world
                         case Global.EARTH_TILE:
                             if (y < tileAmount.Y)
                                 Collidable[x, y] = true;
-                            xOffset = 100;
+                            xOffset = EARTHTILEOFFSET;
+                            break;
+                        case Global.LAVA_TOP_TILE:
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = true;
+                            xOffset = LAVA1TOPOFFSET;
+                            break;
+                        case Global.LAVATILE:
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = true;
+                            xOffset = LAVA1OFFSET;
                             break;
                         case Global.EARTH_TOP_TILE:
-                            xOffset = 200;
+                            xOffset = EARTHTILEOFFSET;
                             if (y < tileAmount.Y)
                                 Collidable[x, y] = true;
                             break;
                         default:
-                            xOffset = 0;
+                            xOffset = AIROFFSET;
                             if (y < tileAmount.Y)
                                 Collidable[x, y] = false;
                             break;
@@ -115,25 +126,35 @@ namespace DungeonDwarf.world
             {
                 EARTH = s.Element("earth").Value,
                 EARTHTOP = s.Element("earthTop").Value,
+                LAVATOP = s.Element("lavaTop").Value,
+                LAVA = s.Element("lava").Value,
                 AIR = s.Element("air").Value
             }).FirstOrDefault();
             //get strings from array, removing all linebreaks
             string earth = query.EARTH.Replace("\n", String.Empty);
             string earthtop = query.EARTHTOP.Replace("\n", String.Empty);
             string air = query.AIR.Replace("\n", String.Empty);
+            string lava = query.LAVA.Replace("\n", String.Empty);
+            string lavatop = query.LAVATOP.Replace("\n", String.Empty);
             //get byte arrays from strings
             System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
             byte[] earthArray = enc.GetBytes(earth);
             byte[] earthTopArray = enc.GetBytes(earthtop);
             byte[] airArray = enc.GetBytes(air);
+            byte[] lavaArray = enc.GetBytes(lava);
+            byte[] lavaTopArray = enc.GetBytes(lavatop);
 
             //get tiles from byte arrays
             for(int y=0;y<tileAmount.Y;y++){
                 for (int x = 0; x < tileAmount.X; x++){
                     long oneDimensionalArrayPosition=y * tileAmount.X + x;
-                    if (earthArray[oneDimensionalArrayPosition] == 49)//ASCII one
+                    if (earthArray[oneDimensionalArrayPosition] == 49)//ASCII one: earth
                         tileTypes[x, y] = Global.EARTH_TILE;
-                    else if (earthTopArray[oneDimensionalArrayPosition] == 49)
+                    if (lavaArray[oneDimensionalArrayPosition] == 49)//ASCII one: lava
+                        tileTypes[x, y] = Global.LAVATILE;
+                    if (lavaTopArray[oneDimensionalArrayPosition] == 49)//ASCII one: lavatop
+                        tileTypes[x, y] = Global.LAVA_TOP_TILE;
+                    else if (earthTopArray[oneDimensionalArrayPosition] == 49)//earth top
                         tileTypes[x, y] = Global.EARTH_TOP_TILE;
                     else
                         tileTypes[x, y] = Global.AIR_TILE;
@@ -227,16 +248,66 @@ namespace DungeonDwarf.world
 
             //sad implication: we have to scale the position of literally everything when we do this
             Global.GLOBAL_SCALE = currentQuadSize.X / idealQuadSize.X;//returns a smaller value
+        }
 
-            for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++){
-                for (uint x = 0; x < tileAmount.X; x++){
+        public void Update()
+        {
+            for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++)
+            {
+                for (uint x = 0; x < tileAmount.X; x++)
+                {
                     //because: 4 vertexes/quad * (current y times how many x per view) * x
                     uint currentPosition = 4 * ((y * tileAmount.X) + x);
-                    //get old texture coordinates
-                    Vector2f texCo1 = tileMap[currentPosition + 0].TexCoords;
-                    Vector2f texCo2 = tileMap[currentPosition + 1].TexCoords;
-                    Vector2f texCo3 = tileMap[currentPosition + 2].TexCoords;
-                    Vector2f texCo4 = tileMap[currentPosition + 3].TexCoords;
+                    //initialize updated texture coords
+                    Vector2f texCo1, texCo2, texCo3, texCo4;
+                    //enable interpolation:
+                    int tileType;
+                    if (y < tileAmount.Y)
+                        tileType = tileTypes[x, y];
+                    else
+                        tileType = tileTypes[x, tileAmount.Y - 1];
+                    if (tileType == Global.LAVATILE)
+                    {
+                        //+0 should contain pure x offset
+                        texCo1 = tileMap[currentPosition + 0].TexCoords;
+                        Vector2f newOffset=new Vector2f(0,0);
+                        //swap offset
+                        if (texCo1.X == LAVA1OFFSET)
+                            newOffset.X = LAVA2OFFSET-LAVA1OFFSET;
+                        else
+                            newOffset.X = LAVA1OFFSET-LAVA2OFFSET;
+                        texCo1 = tileMap[currentPosition + 0].TexCoords + newOffset;
+                        texCo2 = tileMap[currentPosition + 1].TexCoords + newOffset;
+                        texCo3 = tileMap[currentPosition + 2].TexCoords + newOffset;
+                        texCo4 = tileMap[currentPosition + 3].TexCoords + newOffset;
+                    }
+                    else if (tileType == Global.LAVA_TOP_TILE)
+                    {
+                        //+0 should contain pure x offset
+                        texCo1 = tileMap[currentPosition + 0].TexCoords;
+                        Vector2f newOffset = new Vector2f(0, 0);
+                        //swap offset
+                        if (texCo1.X == LAVA1TOPOFFSET)
+                            newOffset.X = LAVA2TOPOFFSET - LAVA1TOPOFFSET;
+                        else
+                            newOffset.X = LAVA1TOPOFFSET - LAVA2TOPOFFSET;
+                        texCo1 = tileMap[currentPosition + 0].TexCoords + newOffset;
+                        texCo2 = tileMap[currentPosition + 1].TexCoords + newOffset;
+                        texCo3 = tileMap[currentPosition + 2].TexCoords + newOffset;
+                        texCo4 = tileMap[currentPosition + 3].TexCoords + newOffset;
+                    }
+                    else{
+                        texCo1 = tileMap[currentPosition + 0].TexCoords;
+                        texCo2 = tileMap[currentPosition + 1].TexCoords;
+                        texCo3 = tileMap[currentPosition + 2].TexCoords;
+                        texCo4 = tileMap[currentPosition + 3].TexCoords;
+                    }
+                    /*
+                    tileMap[currentPosition + 0] = new Vertex(new Vector2f(idealQuadSize.X * x, idealQuadSize.Y * y), new Vector2f(xOffset, 0));//top left vertex
+                    tileMap[currentPosition + 1] = new Vertex(new Vector2f(idealQuadSize.X * (x + 1), idealQuadSize.Y * y), new Vector2f(xOffset+100, 0));//top right vertex
+                    tileMap[currentPosition + 2] = new Vertex(new Vector2f(idealQuadSize.X * (x + 1), idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+100, 100));//bot right vertex
+                    tileMap[currentPosition + 3] = new Vertex(new Vector2f(idealQuadSize.X * x, idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
+                     */
                     //map vertex positions
                     tileMap[currentPosition + 0] = new Vertex(new Vector2f(currentQuadSize.X * x, currentQuadSize.Y * y), texCo1);//top left vertex
                     tileMap[currentPosition + 1] = new Vertex(new Vector2f(currentQuadSize.X * (x + 1), currentQuadSize.Y * y), texCo2);//top right vertex

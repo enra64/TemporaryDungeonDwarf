@@ -65,6 +65,32 @@
       <Color A="255" R="0" G="255" B="255" />
       <ExportMode>Bitstring</ExportMode>
     </LayerDefinition>
+    <LayerDefinition xsi:type="GridLayerDefinition">
+      <Name>lava</Name>
+      <Grid>
+        <Width>20</Width>
+        <Height>20</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+      <Color A="255" R="255" G="128" B="0" />
+      <ExportMode>Bitstring</ExportMode>
+    </LayerDefinition>
+    <LayerDefinition xsi:type="GridLayerDefinition">
+      <Name>lavaTop</Name>
+      <Grid>
+        <Width>20</Width>
+        <Height>20</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+      <Color A="255" R="128" G="0" B="0" />
+      <ExportMode>Bitstring</ExportMode>
+    </LayerDefinition>
   </LayerDefinitions>
   <Tilesets />
   <EntityDefinitions />
