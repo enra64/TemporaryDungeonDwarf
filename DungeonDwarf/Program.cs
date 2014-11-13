@@ -223,7 +223,7 @@ namespace DungeonDwarf
             r.FillColor = Color.Transparent;
             r.OutlineColor = Color.Green;
             r.OutlineThickness = 2f;
-            currentRenderWindow.Draw(r);
+            //currentRenderWindow.Draw(r);
         }
     }
 }
