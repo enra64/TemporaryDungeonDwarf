@@ -16,6 +16,8 @@ namespace DungeonDwarf
         static world.TileMap tileMap;
         static Player currentPlayer;
         static Enemy zeroEnemy;
+        static Enemy enemyOne;
+        static Enemy enemyTwo;
         static FloatRect moveableRectangle;
         static float zoom = .5f;
 
@@ -92,7 +94,10 @@ namespace DungeonDwarf
             tileMap = new world.TileMap(currentRenderWindow, new Vector2u(400, 10), "world/levels/longTest2.oel");
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
-            zeroEnemy = new Enemy(currentRenderWindow, currentPlayer.playerPosition, tileMap);
+
+            zeroEnemy = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "zeroEnemy", tileMap);
+            enemyOne = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "enemy1", tileMap);
+            enemyTwo = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "enemy2", tileMap);
 
             //create a rectangle the player can move in without changing the view
             Vector2f tempCurrentPlayerCenter=currentPlayer.GetCenter();
@@ -122,7 +127,9 @@ namespace DungeonDwarf
             //check for key input
             KeyCheck();
             //update zoom for view
-            zeroEnemy.update(currentPlayer.playerPosition);
+            zeroEnemy.update(currentPlayer.GetCenter());
+            enemyOne.update(currentPlayer.GetCenter());
+            enemyTwo.update(currentPlayer.GetCenter());
         }
 
         static void KeyCheck()
@@ -201,6 +208,9 @@ namespace DungeonDwarf
              * BEGIN YOUR CALLS AFTER THIS
              */
             zeroEnemy.draw();
+            enemyOne.draw();
+            enemyTwo.draw();
+
             currentPlayer.Draw();
             MovementRectDebug();
             /* END YOUR CALLS HERE
@@ -223,7 +233,7 @@ namespace DungeonDwarf
             r.FillColor = Color.Transparent;
             r.OutlineColor = Color.Green;
             r.OutlineThickness = 2f;
-            currentRenderWindow.Draw(r);
+            //currentRenderWindow.Draw(r);
         }
     }
 }
