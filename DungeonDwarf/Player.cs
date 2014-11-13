@@ -16,7 +16,7 @@ namespace DungeonDwarf
         private const int MAX_HEALTH = 100;
         private const int MIN_HEALTH = 0;
         RectangleShape healthBar = new RectangleShape();
-
+        int health = MAX_HEALTH;
 
 
         //fenster, sprite, scale, map, viewchange
@@ -90,18 +90,21 @@ namespace DungeonDwarf
         public void Update()
         {
             //health
-            int health = MAX_HEALTH;
             healthBar.Size = new Vector2f(health * 2, 20f);
             healthBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 50f);
             healthBar.FillColor = Color.Red;
             healthBar.OutlineColor = Color.Black;
             healthBar.OutlineThickness = 3f;
 
+            Console.WriteLine(health);
 
-
-
-
-
+            if (health > MIN_HEALTH)
+                health--;
+            else
+            {
+                Texture deathTex = new Texture("textures/player/death.png");
+                playerSprite = new Sprite(deathTex);
+            }
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
@@ -119,7 +122,7 @@ namespace DungeonDwarf
                         textureVector.Y = 0;
                         isLeft = true;
                         isRight = false;
-                      
+
                     }
                     if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
