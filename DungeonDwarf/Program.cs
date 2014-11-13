@@ -45,6 +45,9 @@ namespace DungeonDwarf
             //add handler to window resized, because we need to recalculate tile count
             currentRenderWindow.Resized += windowResized;
 
+            //add mouse click handling for getting focus
+            currentRenderWindow.MouseButtonPressed += mouseClick;
+
             //first and only call to init, do everything else there
             Initialize();
             //first and only call to load content, not mandatory to use
@@ -61,6 +64,11 @@ namespace DungeonDwarf
                 //only important if you want to close the window. ever.
                 currentRenderWindow.DispatchEvents();
             }
+        }
+
+        private static void mouseClick(object sender, MouseButtonEventArgs e)
+        {
+            
         }
 
         private static void windowResized(object sender, SizeEventArgs e)

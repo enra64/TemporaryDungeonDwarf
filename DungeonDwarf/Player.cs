@@ -89,9 +89,6 @@ namespace DungeonDwarf
             playerSize.X = (60) * xScale;
             playerSize.Y = (55) * yScale;
 
-
-            playerSprite.Position = playerPosition;
-
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
             //Sprite gets animated again and again if Key is pressed
@@ -145,25 +142,40 @@ namespace DungeonDwarf
 
                 float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
                 float yDiffRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X + playerSize.X);
+                float yDiffFurtherRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X -1f + playerSize.X);
 
-                //new jump logic: if we have finished jumping, reset our position relative y 0
-                if (yDiffLeft > -10 || yDiffRight > -10)
+                //jump glitch now reduced to:
+                //immediate position drop on right to left
+                //left to right jumping not ok
+                if (!hasJumped && (yDiffLeft > -10 || yDiffRight > -10))
                 {
-                    //error detected:
-                    //if we jump right next to a block, said jump gets killed immediately :/
-                    //save both positions
+                    //Console.WriteLine("jump kill: "+yDiffLeft+"/"+yDiffRight);
+                    //get current left and right highest positions
                     float leftTopPosition = tileMap.GetMinYAtX(playerPosition.X);
-                    float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 1f));
+                    float rightTopPosition = tileMap.GetMinYAtX(playerPosition.X + (playerSize.X - 0f));
                     float targetPosition;
-                    
+
+                    //Console.WriteLine("targets: " + leftTopPosition + "/" + rightTopPosition);
                     //use the one higher up 
-                    if (leftTopPosition > rightTopPosition)
-                        targetPosition = rightTopPosition;
+                    if (leftTopPosition > rightTopPosition){
+                        //the right block is a complete block higher than the left one
+                        Console.WriteLine("l" + leftTopPosition + ">r" + rightTopPosition);
+                        if (leftTopPosition - rightTopPosition > 55)
+                        {
+                            //avoid glitching into a block
+                            if (yDiffFurtherRight != yDiffRight)
+                                targetPosition = leftTopPosition;
+                            else
+                                targetPosition = rightTopPosition;
+                        }
+                        else
+                            targetPosition = rightTopPosition;
+                    }
                     else
                         targetPosition = leftTopPosition;
 
-                    //change position now
-                    playerPosition.Y = targetPosition-playerSize.Y;
+                    //use changed position
+                    playerPosition.Y = targetPosition - playerSize.Y;
                     playerSprite.Position = playerPosition;
                 }
                 
@@ -173,6 +185,9 @@ namespace DungeonDwarf
 
                 
                 //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
+
+                //update position only now
+                playerSprite.Position = playerPosition;
             }
         }
 
@@ -195,8 +210,13 @@ namespace DungeonDwarf
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
             float yDiffRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X + playerSize.X);
             //reset jump boolean on ground touch
-            if (yDiffLeft > -5 || yDiffRight > -5)
+            //forever jumping bug originates here: hasjumped gets reset
+                Console.WriteLine("ground touch l: " + yDiffLeft + " r: " + yDiffRight);
+            //if (yDiffLeft > -5 && yDiffRight > -5)
+            if ((yDiffLeft == 0 && yDiffRight == 0) || !( Math.Abs(yDiffRight) > 0 && yDiffLeft < 0 ) || Math.Abs(yDiffLeft) > 0 && yDiffRight > -10)
+            {
                 hasJumped = false;
+            }
 
             //only jump if jump sequence is not already initiated
             if (hasJumped == false)
