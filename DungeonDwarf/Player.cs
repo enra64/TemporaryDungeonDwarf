@@ -245,8 +245,7 @@ namespace DungeonDwarf
                             textureVector.X = 1;
                             textureVector.Y = 0;
                         }
-                        else 
-                        {
+                        else{
                             textureVector.X = 1;
                             textureVector.Y = 1;
                         }
@@ -267,10 +266,10 @@ namespace DungeonDwarf
             Vector2f testingPosition = playerPosition;
             testingPosition.Y -= amount;
             //decrease jump amount until no collision appears
-            while (tileMap.Collides(testingPosition, playerSize)) { 
+            while (tileMap.Collides(testingPosition, playerSize)){
                 testingPosition.Y += .2f;
                 abortedJump = true;
-                Console.WriteLine("decrease jumping to " + testingPosition.Y);
+                //Console.WriteLine("decrease jumping to " + testingPosition.Y);
             }
             playerPosition.Y = testingPosition.Y;
             return abortedJump;
