@@ -131,17 +131,18 @@ namespace DungeonDwarf
                 //after pressing space, the further jumping is now no longer user controllable.
                 //maybe reduce jumpspeed by height, does however seemingly clash with the collision
                 //detection :/
-                if (jumpCount<3){
+                if (jumpCount<10){
                     jumpCount++;
-                    playerPosition.Y -= Global.PLAYER_JUMP_SPEED;
+                    playerPosition.Y -= Global.PLAYER_JUMP_SPEED-jumpCount*3f;
                     //dont know if i need these, just remove it if this is unneeded
                     textureVector.X = 1;
                     textureVector.Y = 1;
                     //Console.WriteLine("enhanced jumping");
                 }
-
+                float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
+                float yDiffRight =playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X+playerSize.X);
                 //reset jump boolean on ground touch
-                if (playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X) == 0 || playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X+playerSize.X) == 0)
+                if (yDiffLeft > -5  || yDiffRight > -5)
                     hasJumped = false;
 
                 //only jump if jump sequence is not already initiated
@@ -167,7 +168,7 @@ namespace DungeonDwarf
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
                 
-                Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
+                //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
             }
         }
 

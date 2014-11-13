@@ -22,7 +22,7 @@ namespace DungeonDwarf
         /// <summary>
         /// Speed to propel upwards during jumps by player
         /// </summary>
-        public const float PLAYER_JUMP_SPEED = 30f;
+        public const float PLAYER_JUMP_SPEED = 35f;
 
         /*
          * TILE TYPES VS THEIR ID
@@ -37,7 +37,7 @@ namespace DungeonDwarf
         /// <summary>
         /// Gravity that is supposed to be used by everyone.
         /// </summary>
-        public const float GLOBAL_GRAVITY = 5f;
+        public const float GLOBAL_GRAVITY = 8f;
         /// <summary>
         /// DIS BE OF UTMOST IMPORTANCY. More readable in Global.cs.
         /// On each update and during the Initialization (e.g. dont worry about availability)
