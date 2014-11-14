@@ -25,6 +25,7 @@ namespace DungeonDwarf
         private float xScale = 1f, yScale = 1f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
+       
         //jump logic variables
         private bool hasJumped = false;
         private int jumpCount = 0;
@@ -65,7 +66,8 @@ namespace DungeonDwarf
         {
             return new Vector2f(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
         }
-
+        
+        #region DelayUtil
         //confusing stuff -> timer "=>" what is this doing???
         /// <summary>
         /// int delay 1000 = 1 sec
@@ -83,12 +85,15 @@ namespace DungeonDwarf
             };
             timer.Start();
         }
+        #endregion
+        
         /// <summary>
         /// Update for Player
         /// </summary>
         /// <returns></returns>
         public void Update()
         {
+            #region Health
             //health
             healthBar.Size = new Vector2f(health * 2, 20f);
             healthBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 50f);
@@ -97,6 +102,7 @@ namespace DungeonDwarf
             healthBar.OutlineThickness = 3f;
 
             Console.WriteLine(health);
+            #endregion
 
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
@@ -105,11 +111,12 @@ namespace DungeonDwarf
             playerSize.X = (60) * xScale;
             playerSize.Y = (57) * yScale;
 
+           #region Movement
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
            if (health > MIN_HEALTH)
            {
-               health--;
+               //health--;
             if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
@@ -120,15 +127,17 @@ namespace DungeonDwarf
                         isRight = false;
 
                     }
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
+                #region LeftAnim
+                if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
                         delayUtil(150, () => textureVector.X = 1);
                         delayUtil(300, () => textureVector.X = 2);
                         delayUtil(450, () => textureVector.X = 3);
                         delayUtil(600, () => textureVector.X = 0);
                         delayUtil(600, () => isAnim= false);
-                    }
-                
+                }
+                #endregion
+
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
@@ -137,8 +146,8 @@ namespace DungeonDwarf
                         isRight = true; 
                         isLeft = false;
                     }
-                    
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
+                #region RightAnim
+                if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
                     {
                         isAnim = true;
                         delayUtil(150, () => textureVector.X = 1);
@@ -147,7 +156,7 @@ namespace DungeonDwarf
                         delayUtil(600, () => textureVector.X = 0);
                         delayUtil(600, () => isAnim = false);
                     }
-                
+                #endregion
                 
                 //debug key: output current player bott vs ground top diff
                 if (Keyboard.IsKeyPressed(Keyboard.Key.O))
@@ -168,10 +177,11 @@ namespace DungeonDwarf
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
             
                 //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
-             }   
-            }    
-            
+             }
+           }
+            #endregion
 
+           #region Death
            else
            {
                Texture deathTex = new Texture("textures/player/death.png"); 
@@ -180,12 +190,15 @@ namespace DungeonDwarf
                textureVector.Y = 0;
                if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
-               
+
            }
+           #endregion
 
            //update position only now
            playerSprite.Position = playerPosition;
         }
+
+        #region CorrectYPosLogic
         public void CorrectYPosLogic(){
             //get difference between player left bottom and ground top
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.MinY(playerPosition);
@@ -214,7 +227,9 @@ namespace DungeonDwarf
                 playerSprite.Position = playerPosition;
             }
         }
+        #endregion
 
+        #region JumpLogic
         public void JumpLogic()
         {
             //after pressing space, the further jumping is now no longer user controllable.
@@ -263,7 +278,9 @@ namespace DungeonDwarf
                
             }
         }
+        #endregion
 
+        #region JumpIntelligent
         /// <summary>
         /// Call this when jumping to avoid jumping into blocks
         /// </summary>
@@ -282,9 +299,11 @@ namespace DungeonDwarf
             playerPosition.Y = testingPosition.Y;
             return abortedJump;
         }
+        #endregion
 
         public void Draw()
         {
+            #region ColliderRect
             //shows playersize
             RectangleShape colliderRect = new RectangleShape();
             colliderRect.Size = new Vector2f(playerSize.X, playerSize.Y);
@@ -292,6 +311,7 @@ namespace DungeonDwarf
             colliderRect.FillColor = Color.Transparent;
             colliderRect.OutlineColor = Color.Green;
             colliderRect.OutlineThickness = 1f;
+            #endregion
 
             win.Draw(healthBar);
             win.Draw(colliderRect);
