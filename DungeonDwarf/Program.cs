@@ -221,7 +221,7 @@ namespace DungeonDwarf
              * AND STUFF
              */
             //clear window
-            currentRenderWindow.Clear();
+            currentRenderWindow.Clear(new Color(52, 52, 52));
             //draw background
             currentRenderWindow.Draw(backgroundSprite);
             //apply view to window
