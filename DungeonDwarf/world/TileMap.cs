@@ -98,7 +98,6 @@ namespace DungeonDwarf.world
                     tileMap[currentPosition + 1] = new Vertex(new Vector2f(idealQuadSize.X * (x + 1), idealQuadSize.Y * y), new Vector2f(xOffset+100, 0));//top right vertex
                     tileMap[currentPosition + 2] = new Vertex(new Vector2f(idealQuadSize.X * (x + 1), idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+100, 100));//bot right vertex
                     tileMap[currentPosition + 3] = new Vertex(new Vector2f(idealQuadSize.X * x, idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
-                    
                 }
             }
         }
@@ -159,7 +158,6 @@ namespace DungeonDwarf.world
                         tileTypes[x, y] = Global.LAVATILE;
                     if (lavaTopArray[oneDimensionalArrayPosition] == 49)//ASCII one: lavatop
                         tileTypes[x, y] = Global.LAVA_TOP_TILE;
-                    
                 }
             }
         }
