@@ -132,8 +132,7 @@ namespace DungeonDwarf
             //move view with player
             moveView();
             //update tilemap if due
-            if (tileMapUpdater.ElapsedMilliseconds > 500)
-            {
+            if (tileMapUpdater.ElapsedMilliseconds > 500){
                 tileMapUpdater.Restart();
                 tileMap.Update();
             }
