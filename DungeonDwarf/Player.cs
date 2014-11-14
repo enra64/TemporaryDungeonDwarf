@@ -1,6 +1,7 @@
 ﻿using SFML;
 using SFML.Graphics;
 using SFML.Window;
+using DungeonDwarf.world;
 
 using System;
 using System.Text;
@@ -103,7 +104,7 @@ namespace DungeonDwarf
 
             //Console.WriteLine(health);
             #endregion
-
+            
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
