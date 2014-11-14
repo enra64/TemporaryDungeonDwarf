@@ -101,7 +101,7 @@ namespace DungeonDwarf
             healthBar.OutlineColor = Color.Black;
             healthBar.OutlineThickness = 3f;
 
-            Console.WriteLine(health);
+            //Console.WriteLine(health);
             #endregion
 
             //get offset

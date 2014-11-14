@@ -201,12 +201,12 @@ namespace DungeonDwarf
 
                 //only offset to lvl limits
                 if ((currentView.Center.X + offset.X) > 390){
+                    //offset background
+                    backgroundSprite.Position = currentView.Center - Global.BEGIN_WINDOW_ORIGIN;
                     //offset rectangle and view
                     currentView.Move(offset);
                     moveableRectangle.Top += offset.Y;
                     moveableRectangle.Left += offset.X;
-                    //offset background, too
-                    backgroundSprite.Position = currentView.Center;
                 }
             }
         }
