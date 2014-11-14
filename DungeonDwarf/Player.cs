@@ -95,7 +95,7 @@ namespace DungeonDwarf
         {
             #region Health
             //health
-            healthBar.Size = new Vector2f(health * 2, 20f);
+            healthBar.Size = new Vector2f(health * 1.2f, 20f);
             healthBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 50f);
             healthBar.FillColor = Color.Red;
             healthBar.OutlineColor = Color.Black;
