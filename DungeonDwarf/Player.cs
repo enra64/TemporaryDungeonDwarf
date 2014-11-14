@@ -1,6 +1,7 @@
 ﻿using SFML;
 using SFML.Graphics;
 using SFML.Window;
+using DungeonDwarf.world;
 
 using System;
 using System.Text;
@@ -101,9 +102,9 @@ namespace DungeonDwarf
             healthBar.OutlineColor = Color.Black;
             healthBar.OutlineThickness = 3f;
 
-            Console.WriteLine(health);
+            //Console.WriteLine(health);
             #endregion
-
+            
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
