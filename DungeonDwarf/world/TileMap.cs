@@ -102,10 +102,23 @@ namespace DungeonDwarf.world
             }
         }
 
+        /// <summary>
+        /// Returns the tile type defined in global (see GetCurrentTile for
+        /// getting tile at x, y position)
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public int GetTileType(int x, int y){
             return tileTypes[x,y];
         }
 
+        /// <summary>
+        /// Returns whether the given tile collides (see GetCurrentTile)
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool GetTileCollidable(int x, int y)
         {
             return Collidable[x, y];
