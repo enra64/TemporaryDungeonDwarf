@@ -22,6 +22,7 @@ namespace DungeonDwarf
         static FloatRect moveableRectangle;
         static Stopwatch tileMapUpdater = new Stopwatch();
         static Sprite backgroundSprite;
+        static List<Sprite> backgroundList = new List<Sprite>();
 
         static void Main(string[] args)
         {
@@ -94,33 +95,37 @@ namespace DungeonDwarf
             //set view origin and current in static global class
             Global.BEGIN_WINDOW_ORIGIN = currentRenderWindow.GetView().Center;
             Global.CURRENT_WINDOW_ORIGIN = currentRenderWindow.GetView().Center;
-            //set background
-            Texture backTex = new Texture("textures/world/background.png");
-            backgroundSprite = new Sprite(backTex);
-            backgroundSprite.Position = new Vector2f(0, 0);
-            float backScale = ((float) currentRenderWindow.Size.X+1*Global.PLAYER_MOVEMENT_SPEED) / (float) backTex.Size.X;
-            backgroundSprite.Scale= new Vector2f(backScale, backScale);
             /*
              * Please write your code after this comment, because rule number one is:
              * dont fuck up the view.
              * rule number two, by the way, is: Sometimes I do do mistakes, but please
              * think twice before adding you calls before this comment
              */
+            /*
+             TILEMAP
+             */
             //init tile map
             tileMap = new world.TileMap(currentRenderWindow, new Vector2u(400, 10), "world/levels/lavatest.oel");
             //start tilemap update stopwatch
             tileMapUpdater.Start();
+            //player and enemy init
+            #region playerAndEnemy
+            Texture backTex = new Texture("textures/world/background.png");
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
             zeroEnemy = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "zeroEnemy", tileMap);
             enemyOne = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "enemy1", tileMap);
             enemyTwo = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "enemy2", tileMap);
+            #endregion
 
+            //Init the rectangle the user can move in without changing view
+            #region nomove
             //create a rectangle the player can move in without changing the view
             Vector2f tempCurrentPlayerCenter=currentPlayer.GetCenter();
             //this is said rectangle
             moveableRectangle = new FloatRect(tempCurrentPlayerCenter.X - currentRenderWindow.Size.X / 6, tempCurrentPlayerCenter.Y - currentRenderWindow.Size.Y / 4, currentRenderWindow.Size.X / 3, currentRenderWindow.Size.Y / 2);
+            #endregion
         }
 
         /// <summary>
@@ -207,7 +212,6 @@ namespace DungeonDwarf
                     currentView.Move(offset);
                     moveableRectangle.Top += offset.Y;
                     moveableRectangle.Left += offset.X;
-                    backgroundSprite.Position += offset;
                 }
             }
         }
@@ -224,7 +228,7 @@ namespace DungeonDwarf
             //clear window
             currentRenderWindow.Clear(new Color(52, 52, 52));
             //draw background
-            currentRenderWindow.Draw(backgroundSprite);
+            //currentRenderWindow.Draw(backgroundSprite);
             //apply view to window
             currentRenderWindow.SetView(currentView);
             //draw map/level
@@ -239,7 +243,7 @@ namespace DungeonDwarf
             enemyTwo.draw();
 
             currentPlayer.Draw();
-            //MovementRectDebug();
+            MovementRectDebug();
             /* END YOUR CALLS HERE
              * Doing last call, do not call anything after this
              */
