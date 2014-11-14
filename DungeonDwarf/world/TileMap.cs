@@ -102,6 +102,15 @@ namespace DungeonDwarf.world
             }
         }
 
+        public int GetTileType(int x, int y){
+            return tileTypes[x,y];
+        }
+
+        public bool GetTileCollidable(int x, int y)
+        {
+            return Collidable[x, y];
+        }
+
         /// <summary>
         /// returns the rectangle of the vertex at position x, y
         /// </summary>
@@ -302,12 +311,6 @@ namespace DungeonDwarf.world
                         texCo3 = tileMap[currentPosition + 2].TexCoords;
                         texCo4 = tileMap[currentPosition + 3].TexCoords;
                     }
-                    /*
-                    tileMap[currentPosition + 0] = new Vertex(new Vector2f(idealQuadSize.X * x, idealQuadSize.Y * y), new Vector2f(xOffset, 0));//top left vertex
-                    tileMap[currentPosition + 1] = new Vertex(new Vector2f(idealQuadSize.X * (x + 1), idealQuadSize.Y * y), new Vector2f(xOffset+100, 0));//top right vertex
-                    tileMap[currentPosition + 2] = new Vertex(new Vector2f(idealQuadSize.X * (x + 1), idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+100, 100));//bot right vertex
-                    tileMap[currentPosition + 3] = new Vertex(new Vector2f(idealQuadSize.X * x, idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
-                     */
                     //map vertex positions
                     tileMap[currentPosition + 0] = new Vertex(new Vector2f(currentQuadSize.X * x, currentQuadSize.Y * y), texCo1);//top left vertex
                     tileMap[currentPosition + 1] = new Vertex(new Vector2f(currentQuadSize.X * (x + 1), currentQuadSize.Y * y), texCo2);//top right vertex

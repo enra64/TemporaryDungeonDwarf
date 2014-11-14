@@ -206,7 +206,7 @@ namespace DungeonDwarf
                     moveableRectangle.Top += offset.Y;
                     moveableRectangle.Left += offset.X;
                     //offset background, too
-                    backgroundSprite.Position += offset;
+                    backgroundSprite.Position = currentView.Center;
                 }
             }
         }
