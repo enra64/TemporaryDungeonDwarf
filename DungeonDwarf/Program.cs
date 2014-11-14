@@ -21,6 +21,7 @@ namespace DungeonDwarf
         static Enemy enemyTwo;
         static FloatRect moveableRectangle;
         static Stopwatch tileMapUpdater = new Stopwatch();
+        static Sprite backgroundSprite;
 
         static void Main(string[] args)
         {
@@ -93,6 +94,12 @@ namespace DungeonDwarf
             //set view origin and current in static global class
             Global.BEGIN_WINDOW_ORIGIN = currentRenderWindow.GetView().Center;
             Global.CURRENT_WINDOW_ORIGIN = currentRenderWindow.GetView().Center;
+            //set background
+            Texture backTex = new Texture("textures/world/background.png");
+            backgroundSprite = new Sprite(backTex);
+            backgroundSprite.Position = new Vector2f(0, 0);
+            float backScale = ((float) currentRenderWindow.Size.X+1*Global.PLAYER_MOVEMENT_SPEED) / (float) backTex.Size.X;
+            backgroundSprite.Scale= new Vector2f(backScale, backScale);
             /*
              * Please write your code after this comment, because rule number one is:
              * dont fuck up the view.
@@ -198,7 +205,8 @@ namespace DungeonDwarf
                     currentView.Move(offset);
                     moveableRectangle.Top += offset.Y;
                     moveableRectangle.Left += offset.X;
-
+                    //offset background, too
+                    backgroundSprite.Position += offset;
                 }
             }
         }
@@ -213,7 +221,9 @@ namespace DungeonDwarf
              * AND STUFF
              */
             //clear window
-            currentRenderWindow.Clear(new Color(0, 153, 153));
+            currentRenderWindow.Clear(new Color(52, 52, 52));
+            //draw background
+            currentRenderWindow.Draw(backgroundSprite);
             //apply view to window
             currentRenderWindow.SetView(currentView);
             //draw map/level
