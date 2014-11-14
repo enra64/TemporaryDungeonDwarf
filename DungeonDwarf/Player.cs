@@ -168,18 +168,23 @@ namespace DungeonDwarf
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
             
                 //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
-
-                //update position only now
-                playerSprite.Position = playerPosition;
              }   
             }    
             
 
            else
            {
-               Texture deathTex = new Texture("textures/player/death.png");
+               Texture deathTex = new Texture("textures/player/death.png"); 
                playerSprite = new Sprite(deathTex);
+               textureVector.X = 2;
+               textureVector.Y = 0;
+               if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
+                    playerPosition.Y += Global.GLOBAL_GRAVITY;
+               
            }
+
+           //update position only now
+           playerSprite.Position = playerPosition;
         }
         public void CorrectYPosLogic(){
             //get difference between player left bottom and ground top
