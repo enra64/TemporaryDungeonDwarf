@@ -251,7 +251,9 @@ namespace DungeonDwarf
             enemyTwo.draw();
 
             currentPlayer.Draw();
-            MovementRectDebug();
+            
+            //MovementRectDebug();
+            
             /* END YOUR CALLS HERE
              * Doing last call, do not call anything after this
              */
