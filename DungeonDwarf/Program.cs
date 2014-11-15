@@ -56,6 +56,14 @@ namespace DungeonDwarf
             //first and only call to load content, not mandatory to use
             LoadContent();
 
+            //show startscreen
+            StartScreen s = new StartScreen(currentRenderWindow);
+            while (!Keyboard.IsKeyPressed(Keyboard.Key.Space)&&currentRenderWindow.IsOpen())
+            {
+                s.Update();
+                s.Draw();
+            }
+
             /*
              * shit be about to get real... starting main loop.
              */
@@ -207,7 +215,7 @@ namespace DungeonDwarf
                 //only offset to lvl limits
                 if ((currentView.Center.X + offset.X) > 390){
                     //offset background
-                    Console.WriteLine("cvc: " + currentView.Center + " offset: " + offset.X);
+                    //Console.WriteLine("cvc: " + currentView.Center + " offset: " + offset.X);
                     //offset rectangle and view
                     currentView.Move(offset);
                     moveableRectangle.Top += offset.Y;
@@ -217,7 +225,7 @@ namespace DungeonDwarf
         }
 
         /// <summary>
-        /// Draws everything. This is also called each game tick.
+        /// Draws everything. Called each game tick.
         /// </summary>
         private static void Draw(){
             /*

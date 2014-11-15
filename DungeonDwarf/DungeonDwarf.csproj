@@ -55,9 +55,11 @@
   <ItemGroup>
     <Compile Include="Enemy.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="Inventory.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartScreen.cs" />
     <Compile Include="world\TileMap.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +101,12 @@
     </Content>
     <Content Include="textures\enemies\zeroEnemy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="textures\menu\startBG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="textures\menu\startButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="textures\player\death.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

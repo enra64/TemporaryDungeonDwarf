@@ -211,7 +211,7 @@ namespace DungeonDwarf
                 if (playerPosition.Y == -50)
                     playerPosition.Y = 0;
                 else{
-                    Console.WriteLine(yDiffLeft);
+                    //Console.WriteLine(yDiffLeft);
                     //get current left and right highest positions
                     float leftTopPosition = tileMap.MinY(playerPosition);
                     float rightTopPosition = tileMap.MinY(new Vector2f(playerPosition.X - 1 + playerSize.X, playerPosition.Y));
