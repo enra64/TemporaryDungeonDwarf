@@ -59,18 +59,14 @@ namespace DungeonDwarf
 
             //show startscreen
 
-            /**********************************************************************************
-             * 
-             * Arne, you forgot to push StartScreen.cs and Inventory.cs
-             * 
-             * 
+            //Arne, you forgot to push StartScreen.cs and Inventory.cs
+            //http://bit.ly/19hKyY7
             StartScreen s = new StartScreen(currentRenderWindow);
             while (!Keyboard.IsKeyPressed(Keyboard.Key.Space)&&currentRenderWindow.IsOpen())
             {
                 s.Update();
                 s.Draw();
             } 
-             * ********************************************************************************/
 
             /*
              * shit be about to get real... starting main loop.
