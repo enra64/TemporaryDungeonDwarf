@@ -16,14 +16,12 @@ namespace DungeonDwarf
         static View currentView;
         static world.TileMap tileMap;
         static Player currentPlayer;
-        static Enemy zeroEnemy;
-        static Enemy enemyOne;
-        static Enemy enemyTwo;
         static FloatRect moveableRectangle;
         static Stopwatch tileMapUpdater = new Stopwatch();
-        static Sprite backgroundSprite;
         static List<Sprite> backgroundList = new List<Sprite>();
         static List<Enemy> EnemyList = new List<Enemy>();
+        static Inventory currentInventory;
+        static bool debugInventory = false;
 
         static void Main(string[] args)
         {
@@ -120,8 +118,10 @@ namespace DungeonDwarf
             tileMap = new world.TileMap(currentRenderWindow, new Vector2u(400, 10), "world/levels/lavatest.oel");
             //start tilemap update stopwatch
             tileMapUpdater.Start();
+            
+            //initialize inventory, currently under heavy development (as in probably wont work)
+            currentInventory = new Inventory(currentRenderWindow, new Vector2f(70, 70), new Vector2f(50, 50));
             //player and enemy init
-
             #region playerAndEnemy
             Texture backTex = new Texture("textures/world/background.png");
             //instance player
@@ -133,7 +133,7 @@ namespace DungeonDwarf
             #endregion
 
             //Init the rectangle the user can move in without changing view
-            #region nomove
+            #region nomoverect
             //create a rectangle the player can move in without changing the view
             Vector2f tempCurrentPlayerCenter=currentPlayer.GetCenter();
             //this is said rectangle
@@ -167,8 +167,7 @@ namespace DungeonDwarf
             currentPlayer.Update();
             //check for key input
             KeyCheck();
-            //update zoom for view
-
+            //a foreach loop would do wonders
             EnemyList[0].update(currentPlayer.playerPosition);
             EnemyList[1].update(currentPlayer.playerPosition);
             EnemyList[2].update(currentPlayer.playerPosition);
@@ -186,9 +185,8 @@ namespace DungeonDwarf
             {
                 currentView.Zoom(1.01f);
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.J))
-            {
-                currentView.Zoom(1f);
+            if (Keyboard.IsKeyPressed(Keyboard.Key.I)){
+                currentInventory.Show();
             }
         }
 

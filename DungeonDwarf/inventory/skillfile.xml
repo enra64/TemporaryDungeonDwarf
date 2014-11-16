@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--texbasispath _must_ under all circumstances stay first entry of the skill class-->
+<!--texpath must stay first entry in level childs-->
+<skills>
+  <sword level="0">
+    <texbasispath>sword/</texbasispath>
+    <level>
+      <texpath>one.png</texpath>
+      <description>Billige chinesische Katanaimitation</description>
+    </level>
+    <level>
+      <texpath>two.png</texpath>
+      <description>Mittelteure chinesische Katanaimitation</description>
+    </level>
+    <level>
+      <texpath>three.png</texpath>
+      <description>Teure chinesische Katanaimitation</description>
+    </level>
+  </sword>
+  <arrow level="0">
+    <texbasispath>arrow/</texbasispath>
+    <level>
+      <texpath>one.png</texpath>
+      <description>Das Urkilo. Schlecht zu werfen.</description>
+    </level>
+    <level>
+      <texpath>two.png</texpath>
+      <description>Geklaute Bowlingkugel</description>
+    </level>
+    <level>
+      <texpath>three.png</texpath>
+      <description>Wettbewerbsfähiger Pfeil</description>
+    </level>
+  </arrow>
+  <armor level="0">
+    <texbasispath>armor/</texbasispath>
+    <level>
+      <texpath>one.png</texpath>
+      <description>Massgeschneiderter Pappkarton, nicht zu sehen</description>
+    </level>
+    <level>
+      <texpath>two.png</texpath>
+      <description>Gebrauchtes Holzschild</description>
+    </level>
+    <level>
+      <texpath>three.png</texpath>
+      <description>Siebzehnlagige Kevlarweste</description>
+    </level>
+  </armor>
+</skills>

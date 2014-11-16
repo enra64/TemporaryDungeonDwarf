@@ -1,5 +1,6 @@
 ﻿using SFML.Window;
 using System;
+using System.Collections.Generic;
 
 namespace DungeonDwarf
 {
@@ -56,5 +57,38 @@ namespace DungeonDwarf
         /// Could possibly be the scalefactor set by the tilemap
         /// </summary>
         public static float GLOBAL_SCALE;
+
+        /*
+         * SKILLING
+         */
+        /// <summary>
+        /// .Count contains skilllevel count, strings contain texture position
+        /// </summary>
+        public static List<string> TEXPATH_LIST_SWORD;
+        /// <summary>
+        /// contains descriptions
+        /// </summary>
+        public static List<string> DESCRIPTION_LIST_SWORD;
+        /// <summary>
+        /// .Count contains skilllevel count, strings contain texture position
+        /// </summary>
+        public static List<string> TEXPATH_LIST_ARROW;
+        /// <summary>
+        /// contains descriptions
+        /// </summary>
+        public static List<string> DESCRIPTION_LIST_ARROW;
+        /// <summary>
+        /// .Count contains skilllevel count, strings contain texture position
+        /// </summary>
+        public static List<string> TEXPATH_LIST_ARMOR;
+        /// <summary>
+        /// contains descriptions
+        /// </summary>
+        public static List<string> DESCRIPTION_LIST_ARMOR;
+        /// <summary>
+        /// current skilllevel
+        /// </summary>
+        public static int LEVEL_SWORD = 0, LEVEL_ARROW = 0, LEVEL_ARMOR = 0;
+        public static int SKILL_COUNT = 0;
     }
 }
