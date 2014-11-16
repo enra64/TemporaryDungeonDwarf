@@ -122,7 +122,7 @@ namespace DungeonDwarf
             CorrectYPosLogic();
         }
 
-        // borrowed from Player.cs and adjusted for Enemy.cs
+        // borrowed from Player.cs and adjusted for Enemy.cs, thanks Daniel lol ;)
         public void CorrectYPosLogic() 
         {
             //get difference between player left bottom and ground top
