@@ -14,7 +14,8 @@ namespace DungeonDwarf
     {
         private RenderWindow win;
         private RectangleShape backGround;
-        private Vector2f absoluteSize, relativeOffset, absoluteOffset, targetIconSize;
+        private Vector2f absoluteSize, relativeOffset, absoluteOffset, targetIconSize, innerMargins, skillSpace;
+        private List<Vector2f> marginList = new List<Vector2f>();
         private List<Sprite> swordList = new List<Sprite>(), arrowList = new List<Sprite>(), armorList = new List<Sprite>();
         public bool isShown = false;
 
@@ -100,47 +101,54 @@ namespace DungeonDwarf
             }
             #endregion
             Vector2f spacePerSkill;
-            Vector2f margins;
-
+            
             //calc relative position once
             absoluteOffset = Global.CURRENT_WINDOW_ORIGIN + relativeOffset;
             
             //sword skilling
             //divide available space into sections. this only respects relative size, no positioning
             spacePerSkill = new Vector2f((float)absoluteSize.X / (float)Global.SKILL_COUNT, (float)absoluteSize.Y / (float)Global.TEXPATH_LIST_SWORD.Count);
-            margins = new Vector2f((spacePerSkill.X - targetIconSize.X) / 2, 20f);
+            skillSpace = spacePerSkill;
+            //calculate margins in (!) the section for each section
+            //sword
+            float listCount=Global.DESCRIPTION_LIST_SWORD.Count;
+            marginList.Add(new Vector2f(((float)spacePerSkill.X - targetIconSize.X) / 2f, (float)spacePerSkill.Y - targetIconSize.Y));
+            //arrow
+            listCount = Global.DESCRIPTION_LIST_ARROW.Count;
+            marginList.Add(new Vector2f(((float)spacePerSkill.X - targetIconSize.X) / 2f, (float)spacePerSkill.Y - targetIconSize.Y));
+            //armor
+            listCount = Global.DESCRIPTION_LIST_ARMOR.Count;
+            marginList.Add(new Vector2f(((float)spacePerSkill.X - targetIconSize.X) / 2f, (float)spacePerSkill.Y - targetIconSize.Y));
+
+
+            innerMargins = marginList.ElementAt(0);
             for(int i=0; i<Global.TEXPATH_LIST_SWORD.Count; i++){
                 string tPath = Global.TEXPATH_LIST_SWORD.ElementAt(i);
                 Texture newTexture = new Texture(tPath);
                 Sprite newSprite = new Sprite(newTexture);
                 newSprite.Scale = new Vector2f(targetIconSize.X / newTexture.Size.X, targetIconSize.Y/ newTexture.Size.Y);
-                newSprite.Position = new Vector2f(0 + margins.X, absoluteOffset.Y + margins.Y*(i+1));
                 swordList.Add(newSprite);
             }
 
             //arrow skilling
-            margins = new Vector2f((spacePerSkill.X - targetIconSize.X) / 2, 
-                (spacePerSkill.Y - targetIconSize.Y*Global.TEXPATH_LIST_ARROW.Count) / (Global.TEXPATH_LIST_ARROW.Count+1));//hardcoded, pot dangerous
+            innerMargins = marginList[1];
             for(int i=0; i<Global.TEXPATH_LIST_ARROW.Count; i++)
             {
                 string tPath = Global.TEXPATH_LIST_ARROW.ElementAt(i);
                 Texture newTexture = new Texture(tPath);
                 Sprite newSprite = new Sprite(newTexture);
                 newSprite.Scale = new Vector2f(targetIconSize.X / newTexture.Size.X, targetIconSize.Y/ newTexture.Size.Y);
-                newSprite.Position = new Vector2f(absoluteOffset.X + margins.X*2, absoluteOffset.Y + margins.Y*(i+1));
                 arrowList.Add(newSprite);
             }
             
             //armor skilling
-            margins = new Vector2f((spacePerSkill.X - targetIconSize.X) / 2,
-                (spacePerSkill.Y - targetIconSize.Y * Global.TEXPATH_LIST_ARMOR.Count) / (Global.TEXPATH_LIST_ARMOR.Count + 1));//hardcoded, pot dangerous
+            innerMargins = marginList[2];
             for (int i = 0; i < Global.TEXPATH_LIST_ARMOR.Count; i++)
             {
                 string tPath = Global.TEXPATH_LIST_ARMOR.ElementAt(i);
                 Texture newTexture = new Texture(tPath);
                 Sprite newSprite = new Sprite(newTexture);
                 newSprite.Scale = new Vector2f(targetIconSize.X / newTexture.Size.X, targetIconSize.Y/ newTexture.Size.Y);
-                newSprite.Position = new Vector2f(absoluteOffset.X + margins.X*3, absoluteOffset.Y + margins.Y*(i+1));
                 armorList.Add(newSprite);
             }
 
@@ -159,6 +167,20 @@ namespace DungeonDwarf
         {
             absoluteOffset = Global.CURRENT_WINDOW_ORIGIN + relativeOffset;
             backGround.Position = absoluteOffset;
+            //calculte sword positions
+            for (int i = 0; i < Global.DESCRIPTION_LIST_SWORD.Count; i++)
+            {
+                swordList[i].Position = new Vector2f(absoluteOffset.X + marginList[0].X + skillSpace.X * 0, absoluteOffset.Y + marginList[0].Y * (i + 1));
+            }
+            //calculte arrow positions
+            for (int i = 0; i < Global.DESCRIPTION_LIST_SWORD.Count; i++)
+            {
+                arrowList[i].Position = new Vector2f(absoluteOffset.X + marginList[1].X + skillSpace.X * 1, absoluteOffset.Y + marginList[1].Y * (i + 1));
+            }
+            //calculte armor positions
+            for (int i = 0; i < Global.DESCRIPTION_LIST_SWORD.Count; i++){
+                armorList[i].Position = new Vector2f(absoluteOffset.X + marginList[2].X + skillSpace.X * 2, absoluteOffset.Y + marginList[2].Y * (i + 1));
+            }
         }
 
         private void Draw()
@@ -173,6 +195,33 @@ namespace DungeonDwarf
             win.Display();
         }
 
+        public void Click(float x, float y){
+            Console.WriteLine("got it");
+            //Vector2i translatedMouse=win.MapCoordsToPixel(new Vector2f(x, y), win.GetView());
+            float translatedX = x + Global.CURRENT_WINDOW_ORIGIN.X;
+            float translatedY = y + Global.CURRENT_WINDOW_ORIGIN.Y;
+            //check collision for each sprite
+            for (int i = 0; i < Global.DESCRIPTION_LIST_SWORD.Count; i++){
+                FloatRect clickRect = new FloatRect(swordList[i].Position.X, swordList[i].Position.Y, targetIconSize.X, targetIconSize.Y);
+                if (clickRect.Contains(translatedX, translatedY))
+                    Global.LEVEL_SWORD++;
+                
+            }
+            for (int i = 0; i < Global.DESCRIPTION_LIST_ARROW.Count; i++){
+                FloatRect clickRect = new FloatRect(arrowList[i].Position.X, arrowList[i].Position.Y, targetIconSize.X, targetIconSize.Y);
+                if (clickRect.Contains(translatedX, translatedY))
+                    Global.LEVEL_ARROW++;
+                
+            }
+            for (int i = 0; i < Global.DESCRIPTION_LIST_ARMOR.Count; i++){
+                FloatRect clickRect = new FloatRect(armorList[i].Position.X, armorList[i].Position.Y, targetIconSize.X, targetIconSize.Y);
+                
+                if (clickRect.Contains(translatedX, translatedY))
+                    Global.LEVEL_ARMOR++;
+                
+            }
+        }
+
         /// <summary>
         /// blocks main thread execution!
         /// </summary>
@@ -181,7 +230,6 @@ namespace DungeonDwarf
             while (!Keyboard.IsKeyPressed(Keyboard.Key.E)){
                 Update();
                 Draw();
-                Console.WriteLine("showing");
                 win.DispatchEvents();
             }
             isShown = false;

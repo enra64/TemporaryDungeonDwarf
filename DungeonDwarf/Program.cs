@@ -81,7 +81,8 @@ namespace DungeonDwarf
 
         private static void mouseClick(object sender, MouseButtonEventArgs e)
         {
-            
+            Console.WriteLine(e.X + ": x, y: " + e.Y);
+            currentInventory.Click(e.X, e.Y);
         }
 
         private static void windowResized(object sender, SizeEventArgs e)
@@ -167,10 +168,10 @@ namespace DungeonDwarf
             currentPlayer.Update();
             //check for key input
             KeyCheck();
-            //a foreach loop would do wonders
-            EnemyList[0].update(currentPlayer.playerPosition);
-            EnemyList[1].update(currentPlayer.playerPosition);
-            EnemyList[2].update(currentPlayer.playerPosition);
+
+            //hint:
+            foreach (Enemy e in EnemyList)
+                e.update(currentPlayer.playerPosition);
         }
 
         static void KeyCheck()
