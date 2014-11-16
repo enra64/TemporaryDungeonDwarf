@@ -23,6 +23,7 @@ namespace DungeonDwarf
         static Stopwatch tileMapUpdater = new Stopwatch();
         static Sprite backgroundSprite;
         static List<Sprite> backgroundList = new List<Sprite>();
+        static List<Enemy> EnemyList = new List<Enemy>();
 
         static void Main(string[] args)
         {
@@ -57,12 +58,19 @@ namespace DungeonDwarf
             LoadContent();
 
             //show startscreen
+
+            /**********************************************************************************
+             * 
+             * Arne, you forgot to push StartScreen.cs and Inventory.cs
+             * 
+             * 
             StartScreen s = new StartScreen(currentRenderWindow);
             while (!Keyboard.IsKeyPressed(Keyboard.Key.Space)&&currentRenderWindow.IsOpen())
             {
                 s.Update();
                 s.Draw();
-            }
+            } 
+             * ********************************************************************************/
 
             /*
              * shit be about to get real... starting main loop.
@@ -117,14 +125,15 @@ namespace DungeonDwarf
             //start tilemap update stopwatch
             tileMapUpdater.Start();
             //player and enemy init
+
             #region playerAndEnemy
             Texture backTex = new Texture("textures/world/background.png");
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
-            zeroEnemy = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "zeroEnemy", tileMap);
-            enemyOne = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "enemy1", tileMap);
-            enemyTwo = new Enemy(currentRenderWindow, currentPlayer.playerPosition, "enemy2", tileMap);
+            EnemyList.Add(new Enemy("zeroEnemy", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/enemies/zeroEnemy.png", Global.GLOBAL_SCALE, Global.GLOBAL_SCALE));
+            EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTileTop.png", 0.3f, 0.3f));
+            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTile.png", 0.4f, 0.4f));
             #endregion
 
             //Init the rectangle the user can move in without changing view
@@ -163,9 +172,10 @@ namespace DungeonDwarf
             //check for key input
             KeyCheck();
             //update zoom for view
-            zeroEnemy.update(currentPlayer.GetCenter());
-            enemyOne.update(currentPlayer.GetCenter());
-            enemyTwo.update(currentPlayer.GetCenter());
+
+            EnemyList[0].update(currentPlayer.playerPosition);
+            EnemyList[1].update(currentPlayer.playerPosition);
+            EnemyList[2].update(currentPlayer.playerPosition);
         }
 
         static void KeyCheck()
@@ -246,9 +256,9 @@ namespace DungeonDwarf
              * What is draw-called first, will be most backgroundy, so think about where you place your calls.
              * BEGIN YOUR CALLS AFTER THIS
              */
-            zeroEnemy.draw();
-            enemyOne.draw();
-            enemyTwo.draw();
+            EnemyList[0].draw();
+            EnemyList[1].draw();
+            EnemyList[2].draw();
 
             currentPlayer.Draw();
             

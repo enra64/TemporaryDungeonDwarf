@@ -13,63 +13,70 @@ using System.Threading.Tasks;
  * 
  * Doesn't have a KI yet lol. -wulfihm
  * 
- * TODO: nicer jumping, cleaner spawning, healthbar, a somewhat decent KI for...(see above), WEAAAAAAAPOOOO000oooOOOns,...and whatever there is to do ;)
- *      
- * ALSO TODO: load your enemies into a list in the main prgoram (List<Enemy> enemeyList= new List<Enemy>();) 
- *      so that you can easily add or remove enemies (with enemyList.Add(new enemy))
- ********/
+ * TODO:    loop for Enemylist in Program.update(); and Program.draw();
+ *          fix bug: enemy goes/jumps through ceiling
+ *          nicer jumping
+ *          cleaner spawning
+ *          healthbar
+ *          a somewhat decent KI for...(see above)
+ *          WEAAAAAAAPOOOO000oooOOOns
+ *          ...and whatever there is to do ;)
+ * 
+ * DONE:
+ *          load your enemies into a list
+ * 
+ * ********/
 namespace DungeonDwarf
 {
     class Enemy
     {
         public Vector2f enemyPosition, enemySize;
         private Sprite enemySprite;
-        private Texture enemyTexture = new Texture("textures/enemies/zeroEnemy.png");
+        private Texture enemyTexture;
         private RenderWindow win;
+        private float xScale, yScale;
         private world.TileMap tileMap;
         private float ENEMY_MOVEMENT_SPEED = Global.PLAYER_MOVEMENT_SPEED / 2f;
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
+        private int i = 0;
 
-        public Enemy(RenderWindow _win, Vector2f _enemyPosition, String enemyType, world.TileMap _tileMap)
+        public Enemy(String enemyType, RenderWindow _win, Vector2f _enemyPosition, world.TileMap _tileMap, string texturePath, float xScale, float yScale)
         {
             // where the enemy spawns
             enemyPosition.X = _enemyPosition.X;        
-            enemyPosition.Y = _enemyPosition.Y-400;
+            enemyPosition.Y = _enemyPosition.Y-200;
 
-            // following code determines which enemy to spawn
-            switch (enemyType)
+            /***** OLD STUFF, DON'T REMOVE *********
+             * switch (enemyType)
             {
                 case "enemy1":
-                    enemyTexture = new Texture("textures/world/earthTileTop.png");
-                    enemySprite = new Sprite(enemyTexture);
-                    enemySprite.Scale = new Vector2f(0.3f, 0.3f);   // changes the scale of the sprite
 
-                    enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
-                    enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
                     ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / 2f;
                     ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
                     
                     break;
                 case "enemy2":
-                    enemyTexture = new Texture("textures/world/earthTile.png");
-                    enemySprite = new Sprite(enemyTexture);
-                    enemySprite.Scale = new Vector2f(0.4f, 0.4f);   // changes the scale of the sprite
 
-                    enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
-                    enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
                     ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / 4f;
                     ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
                     
                     break;
                 default:
-                    enemySprite = new Sprite(enemyTexture);
-                    enemySprite.Scale = new Vector2f(Global.GLOBAL_SCALE, Global.GLOBAL_SCALE);   // changes the scale of the sprite
 
-                    enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
-                    enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
-                    break;
+            }**************************************/
+
+            enemyTexture = new Texture(texturePath);
+            enemySprite = new Sprite(enemyTexture);
+            enemySprite.Scale = new Vector2f(xScale, yScale);   // changes the scale of the sprite
+
+            enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
+            enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
+
+            if (xScale != Global.GLOBAL_SCALE)
+            {
+                ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / (xScale * 10);
+                ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
             }
-
 
             tileMap = _tileMap;  // used for tile colliding in method update();
 
@@ -83,34 +90,68 @@ namespace DungeonDwarf
         }
 
         public void update(Vector2f playerPosition)
-        {   
-            
-            // the following code is for the enemy to move in direction of the player (only on the X axis i.e left/right)
+        {
 
+            // simple movement logic
             if (!tileMap.Collides(enemyPosition, enemySize))    // check if enemy collides with tiles, if true dont move at all
             { 
                 //move to the left in direction of the player
-                if (enemyPosition.X > playerPosition.X || enemyPosition.X + enemySize.X > playerPosition.X)     
+                if (enemyPosition.X > playerPosition.X || enemyPosition.X - enemySize.X > playerPosition.X)     
                     if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f)))
                         enemyPosition.X -= ENEMY_MOVEMENT_SPEED;
 
                 //move to the right in direction of the player
                 if (enemyPosition.X < playerPosition.X || enemyPosition.X + enemySize.X < playerPosition.X)      
                     if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)))
-                        enemyPosition.X += ENEMY_MOVEMENT_SPEED;
-
-                // Gravity 
-                if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
-                    enemyPosition.Y += Global.GLOBAL_GRAVITY;
-            
+                        enemyPosition.X += ENEMY_MOVEMENT_SPEED;       
             }
+
+            // Gravity 
+            if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
+                enemyPosition.Y += Global.GLOBAL_GRAVITY;
 
             // enemy jumps if player is unreacheable and if enemy is colliding with tiles to the left or the right of the enemy
             // multiple of ENEMY_MOVEMENT_SPEED for CheckNextCollide so that it doesn't look like that the enemy is crawling up the wall i.e. the enemy is jumping some steps before the wall
             // jumping is endless as of now
-            if (tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED / enemySprite.Scale.X * 2f, 0f)) || tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED / enemySprite.Scale.X * 2f, 0f)))
+            if (enemyPosition.X != playerPosition.X && (tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)) ||
+                tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f))))
                 enemyPosition.Y -= ENEMY_JUMP_SPEED;
+
+
+
+            CorrectYPosLogic();
         }
 
+        // borrowed from Player.cs and adjusted for Enemy.cs, thanks Daniel lol ;)
+        public void CorrectYPosLogic() 
+        {
+            //get difference between player left bottom and ground top
+            float yDiffLeft = enemyPosition.Y + enemySize.Y - tileMap.MinY(enemyPosition);
+            //reset player position if he is just above ground
+            //even though leaving out yDiffRigh checking seems illogical, it removes the jumping bug
+            if (yDiffLeft > -10 && yDiffLeft < 60 && yDiffLeft != 0)
+            {
+                //avoid getting put above the game
+                if (enemyPosition.Y == -50)
+                    enemyPosition.Y = 0;
+                else
+                {
+                    //Console.WriteLine(yDiffLeft);
+                    //get current left and right highest positions
+                    float leftTopPosition = tileMap.MinY(enemyPosition);
+                    float rightTopPosition = tileMap.MinY(new Vector2f(enemyPosition.X - 1 + enemySize.X, enemyPosition.Y));
+                    float targetPosition;
+
+                    //use the block higher up 
+                    if (leftTopPosition > rightTopPosition)
+                        targetPosition = rightTopPosition;
+                    else
+                        targetPosition = leftTopPosition;
+                    enemyPosition.Y = targetPosition - enemySize.Y;
+                }
+                //write changed position
+                enemySprite.Position = enemyPosition;
+            }
+        }
     }
 }
