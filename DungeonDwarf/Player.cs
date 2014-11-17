@@ -19,10 +19,10 @@ namespace DungeonDwarf
         RectangleShape healthBar = new RectangleShape();
         int health = MAX_HEALTH;
 
-        private const int MAX_SHIELD= 100;
-        private const int MIN_SHIELD= 0;
+        private const float MAX_SHIELD= 100;
+        private const float MIN_SHIELD= 0;
         RectangleShape shieldBar = new RectangleShape();
-        int shield = MAX_SHIELD;
+        float shield = MAX_SHIELD;
 
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
@@ -135,7 +135,7 @@ namespace DungeonDwarf
                
                //shield gets back up
                if (shield < MAX_SHIELD)
-                   shield++;
+                   shield += 0.25f;
 
                #region Lava_Death
                //lava
