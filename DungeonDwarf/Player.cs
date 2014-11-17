@@ -19,6 +19,10 @@ namespace DungeonDwarf
         RectangleShape healthBar = new RectangleShape();
         int health = MAX_HEALTH;
 
+        private const float MAX_SHIELD= 100;
+        private const float MIN_SHIELD= 0;
+        RectangleShape shieldBar = new RectangleShape();
+        float shield = MAX_SHIELD;
 
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
@@ -36,6 +40,7 @@ namespace DungeonDwarf
         bool isAnim = false;
         bool isRight = false;
         bool isLeft = false;
+
 
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
@@ -99,12 +104,23 @@ namespace DungeonDwarf
             healthBar.Size = new Vector2f(health * 1.2f, 20f);
             healthBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 50f);
             healthBar.FillColor = Color.Red;
-            healthBar.OutlineColor = Color.Black;
-            healthBar.OutlineThickness = 3f;
+            healthBar.OutlineColor = Color.Transparent;
+            healthBar.OutlineThickness = 0.01f;
 
             //Console.WriteLine(health);
             #endregion
-            
+
+            #region Shield
+            //shield
+           shieldBar.Size = new Vector2f(shield * 1.2f, 20f);
+           shieldBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 80f);
+           shieldBar.FillColor = Color.Blue;
+           shieldBar.OutlineColor = Color.Transparent;
+           shieldBar.OutlineThickness = 0.01f;
+
+            //Console.WriteLine(shield);
+            #endregion
+
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
@@ -115,10 +131,25 @@ namespace DungeonDwarf
            #region Movement
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
-           if (health > MIN_HEALTH)
-           {
-               //health--;
-            if (!tileMap.Collides(playerPosition, playerSize)){       
+           if (health > MIN_HEALTH){
+               
+               //shield gets back up
+               if (shield < MAX_SHIELD)
+                   shield += 0.25f;
+
+               #region Lava_Death
+               //lava
+               int[] currentTile = tileMap.GetCurrentTile(new Vector2f(playerPosition.X, playerSize.Y + playerPosition.Y + 30f));
+               if (tileMap.GetTileType(currentTile[0], currentTile[1]) == Global.LAVA_TOP_TILE)
+               {
+                   if (shield > MIN_HEALTH)
+                    shield -= 5;
+                   else
+                    health -= 10;
+               }
+               #endregion
+               
+               if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
@@ -128,6 +159,7 @@ namespace DungeonDwarf
                         isRight = false;
 
                     }
+
                 #region LeftAnim
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
@@ -195,22 +227,25 @@ namespace DungeonDwarf
            }
            #endregion
 
-           //update position only now
-           playerSprite.Position = playerPosition;
+            //draw sprite slightly below position
+           playerSprite.Position = new Vector2f(playerPosition.X, playerPosition.Y + 5f); ;
         }
 
-        #region CorrectYPosLogic
+        //reset player position if he is just above ground
+        #region ResetYPosition
         public void CorrectYPosLogic(){
             //get difference between player left bottom and ground top
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.MinY(playerPosition);
-            //reset player position if he is just above ground
-            //even though leaving out yDiffRigh checking seems illogical, it removes the jumping bug
-            if (yDiffLeft > -10 && yDiffLeft<60 && yDiffLeft!=0)
-            {
+
+            //calc maximum distance from ground, scale by gravity
+            float gravityScale = 9f / Global.GLOBAL_GRAVITY;
+            if (yDiffLeft > -10 / gravityScale && yDiffLeft < 60 && yDiffLeft != 0){
+                Console.WriteLine(playerPosition.Y);
                 //avoid getting put above the game
-                if (playerPosition.Y == -50)
+                if (playerPosition.Y < -10)
                     playerPosition.Y = 0;
-                else{
+                else
+                {
                     //Console.WriteLine(yDiffLeft);
                     //get current left and right highest positions
                     float leftTopPosition = tileMap.MinY(playerPosition);
@@ -315,7 +350,8 @@ namespace DungeonDwarf
             #endregion
 
             win.Draw(healthBar);
-            win.Draw(colliderRect);
+            win.Draw(shieldBar);
+            //win.Draw(colliderRect);
             win.Draw(playerSprite);
         }
     }

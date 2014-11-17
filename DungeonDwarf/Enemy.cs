@@ -40,43 +40,49 @@ namespace DungeonDwarf
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
         private int i = 0;
 
-        public Enemy(String enemyType, RenderWindow _win, Vector2f _enemyPosition, world.TileMap _tileMap, string texturePath, float xScale, float yScale)
+        public Enemy(String enemyType, RenderWindow _win, Vector2f _enemyPosition, world.TileMap _tileMap)
         {
+            float xScale, yScale, _jumpspeed, _movementspeed;
+            string texturePath;
+            //moved enemy distinguishment here, b/c 7 constructor arguments
+            switch (enemyType)
+            {
+                case "zeroEnemy":
+                    texturePath="textures/enemies/zeroEnemy.png";
+                    xScale=Global.GLOBAL_SCALE;
+                    yScale=Global.GLOBAL_SCALE;
+                    _jumpspeed=.5f;
+                    _movementspeed=.5f;
+                    break;
+                case "enemy1":
+                    texturePath="textures/world/earthTileTop.png";
+                    xScale=Global.GLOBAL_SCALE;
+                    yScale=Global.GLOBAL_SCALE;
+                    _jumpspeed=.3f;
+                    _movementspeed=.3f;
+                    break;
+                //do this when case is enemy2 or if no other case fit
+                default: case "enemy2":
+                    texturePath = "textures/world/earthTile.png";
+                    xScale=Global.GLOBAL_SCALE;
+                    yScale=Global.GLOBAL_SCALE;
+                    _jumpspeed=.4f;
+                    _movementspeed=.4f;
+                    break;
+            }
+
             // where the enemy spawns
             enemyPosition.X = _enemyPosition.X;        
             enemyPosition.Y = _enemyPosition.Y-200;
 
-            /***** OLD STUFF, DON'T REMOVE *********
-             * switch (enemyType)
-            {
-                case "enemy1":
-
-                    ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / 2f;
-                    ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
-                    
-                    break;
-                case "enemy2":
-
-                    ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / 4f;
-                    ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
-                    
-                    break;
-                default:
-
-            }**************************************/
-
             enemyTexture = new Texture(texturePath);
             enemySprite = new Sprite(enemyTexture);
             enemySprite.Scale = new Vector2f(xScale, yScale);   // changes the scale of the sprite
-
             enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
             enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
 
-            if (xScale != Global.GLOBAL_SCALE)
-            {
-                ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / (xScale * 10);
-                ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
-            }
+            ENEMY_MOVEMENT_SPEED = _jumpspeed;
+            ENEMY_JUMP_SPEED = _movementspeed;
 
             tileMap = _tileMap;  // used for tile colliding in method update();
 
@@ -91,7 +97,6 @@ namespace DungeonDwarf
 
         public void update(Vector2f playerPosition)
         {
-
             // simple movement logic
             if (!tileMap.Collides(enemyPosition, enemySize))    // check if enemy collides with tiles, if true dont move at all
             { 
@@ -113,8 +118,9 @@ namespace DungeonDwarf
             // enemy jumps if player is unreacheable and if enemy is colliding with tiles to the left or the right of the enemy
             // multiple of ENEMY_MOVEMENT_SPEED for CheckNextCollide so that it doesn't look like that the enemy is crawling up the wall i.e. the enemy is jumping some steps before the wall
             // jumping is endless as of now
-            if (enemyPosition.X != playerPosition.X && (tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)) ||
-                tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f))))
+            if (enemyPosition.X != playerPosition.X && !tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(0f,-ENEMY_JUMP_SPEED)) && 
+                                                        (tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)) ||
+                                                        tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f))))
                 enemyPosition.Y -= ENEMY_JUMP_SPEED;
 
 
@@ -122,7 +128,7 @@ namespace DungeonDwarf
             CorrectYPosLogic();
         }
 
-        // borrowed from Player.cs and adjusted for Enemy.cs, thanks Daniel lol ;)
+        // borrowed from Player.cs and adjusted for Enemy.cs, thanks Daniel lol ;) pff daniel xD thats my work :D
         public void CorrectYPosLogic() 
         {
             //get difference between player left bottom and ground top

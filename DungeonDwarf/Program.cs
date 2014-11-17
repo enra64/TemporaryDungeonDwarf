@@ -128,9 +128,10 @@ namespace DungeonDwarf
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
-            EnemyList.Add(new Enemy("zeroEnemy", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/enemies/zeroEnemy.png", Global.GLOBAL_SCALE, Global.GLOBAL_SCALE));
-            EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTileTop.png", 0.3f, 0.3f));
-            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTile.png", 0.4f, 0.4f));
+            // Konstructor mit Enemy(Gegnername, currenRenderWindow, currentPlayer.playerPosition, tileMap, Texturpath als String, x-Wert Scaling, y-Wert Scaling, Movementspeed, Jumpspeed));
+            EnemyList.Add(new Enemy("zeroEnemy", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/enemies/zeroEnemy.png", Global.GLOBAL_SCALE, Global.GLOBAL_SCALE, Global.PLAYER_MOVEMENT_SPEED / 2f, Global.PLAYER_JUMP_SPEED / 1.5f));
+            EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTileTop.png", 0.2f, 0.2f, Global.PLAYER_MOVEMENT_SPEED / 3f, Global.PLAYER_JUMP_SPEED / 2f));
+            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTile.png", 0.4f, 0.4f, Global.PLAYER_MOVEMENT_SPEED / 4f, Global.PLAYER_JUMP_SPEED / 2.5f));
             #endregion
 
             //Init the rectangle the user can move in without changing view
@@ -185,6 +186,10 @@ namespace DungeonDwarf
             {
                 currentView.Zoom(1.01f);
             }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.N))
+            {
+                Console.WriteLine("batman");
+            }
             if (Keyboard.IsKeyPressed(Keyboard.Key.I)){
                 currentInventory.Show();
             }
@@ -232,6 +237,8 @@ namespace DungeonDwarf
         /// Draws everything. Called each game tick.
         /// </summary>
         private static void Draw(){
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             /*
              * HE WHO DOES NOT READ THE STARRY COMMENTS (aka oneliners are _mostly_ unimportant) SHALL BE SLAIN
              * TO DEATH
@@ -245,6 +252,7 @@ namespace DungeonDwarf
             currentRenderWindow.SetView(currentView);
             //draw map/level
             tileMap.Draw();
+
             /*
              * Your drawing calls may begin only now.
              * What is draw-called first, will be most backgroundy, so think about where you place your calls.
@@ -258,7 +266,6 @@ namespace DungeonDwarf
             EnemyList[0].draw();
             EnemyList[1].draw();
             EnemyList[2].draw();
-
             currentPlayer.Draw();
             
             //MovementRectDebug();
@@ -267,6 +274,9 @@ namespace DungeonDwarf
              * Doing last call, do not call anything after this
              */
             currentRenderWindow.Display();
+            sw.Stop();
+            //Console.WriteLine(sw.ElapsedMilliseconds);
+            sw.Reset();
         }
 
         //you can ignore this function
