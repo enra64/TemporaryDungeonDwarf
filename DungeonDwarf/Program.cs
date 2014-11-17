@@ -168,18 +168,43 @@ namespace DungeonDwarf
             }
             //store current offset in global class
             Global.CURRENT_WINDOW_ORIGIN=currentView.Center-Global.BEGIN_WINDOW_ORIGIN;
+            /*
+             * BEGIN YOUR CODE AFTER THIS
+             */
+            BulletCollision();
             //moves the player
             currentPlayer.Update();
             //check for key input
             KeyCheck();
             //Moving Bullet
-            if (bullet1 != null)
-                bullet1.update();
             foreach (Bullet e in BulletList)
                 e.update();
             //hint:
             foreach (Enemy e in EnemyList)
                 e.update(currentPlayer.playerPosition);
+        }
+
+        private static void BulletCollision()
+        {
+            for (int i = 0; i < BulletList.Count; i++)
+            {
+                Bullet b = BulletList.ElementAt(i);
+                for (int j = 0; j < EnemyList.Count; j++)
+                {
+                    Enemy e = EnemyList.ElementAt(j);
+                    //actual collision check
+                    FloatRect bulletRect = new FloatRect(b.bulletPosition.X, b.bulletPosition.Y, b.bulletSize.X, b.bulletSize.Y);
+                    FloatRect enemyRect = new FloatRect(e.enemyPosition.X, e.enemyPosition.Y, e.enemySize.X, e.enemySize.Y);
+                    //remove both on collision
+                    if (bulletRect.Intersects(enemyRect)){
+                        BulletList.RemoveAt(i);
+                        EnemyList.RemoveAt(j);
+                        //avoid wrong indices
+                        break;
+                    }
+
+                }
+            }
         }
 
         static void KeyCheck()
@@ -194,23 +219,20 @@ namespace DungeonDwarf
             {
                 currentView.Zoom(1.01f);
             }
+            //easter egg or something
             if (Keyboard.IsKeyPressed(Keyboard.Key.N))
-            {
                 Console.WriteLine("batman");
-            }
             if (Keyboard.IsKeyPressed(Keyboard.Key.I)){
                 currentInventory.Show();
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.F))
-            {
-                if (BulletButton == false)
-                {
+            //fire debouncing
+            if (Keyboard.IsKeyPressed(Keyboard.Key.F)){
+                if (BulletButton == false){
                     BulletList.Add(new Bullet(currentPlayer.playerPosition, "textures/weapons/arrow/Feuer.png", currentRenderWindow));
                     BulletButton = true;
-        }
+                }
             }
-            if (!Keyboard.IsKeyPressed(Keyboard.Key.F))
-            {
+            if (!Keyboard.IsKeyPressed(Keyboard.Key.F)){
                 BulletButton = false;
             }
         }
@@ -279,14 +301,20 @@ namespace DungeonDwarf
              * BEGIN YOUR CALLS AFTER THIS
              */
             /*
+             * copy to real web browser for best experience
              http://i.minus.com/ixfHgzTc4VA2Q.gif
-             * foreach(Enemy e in EnemyList)
-             * e.draw();
+             EnemyList[0].draw();
+             EnemyList[1].draw();
+             EnemyList[2].draw();
              */
-            EnemyList[0].draw();
-            EnemyList[1].draw();
-            EnemyList[2].draw();
+            //draw all enemys
+            foreach (Enemy e in EnemyList)
+                e.draw();
+
+            //draw player
             currentPlayer.Draw();
+
+            //draw all current bullets
             foreach (Bullet e in BulletList)
                 e.draw();
             

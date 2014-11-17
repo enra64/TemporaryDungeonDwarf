@@ -227,7 +227,8 @@ namespace DungeonDwarf
            }
            #endregion
 
-            //draw sprite slightly below position
+
+           //draw sprite slightly below position
            playerSprite.Position = new Vector2f(playerPosition.X, playerPosition.Y + 5f); ;
         }
 
@@ -244,8 +245,7 @@ namespace DungeonDwarf
                 //avoid getting put above the game
                 if (playerPosition.Y < -10)
                     playerPosition.Y = 0;
-                else
-                {
+                else{
                     //Console.WriteLine(yDiffLeft);
                     //get current left and right highest positions
                     float leftTopPosition = tileMap.MinY(playerPosition);
