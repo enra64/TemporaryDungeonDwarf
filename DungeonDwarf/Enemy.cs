@@ -51,23 +51,23 @@ namespace DungeonDwarf
                     texturePath="textures/enemies/zeroEnemy.png";
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
-                    _jumpspeed=.5f;
-                    _movementspeed=.5f;
+                    _jumpspeed = Global.PLAYER_JUMP_SPEED / 1.5f;
+                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 2f;
                     break;
                 case "enemy1":
                     texturePath="textures/world/earthTileTop.png";
-                    xScale=Global.GLOBAL_SCALE;
-                    yScale=Global.GLOBAL_SCALE;
-                    _jumpspeed=.3f;
-                    _movementspeed=.3f;
+                    xScale=.2f;
+                    yScale=.2f;
+                    _jumpspeed = Global.PLAYER_JUMP_SPEED / 2f;
+                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 3f;
                     break;
                 //do this when case is enemy2 or if no other case fit
                 default: case "enemy2":
                     texturePath = "textures/world/earthTile.png";
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
-                    _jumpspeed=.4f;
-                    _movementspeed=.4f;
+                    _jumpspeed = Global.PLAYER_JUMP_SPEED / 2.5f;
+                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 4f;
                     break;
             }
 
