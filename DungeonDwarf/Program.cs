@@ -38,7 +38,7 @@ namespace DungeonDwarf
             currentRenderWindow = new RenderWindow(new VideoMode(800, 600), "Dungeon Dwarf", Styles.Default);
             //currentRenderWindow = new RenderWindow(VideoMode.FullscreenModes[0], "Dungeon Dwarf", Styles.Fullscreen);
             //sets framerate to a maximum of 45; changing the value will likely result in bad things
-            currentRenderWindow.SetFramerateLimit(45);
+            currentRenderWindow.SetFramerateLimit(0);
             //add event handler for klicking the X icon
             currentRenderWindow.Closed += windowClosed;
             //vertical sync is enabled, because master graphics n shit
