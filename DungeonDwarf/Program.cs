@@ -20,8 +20,11 @@ namespace DungeonDwarf
         static Stopwatch tileMapUpdater = new Stopwatch();
         static List<Sprite> backgroundList = new List<Sprite>();
         static List<Enemy> EnemyList = new List<Enemy>();
+        static List<Bullet> BulletList = new List<Bullet>();
         static Inventory currentInventory;
         static bool debugInventory = false;
+        static Bullet bullet1;
+        static bool BulletButton = false;
 
         static void Main(string[] args)
         {
@@ -169,7 +172,12 @@ namespace DungeonDwarf
             currentPlayer.Update();
             //check for key input
             KeyCheck();
-
+            //Moving Bullet
+            if (bullet1 != null)
+                bullet1.update();
+            foreach (Bullet e in BulletList)
+                e.update();
+            //hint:
             foreach (Enemy e in EnemyList)
                 e.update(currentPlayer.playerPosition);
         }
@@ -192,6 +200,18 @@ namespace DungeonDwarf
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.I)){
                 currentInventory.Show();
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.F))
+            {
+                if (BulletButton == false)
+                {
+                    BulletList.Add(new Bullet(currentPlayer.playerPosition, "textures/weapons/arrow/Feuer.png", currentRenderWindow));
+                    BulletButton = true;
+        }
+            }
+            if (!Keyboard.IsKeyPressed(Keyboard.Key.F))
+            {
+                BulletButton = false;
             }
         }
 
@@ -267,6 +287,8 @@ namespace DungeonDwarf
             EnemyList[1].draw();
             EnemyList[2].draw();
             currentPlayer.Draw();
+            foreach (Bullet e in BulletList)
+                e.draw();
             
             //MovementRectDebug();
             
