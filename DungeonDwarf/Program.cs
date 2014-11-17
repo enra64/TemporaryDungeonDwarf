@@ -186,6 +186,10 @@ namespace DungeonDwarf
             {
                 currentView.Zoom(1.01f);
             }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.N))
+            {
+                Console.WriteLine("batman");
+            }
             if (Keyboard.IsKeyPressed(Keyboard.Key.I)){
                 currentInventory.Show();
             }
@@ -254,10 +258,10 @@ namespace DungeonDwarf
              * What is draw-called first, will be most backgroundy, so think about where you place your calls.
              * BEGIN YOUR CALLS AFTER THIS
              */
+
             EnemyList[0].draw();
             EnemyList[1].draw();
             EnemyList[2].draw();
-
             currentPlayer.Draw();
             
             //MovementRectDebug();
@@ -267,7 +271,7 @@ namespace DungeonDwarf
              */
             currentRenderWindow.Display();
             sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds);
+            //Console.WriteLine(sw.ElapsedMilliseconds);
             sw.Reset();
         }
 
