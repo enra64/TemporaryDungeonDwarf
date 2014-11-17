@@ -136,7 +136,7 @@ namespace DungeonDwarf
                
                #region Lava_Death
                //lava
-               int[] currentTile = tileMap.GetCurrentTile(new Vector2f(playerPosition.X, playerSize.Y+playerPosition.Y +30f));
+               int[] currentTile = tileMap.GetCurrentTile(new Vector2f(playerPosition.X, playerSize.Y + playerPosition.Y + 30f));
                if (tileMap.GetTileType(currentTile[0], currentTile[1]) == Global.LAVA_TOP_TILE)
                {
                    if (shield > MIN_HEALTH)
@@ -345,7 +345,7 @@ namespace DungeonDwarf
 
             win.Draw(healthBar);
             win.Draw(shieldBar);
-            win.Draw(colliderRect);
+            //win.Draw(colliderRect);
             win.Draw(playerSprite);
         }
     }
