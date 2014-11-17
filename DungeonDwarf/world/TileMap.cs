@@ -16,6 +16,7 @@ namespace DungeonDwarf.world
     {
         public RenderWindow win;
         public Vector2u tileAmount, tilesPerView=new Vector2u(20, 10);
+        public List<int[]> spawnPoints=new List<int[]>();
 
         //tile specific variables
         private int[,] tileTypes;
@@ -87,6 +88,24 @@ namespace DungeonDwarf.world
                             if (y < tileAmount.Y)
                                 Collidable[x, y] = true;
                             break;
+                        case Global.SPAWNTILE_1:
+                            xOffset = AIROFFSET;
+                            spawnPoints.Add(new int[]{(int)x, (int)y, Global.SPAWNTILE_1});
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = false;
+                            break;
+                        case Global.SPAWNTILE_2:
+                            xOffset = AIROFFSET;
+                            spawnPoints.Add(new int[] { (int)x, (int)y, Global.SPAWNTILE_2 });
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = false;
+                            break;
+                        case Global.SPAWNTILE_3:
+                            xOffset = AIROFFSET;
+                            spawnPoints.Add(new int[] { (int)x, (int)y, Global.SPAWNTILE_3 });
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = false;
+                            break;
                         default:
                             xOffset = AIROFFSET;
                             if (y < tileAmount.Y)
@@ -148,6 +167,9 @@ namespace DungeonDwarf.world
                 EARTHTOP = s.Element("earthTop").Value,
                 LAVATOP = s.Element("lavaTop").Value,
                 LAVA = s.Element("lava").Value,
+                S1 = s.Element("spawn1").Value,
+                S2 = s.Element("spawn2").Value,
+                S3 = s.Element("spawn3").Value,
                 AIR = s.Element("air").Value
             }).FirstOrDefault();
             //get strings from array, removing all linebreaks
@@ -156,6 +178,9 @@ namespace DungeonDwarf.world
             string air = query.AIR.Replace("\n", String.Empty);
             string lava = query.LAVA.Replace("\n", String.Empty);
             string lavatop = query.LAVATOP.Replace("\n", String.Empty);
+            string spawn1 = query.S1.Replace("\n", String.Empty);
+            string spawn2 = query.S2.Replace("\n", String.Empty);
+            string spawn3 = query.S3.Replace("\n", String.Empty);
             //get byte arrays from strings
             System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
             byte[] earthArray = enc.GetBytes(earth);
@@ -163,7 +188,9 @@ namespace DungeonDwarf.world
             byte[] airArray = enc.GetBytes(air);
             byte[] lavaArray = enc.GetBytes(lava);
             byte[] lavaTopArray = enc.GetBytes(lavatop);
-
+            byte[] spawn1Array = enc.GetBytes(spawn1);
+            byte[] spawn2Array = enc.GetBytes(spawn2);
+            byte[] spawn3Array = enc.GetBytes(spawn3);
             //get tiles from byte arrays
             //somewhat dirty implementation, we can only define tile priority
             for(int y=0;y<tileAmount.Y;y++){
@@ -180,6 +207,13 @@ namespace DungeonDwarf.world
                         tileTypes[x, y] = Global.LAVATILE;
                     if (lavaTopArray[oneDimensionalArrayPosition] == 49)//ASCII one: lavatop
                         tileTypes[x, y] = Global.LAVA_TOP_TILE;
+                    //spawns
+                    if (spawn1Array[oneDimensionalArrayPosition] == 49)//ASCII one: spawn 1
+                        tileTypes[x, y] = Global.SPAWNTILE_1;
+                    if (spawn2Array[oneDimensionalArrayPosition] == 49)//ASCII one: spawn 2
+                        tileTypes[x, y] = Global.SPAWNTILE_2;
+                    if (spawn3Array[oneDimensionalArrayPosition] == 49)//ASCII one: spawn 3
+                        tileTypes[x, y] = Global.SPAWNTILE_3;
                 }
             }
         }

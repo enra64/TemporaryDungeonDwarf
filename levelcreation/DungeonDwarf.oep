@@ -16,7 +16,7 @@
     <Width>20000</Width>
     <Height>200</Height>
   </LevelMaximumSize>
-  <Filename>C:\Users\Arne\Documents\Visual Studio 2013\Projects\DungeonDwarfC\levelcreation\DungeonDwarf.oep</Filename>
+  <Filename>C:\Users\Arne\Source\Repos\dungeondwarf\levelcreation\DungeonDwarf.oep</Filename>
   <AngleMode>Radians</AngleMode>
   <CameraEnabled>true</CameraEnabled>
   <CameraSize>
@@ -89,6 +89,45 @@
         <Y>1</Y>
       </ScrollFactor>
       <Color A="255" R="128" G="0" B="0" />
+      <ExportMode>Bitstring</ExportMode>
+    </LayerDefinition>
+    <LayerDefinition xsi:type="GridLayerDefinition">
+      <Name>spawn1</Name>
+      <Grid>
+        <Width>20</Width>
+        <Height>20</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+      <Color A="255" R="0" G="0" B="0" />
+      <ExportMode>Bitstring</ExportMode>
+    </LayerDefinition>
+    <LayerDefinition xsi:type="GridLayerDefinition">
+      <Name>spawn2</Name>
+      <Grid>
+        <Width>20</Width>
+        <Height>20</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+      <Color A="255" R="0" G="0" B="0" />
+      <ExportMode>Bitstring</ExportMode>
+    </LayerDefinition>
+    <LayerDefinition xsi:type="GridLayerDefinition">
+      <Name>spawn3</Name>
+      <Grid>
+        <Width>20</Width>
+        <Height>20</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+      <Color A="255" R="0" G="0" B="0" />
       <ExportMode>Bitstring</ExportMode>
     </LayerDefinition>
   </LayerDefinitions>
