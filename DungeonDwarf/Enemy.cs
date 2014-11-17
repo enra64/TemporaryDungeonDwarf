@@ -113,8 +113,9 @@ namespace DungeonDwarf
             // enemy jumps if player is unreacheable and if enemy is colliding with tiles to the left or the right of the enemy
             // multiple of ENEMY_MOVEMENT_SPEED for CheckNextCollide so that it doesn't look like that the enemy is crawling up the wall i.e. the enemy is jumping some steps before the wall
             // jumping is endless as of now
-            if (enemyPosition.X != playerPosition.X && (tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)) ||
-                tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f))))
+            if (enemyPosition.X != playerPosition.X && !tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(0f,-ENEMY_JUMP_SPEED)) && 
+                                                        (tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)) ||
+                                                        tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f))))
                 enemyPosition.Y -= ENEMY_JUMP_SPEED;
 
 

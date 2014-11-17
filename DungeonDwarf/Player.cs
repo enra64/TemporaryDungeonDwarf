@@ -19,6 +19,10 @@ namespace DungeonDwarf
         RectangleShape healthBar = new RectangleShape();
         int health = MAX_HEALTH;
 
+        private const int MAX_SHIELD= 100;
+        private const int MIN_SHIELD= 0;
+        RectangleShape shieldBar = new RectangleShape();
+        int shield = MAX_SHIELD;
 
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
@@ -99,13 +103,23 @@ namespace DungeonDwarf
             healthBar.Size = new Vector2f(health * 1.2f, 20f);
             healthBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 50f);
             healthBar.FillColor = Color.Red;
-            healthBar.OutlineColor = Color.Black;
-            healthBar.OutlineThickness = 3f;
+            healthBar.OutlineColor = Color.Transparent;
+            healthBar.OutlineThickness = 0.01f;
 
             //Console.WriteLine(health);
             #endregion
 
-            health--;
+            #region Shield
+            //shield
+           shieldBar.Size = new Vector2f(shield * 1.2f, 20f);
+           shieldBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 80f);
+           shieldBar.FillColor = Color.Blue;
+           shieldBar.OutlineColor = Color.Transparent;
+           shieldBar.OutlineThickness = 0.01f;
+
+            //Console.WriteLine(shield);
+            #endregion
+
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
@@ -117,7 +131,7 @@ namespace DungeonDwarf
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
            if (health > MIN_HEALTH){
-            //health--;
+               //health--;
             if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
@@ -128,6 +142,7 @@ namespace DungeonDwarf
                         isRight = false;
 
                     }
+
                 #region LeftAnim
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
@@ -315,6 +330,7 @@ namespace DungeonDwarf
             #endregion
 
             win.Draw(healthBar);
+            win.Draw(shieldBar);
             win.Draw(colliderRect);
             win.Draw(playerSprite);
         }
