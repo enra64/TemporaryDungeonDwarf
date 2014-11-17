@@ -34,32 +34,32 @@ namespace DungeonDwarf
         private Sprite enemySprite;
         private Texture enemyTexture;
         private RenderWindow win;
-        private float xScale, yScale;
+        //private float xScale, yScale;
         private world.TileMap tileMap;
         private float ENEMY_MOVEMENT_SPEED = Global.PLAYER_MOVEMENT_SPEED / 2f;
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
         private int i = 0;
 
-        public Enemy(String enemyType, RenderWindow _win, Vector2f _enemyPosition, world.TileMap _tileMap)
+        public Enemy(String _enemyType, RenderWindow _win, Vector2f _enemyPosition, world.TileMap _tileMap)
         {
             float xScale, yScale, _jumpspeed, _movementspeed;
             string texturePath;
-            //moved enemy distinguishment here, b/c 7 constructor arguments
-            switch (enemyType)
+            //moved enemy distinguishment here, b/c 7 constructor arguments and somehow the commit was broken
+            switch (_enemyType)
             {
                 case "zeroEnemy":
                     texturePath="textures/enemies/zeroEnemy.png";
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 1.5f;
-                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 2f;
+                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 5f;
                     break;
                 case "enemy1":
                     texturePath="textures/world/earthTileTop.png";
                     xScale=.2f;
                     yScale=.2f;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2f;
-                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 3f;
+                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 8f;
                     break;
                 //do this when case is enemy2 or if no other case fit
                 default: case "enemy2":
@@ -67,7 +67,7 @@ namespace DungeonDwarf
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2.5f;
-                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 4f;
+                    _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 10f;
                     break;
             }
 
@@ -81,8 +81,9 @@ namespace DungeonDwarf
             enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
             enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
 
-            ENEMY_MOVEMENT_SPEED = _jumpspeed;
-            ENEMY_JUMP_SPEED = _movementspeed;
+            //turned these around btw
+            ENEMY_JUMP_SPEED = _jumpspeed;
+            ENEMY_MOVEMENT_SPEED = _movementspeed;
 
             tileMap = _tileMap;  // used for tile colliding in method update();
 
