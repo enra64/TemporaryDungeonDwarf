@@ -115,9 +115,8 @@ namespace DungeonDwarf
            #region Movement
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
-           if (health > MIN_HEALTH)
-           {
-               //health--;
+           if (health > MIN_HEALTH){
+            //health--;
             if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 

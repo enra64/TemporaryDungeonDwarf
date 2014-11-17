@@ -233,6 +233,8 @@ namespace DungeonDwarf
         /// Draws everything. Called each game tick.
         /// </summary>
         private static void Draw(){
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             /*
              * HE WHO DOES NOT READ THE STARRY COMMENTS (aka oneliners are _mostly_ unimportant) SHALL BE SLAIN
              * TO DEATH
@@ -246,6 +248,7 @@ namespace DungeonDwarf
             currentRenderWindow.SetView(currentView);
             //draw map/level
             tileMap.Draw();
+
             /*
              * Your drawing calls may begin only now.
              * What is draw-called first, will be most backgroundy, so think about where you place your calls.
@@ -263,6 +266,9 @@ namespace DungeonDwarf
              * Doing last call, do not call anything after this
              */
             currentRenderWindow.Display();
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
+            sw.Reset();
         }
 
         //you can ignore this function
