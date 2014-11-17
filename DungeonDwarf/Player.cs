@@ -132,8 +132,11 @@ namespace DungeonDwarf
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
            if (health > MIN_HEALTH){
-               //health--;
                
+               //shield gets back up
+               if (shield < MAX_SHIELD)
+                   shield++;
+
                #region Lava_Death
                //lava
                int[] currentTile = tileMap.GetCurrentTile(new Vector2f(playerPosition.X, playerSize.Y + playerPosition.Y + 30f));
