@@ -236,9 +236,10 @@ namespace DungeonDwarf
             //get difference between player left bottom and ground top
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.MinY(playerPosition);
             //reset player position if he is just above ground
-            //even though leaving out yDiffRigh checking seems illogical, it removes the jumping bug
-            if (yDiffLeft > -10 && yDiffLeft<60 && yDiffLeft!=0)
-            {
+            //even though leaving out yDiffRight checking seems illogical, it removes the jumping bug
+            //calc maximum distance from ground, scale by gravity
+            float gravityScale = 8f / Global.GLOBAL_GRAVITY;
+            if (yDiffLeft > -10 / gravityScale && yDiffLeft<60 && yDiffLeft!=0){
                 //avoid getting put above the game
                 if (playerPosition.Y == -50)
                     playerPosition.Y = 0;
