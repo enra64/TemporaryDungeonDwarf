@@ -40,43 +40,20 @@ namespace DungeonDwarf
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
         private int i = 0;
 
-        public Enemy(String enemyType, RenderWindow _win, Vector2f _enemyPosition, world.TileMap _tileMap, string texturePath, float xScale, float yScale)
+        public Enemy(String enemyType, RenderWindow _win, Vector2f _enemyPosition, world.TileMap _tileMap, string texturePath, float xScale, float yScale, float _jumspeed, float _movementspeed)
         {
             // where the enemy spawns
             enemyPosition.X = _enemyPosition.X;        
             enemyPosition.Y = _enemyPosition.Y-200;
 
-            /***** OLD STUFF, DON'T REMOVE *********
-             * switch (enemyType)
-            {
-                case "enemy1":
-
-                    ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / 2f;
-                    ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
-                    
-                    break;
-                case "enemy2":
-
-                    ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / 4f;
-                    ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
-                    
-                    break;
-                default:
-
-            }**************************************/
-
             enemyTexture = new Texture(texturePath);
             enemySprite = new Sprite(enemyTexture);
             enemySprite.Scale = new Vector2f(xScale, yScale);   // changes the scale of the sprite
-
             enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
             enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
 
-            if (xScale != Global.GLOBAL_SCALE)
-            {
-                ENEMY_MOVEMENT_SPEED = ENEMY_MOVEMENT_SPEED / (xScale * 10);
-                ENEMY_JUMP_SPEED = ENEMY_JUMP_SPEED * enemySprite.Scale.X;
-            }
+            ENEMY_MOVEMENT_SPEED = _jumspeed;
+            ENEMY_JUMP_SPEED = _movementspeed;
 
             tileMap = _tileMap;  // used for tile colliding in method update();
 
