@@ -129,7 +129,9 @@ namespace DungeonDwarf.world
         /// <param name="y"></param>
         /// <returns></returns>
         public int GetTileType(int x, int y){
-            return tileTypes[x,y];
+            if(x!=-1&&y!=-1)
+                return tileTypes[x, y];
+            else return Global.AIR_TILE;
         }
 
         /// <summary>
