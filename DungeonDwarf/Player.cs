@@ -133,7 +133,9 @@ namespace DungeonDwarf
             //xD :D
            if (health > MIN_HEALTH){
                //health--;
-            //lava
+               
+               #region Lava_Death
+               //lava
                int[] currentTile = tileMap.GetCurrentTile(new Vector2f(playerPosition.X, playerSize.Y+playerPosition.Y +30f));
                if (tileMap.GetTileType(currentTile[0], currentTile[1]) == Global.LAVA_TOP_TILE)
                {
@@ -142,7 +144,9 @@ namespace DungeonDwarf
                    else
                     health -= 10;
                }
-            if (!tileMap.Collides(playerPosition, playerSize)){       
+               #endregion
+               
+               if (!tileMap.Collides(playerPosition, playerSize)){       
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
                     { 
