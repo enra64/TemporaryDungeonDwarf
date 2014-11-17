@@ -16,6 +16,7 @@ namespace DungeonDwarf.world
     {
         public RenderWindow win;
         public Vector2u tileAmount, tilesPerView=new Vector2u(20, 10);
+        public List<int[]> spawnPoints=new List<int[]>();
 
         //tile specific variables
         private int[,] tileTypes;
@@ -86,6 +87,24 @@ namespace DungeonDwarf.world
                             xOffset = EARTHTOPTILEOFFSET;
                             if (y < tileAmount.Y)
                                 Collidable[x, y] = true;
+                            break;
+                        case Global.SPAWNTILE_1:
+                            xOffset = AIROFFSET;
+                            spawnPoints.Add(new int[]{(int)x, (int)y, Global.SPAWNTILE_1});
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = false;
+                            break;
+                        case Global.SPAWNTILE_2:
+                            xOffset = AIROFFSET;
+                            spawnPoints.Add(new int[] { (int)x, (int)y, Global.SPAWNTILE_2 });
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = false;
+                            break;
+                        case Global.SPAWNTILE_3:
+                            xOffset = AIROFFSET;
+                            spawnPoints.Add(new int[] { (int)x, (int)y, Global.SPAWNTILE_3 });
+                            if (y < tileAmount.Y)
+                                Collidable[x, y] = false;
                             break;
                         default:
                             xOffset = AIROFFSET;
