@@ -64,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="inventory\ARIAL.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="world\levels\DungeonDwarf.oep">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
