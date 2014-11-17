@@ -169,7 +169,6 @@ namespace DungeonDwarf
             //check for key input
             KeyCheck();
 
-            //hint:
             foreach (Enemy e in EnemyList)
                 e.update(currentPlayer.playerPosition);
         }
@@ -250,6 +249,11 @@ namespace DungeonDwarf
              * Your drawing calls may begin only now.
              * What is draw-called first, will be most backgroundy, so think about where you place your calls.
              * BEGIN YOUR CALLS AFTER THIS
+             */
+            /*
+             http://i.minus.com/ixfHgzTc4VA2Q.gif
+             * foreach(Enemy e in EnemyList)
+             * e.draw();
              */
             EnemyList[0].draw();
             EnemyList[1].draw();
