@@ -104,7 +104,8 @@ namespace DungeonDwarf
 
             //Console.WriteLine(health);
             #endregion
-            
+
+            health--;
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
