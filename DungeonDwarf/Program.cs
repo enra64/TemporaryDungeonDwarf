@@ -128,9 +128,10 @@ namespace DungeonDwarf
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
-            EnemyList.Add(new Enemy("zeroEnemy", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/enemies/zeroEnemy.png", Global.GLOBAL_SCALE, Global.GLOBAL_SCALE));
-            EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTileTop.png", 0.3f, 0.3f));
-            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTile.png", 0.4f, 0.4f));
+            // Konstructor mit Enemy(Gegnername, currenRenderWindow, currentPlayer.playerPosition, tileMap, Texturpath als String, x-Wert Scaling, y-Wert Scaling, Movementspeed, Jumpspeed));
+            EnemyList.Add(new Enemy("zeroEnemy", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/enemies/zeroEnemy.png", Global.GLOBAL_SCALE, Global.GLOBAL_SCALE, Global.PLAYER_MOVEMENT_SPEED / 2f, Global.PLAYER_JUMP_SPEED / 1.5f));
+            EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTileTop.png", 0.2f, 0.2f, Global.PLAYER_MOVEMENT_SPEED / 3f, Global.PLAYER_JUMP_SPEED / 2f));
+            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap, "textures/world/earthTile.png", 0.4f, 0.4f, Global.PLAYER_MOVEMENT_SPEED / 4f, Global.PLAYER_JUMP_SPEED / 2.5f));
             #endregion
 
             //Init the rectangle the user can move in without changing view
