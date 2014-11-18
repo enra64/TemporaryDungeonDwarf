@@ -67,6 +67,7 @@ namespace DungeonDwarf
             {
                 s.Update();
                 s.Draw();
+
             } 
 
             /*
