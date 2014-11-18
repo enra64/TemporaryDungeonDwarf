@@ -72,7 +72,7 @@ namespace DungeonDwarf
             }
 
             // where the enemy spawns
-            enemyPosition.X = _enemyPosition.X;        
+            enemyPosition.X = _enemyPosition.X-200;        
             enemyPosition.Y = _enemyPosition.Y-200;
 
             enemyTexture = new Texture(texturePath);
@@ -90,13 +90,13 @@ namespace DungeonDwarf
             win = _win;   // used for the draw function
         }
 
-        public void draw()
+        public void Draw()
         {
             enemySprite.Position = enemyPosition;
             win.Draw(enemySprite);
         }
 
-        public void update(Vector2f playerPosition)
+        public void Update(Vector2f playerPosition)
         {
             // simple movement logic
             if (!tileMap.Collides(enemyPosition, enemySize))    // check if enemy collides with tiles, if true dont move at all
@@ -123,8 +123,6 @@ namespace DungeonDwarf
                                                         (tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)) ||
                                                         tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f))))
                 enemyPosition.Y -= ENEMY_JUMP_SPEED;
-
-
 
             CorrectYPosLogic();
         }

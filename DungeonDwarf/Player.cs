@@ -17,12 +17,12 @@ namespace DungeonDwarf
         private const int MAX_HEALTH = 100;
         private const int MIN_HEALTH = 0;
         RectangleShape healthBar = new RectangleShape();
-        int health = MAX_HEALTH;
+        public int health = MAX_HEALTH;     // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
         private const float MAX_SHIELD= 100;
         private const float MIN_SHIELD= 0;
         RectangleShape shieldBar = new RectangleShape();
-        float shield = MAX_SHIELD;
+        public float shield = MAX_SHIELD;   // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
@@ -241,7 +241,7 @@ namespace DungeonDwarf
             //calc maximum distance from ground, scale by gravity
             float gravityScale = 9f / Global.GLOBAL_GRAVITY;
             if (yDiffLeft > -10 / gravityScale && yDiffLeft < 60 && yDiffLeft != 0){
-                Console.WriteLine(playerPosition.Y);
+                //Console.WriteLine(playerPosition.Y);
                 //avoid getting put above the game
                 if (playerPosition.Y < -10)
                     playerPosition.Y = 0;

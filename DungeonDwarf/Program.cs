@@ -172,16 +172,17 @@ namespace DungeonDwarf
              * BEGIN YOUR CODE AFTER THIS
              */
             BulletCollision();
+            EnemyCollision();
             //moves the player
             currentPlayer.Update();
             //check for key input
             KeyCheck();
             //Moving Bullet
             foreach (Bullet e in BulletList)
-                e.update();
+                e.Update();
             //hint:
             foreach (Enemy e in EnemyList)
-                e.update(currentPlayer.playerPosition);
+                e.Update(currentPlayer.playerPosition);
         }
 
         private static void BulletCollision()
@@ -205,6 +206,27 @@ namespace DungeonDwarf
 
                 }
             }
+        }
+
+        // method to check for collision of all Enemies of List EnemyList with Player
+        private static void EnemyCollision()
+        {
+            if (currentPlayer.health > 0)  // prevents unnecessary code execution, just thought it might be useful, remove if you think its redundant
+            {    
+                FloatRect playerRect = new FloatRect(currentPlayer.playerPosition.X, currentPlayer.playerPosition.Y, currentPlayer.playerSize.X, currentPlayer.playerSize.Y);
+                foreach (Enemy enem in EnemyList)
+                {
+                   FloatRect enemyRect = new FloatRect(enem.enemyPosition.X, enem.enemyPosition.Y, enem.enemySize.X, enem.enemySize.Y);
+                   
+                   // what to do if collision = true (we should discuss what should happen if; for now it only sets the players shield on zero)
+                   if (playerRect.Intersects(enemyRect)) 
+                   {
+                        currentPlayer.shield = 0;
+                        //currentPlayer.health = 0;
+                    }
+                }
+            }
+
         }
 
         static void KeyCheck()
@@ -309,14 +331,14 @@ namespace DungeonDwarf
              */
             //draw all enemys
             foreach (Enemy e in EnemyList)
-                e.draw();
+                e.Draw();
 
             //draw player
             currentPlayer.Draw();
 
             //draw all current bullets
             foreach (Bullet e in BulletList)
-                e.draw();
+                e.Draw();
             
             //MovementRectDebug();
             
