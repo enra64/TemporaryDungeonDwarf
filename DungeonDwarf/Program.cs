@@ -323,6 +323,11 @@ namespace DungeonDwarf
             }
         }
 
+        private static Vector2f ConvertToLightPos(Vector2f position, Vector2f size)
+        {
+            return new Vector2f(position.X-Global.CURRENT_WINDOW_ORIGIN.X, lightMap.Size.Y-(position.Y+size.Y));
+        }
+
         /// <summary>
         /// Draws everything. Called each game tick.
         /// </summary>
@@ -336,9 +341,13 @@ namespace DungeonDwarf
             currentRenderWindow.Clear(Color.Black);
             //add lighting
             lightMap.Clear(Color.Black);
-            Sprite playerLight=new Sprite(new Texture("textures/light/lightball.png"));
-            playerLight.Position = new Vector2f(currentPlayer.playerPosition.X, lightMap.Size.Y-(currentPlayer.playerPosition.Y+currentPlayer.playerSize.Y));
-            lightMap.Draw(playerLight, renderStateAdditive);
+            Sprite newLightSprite=new Sprite(new Texture("textures/light/lightball.png"));
+            foreach (Bullet b in BulletList){
+                newLightSprite.Position = ConvertToLightPos(b.bulletPosition, b.bulletSize);
+                lightMap.Draw(newLightSprite, renderStateAdditive);
+            }
+            newLightSprite.Position = ConvertToLightPos(currentPlayer.playerPosition, currentPlayer.playerSize);
+            lightMap.Draw(newLightSprite, renderStateAdditive);
 
             //apply view to window
             currentRenderWindow.SetView(currentView);
@@ -375,7 +384,9 @@ namespace DungeonDwarf
              * Doing last call, do not call anything after this
              */
             //draw light
-            currentRenderWindow.Draw(new Sprite(lightMap.Texture), renderStateMult);
+            Sprite lightSprite=new Sprite(lightMap.Texture);
+            lightSprite.Position = Global.CURRENT_WINDOW_ORIGIN;
+            currentRenderWindow.Draw(lightSprite, renderStateMult);
             currentRenderWindow.Display();
             sw.Stop();
             //fps counter in console, if I am thinking this through correctly it should be accurate to 99%
