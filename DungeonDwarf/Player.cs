@@ -227,8 +227,7 @@ namespace DungeonDwarf
            }
            #endregion
 
-
-           //draw sprite slightly below position
+           //draw sprite slightly below position to simulate correct sprite cutting
            playerSprite.Position = new Vector2f(playerPosition.X, playerPosition.Y + 5f); ;
         }
 
@@ -337,22 +336,21 @@ namespace DungeonDwarf
         }
         #endregion
 
-        public void Draw()
+        public void Draw(){
+            win.Draw(healthBar);
+            win.Draw(shieldBar);
+            win.Draw(playerSprite);
+        }
+
+        private void DrawCollidingRect()
         {
-            #region ColliderRect
-            //shows playersize
             RectangleShape colliderRect = new RectangleShape();
             colliderRect.Size = new Vector2f(playerSize.X, playerSize.Y);
             colliderRect.Position = new Vector2f(playerPosition.X, playerPosition.Y);
             colliderRect.FillColor = Color.Transparent;
             colliderRect.OutlineColor = Color.Green;
             colliderRect.OutlineThickness = 1f;
-            #endregion
-
-            win.Draw(healthBar);
-            win.Draw(shieldBar);
-            //win.Draw(colliderRect);
-            win.Draw(playerSprite);
+            win.Draw(colliderRect);
         }
     }
 }
