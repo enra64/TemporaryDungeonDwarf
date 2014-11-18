@@ -25,6 +25,7 @@ namespace DungeonDwarf
         static bool debugInventory = false;
         static Bullet bullet1;
         static bool BulletButton = false;
+        static Stopwatch sw = new Stopwatch();
 
         static void Main(string[] args)
         {
@@ -160,6 +161,8 @@ namespace DungeonDwarf
         /// It is thus called in each main loop iteration.
         /// </summary>
         private static void Update(){
+            // stopwatch beginning 
+            sw.Start();
             //move view with player
             moveView();
             //update tilemap if due
@@ -173,16 +176,17 @@ namespace DungeonDwarf
              * BEGIN YOUR CODE AFTER THIS
              */
             BulletCollision();
+            EnemyCollision();
             //moves the player
             currentPlayer.Update();
             //check for key input
             KeyCheck();
             //Moving Bullet
             foreach (Bullet e in BulletList)
-                e.update();
+                e.Update();
             //hint:
             foreach (Enemy e in EnemyList)
-                e.update(currentPlayer.playerPosition);
+                e.Update(currentPlayer.playerPosition);
         }
 
         private static void BulletCollision()
@@ -206,6 +210,27 @@ namespace DungeonDwarf
 
                 }
             }
+        }
+
+        // method to check for collision of all Enemies of List EnemyList with Player
+        private static void EnemyCollision()
+        {
+            if (currentPlayer.health > 0)  // prevents unnecessary code execution, just thought it might be useful, remove if you think its redundant
+            {    
+                FloatRect playerRect = new FloatRect(currentPlayer.playerPosition.X, currentPlayer.playerPosition.Y, currentPlayer.playerSize.X, currentPlayer.playerSize.Y);
+                foreach (Enemy enem in EnemyList)
+                {
+                   FloatRect enemyRect = new FloatRect(enem.enemyPosition.X, enem.enemyPosition.Y, enem.enemySize.X, enem.enemySize.Y);
+                   
+                   // what to do if collision = true (we should discuss what should happen if; for now it only sets the players shield on zero)
+                   if (playerRect.Intersects(enemyRect)) 
+                   {
+                        currentPlayer.shield = 0;
+                        //currentPlayer.health = 0;
+                    }
+                }
+            }
+
         }
 
         static void KeyCheck()
@@ -280,8 +305,6 @@ namespace DungeonDwarf
         /// Draws everything. Called each game tick.
         /// </summary>
         private static void Draw(){
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             /*
              * HE WHO DOES NOT READ THE STARRY COMMENTS (aka oneliners are _mostly_ unimportant) SHALL BE SLAIN
              * TO DEATH
@@ -310,14 +333,14 @@ namespace DungeonDwarf
              */
             //draw all enemys
             foreach (Enemy e in EnemyList)
-                e.draw();
+                e.Draw();
 
             //draw player
             currentPlayer.Draw();
 
             //draw all current bullets
             foreach (Bullet e in BulletList)
-                e.draw();
+                e.Draw();
             
             //MovementRectDebug();
             
@@ -326,6 +349,8 @@ namespace DungeonDwarf
              */
             currentRenderWindow.Display();
             sw.Stop();
+            //fps counter in console, if I am thinking this through correctly it should be accurate to 99%
+            Console.WriteLine("FPS: " + 1000f / sw.ElapsedMilliseconds);
             //Console.WriteLine(sw.ElapsedMilliseconds);
             sw.Reset();
         }

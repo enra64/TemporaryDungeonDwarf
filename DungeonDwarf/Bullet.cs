@@ -31,14 +31,14 @@ namespace DungeonDwarf
             win = fenster1;
         }
 
-        public void draw()
+        public void Draw()
         {
             bulletSprite.Position = bulletPosition;
             win.Draw(bulletSprite);
             Console.WriteLine(zaehler);
         }
 
-        public void update()
+        public void Update()
         {
             bulletPosition.X += 1;
             bulletSprite.Position = bulletPosition;

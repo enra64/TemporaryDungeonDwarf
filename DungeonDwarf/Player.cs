@@ -17,17 +17,17 @@ namespace DungeonDwarf
         private const int MAX_HEALTH = 100;
         private const int MIN_HEALTH = 0;
         RectangleShape healthBar = new RectangleShape();
-        int health = MAX_HEALTH;
+        public int health = MAX_HEALTH;     // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
-        private const float MAX_SHIELD= 100;
-        private const float MIN_SHIELD= 0;
+        private const float MAX_SHIELD= 100f;
+        private const float MIN_SHIELD= 0f;
         RectangleShape shieldBar = new RectangleShape();
-        float shield = MAX_SHIELD;
+        public float shield = MAX_SHIELD;   // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
         private Sprite playerSprite;
-        private float xScale = 1f, yScale = 1f;
+        private float xScale = 0.1f, yScale = 1f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
        
@@ -227,8 +227,7 @@ namespace DungeonDwarf
            }
            #endregion
 
-
-           //draw sprite slightly below position
+           //draw sprite slightly below position to simulate correct sprite cutting
            playerSprite.Position = new Vector2f(playerPosition.X, playerPosition.Y + 5f); ;
         }
 
@@ -241,7 +240,7 @@ namespace DungeonDwarf
             //calc maximum distance from ground, scale by gravity
             float gravityScale = 9f / Global.GLOBAL_GRAVITY;
             if (yDiffLeft > -10 / gravityScale && yDiffLeft < 60 && yDiffLeft != 0){
-                Console.WriteLine(playerPosition.Y);
+                //Console.WriteLine(playerPosition.Y);
                 //avoid getting put above the game
                 if (playerPosition.Y < -10)
                     playerPosition.Y = 0;
@@ -337,22 +336,21 @@ namespace DungeonDwarf
         }
         #endregion
 
-        public void Draw()
+        public void Draw(){
+            win.Draw(healthBar);
+            win.Draw(shieldBar);
+            win.Draw(playerSprite);
+        }
+
+        private void DrawCollidingRect()
         {
-            #region ColliderRect
-            //shows playersize
             RectangleShape colliderRect = new RectangleShape();
             colliderRect.Size = new Vector2f(playerSize.X, playerSize.Y);
             colliderRect.Position = new Vector2f(playerPosition.X, playerPosition.Y);
             colliderRect.FillColor = Color.Transparent;
             colliderRect.OutlineColor = Color.Green;
             colliderRect.OutlineThickness = 1f;
-            #endregion
-
-            win.Draw(healthBar);
-            win.Draw(shieldBar);
-            //win.Draw(colliderRect);
-            win.Draw(playerSprite);
+            win.Draw(colliderRect);
         }
     }
 }
