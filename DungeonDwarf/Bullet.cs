@@ -57,6 +57,15 @@ namespace DungeonDwarf
            
         }
 
+        /// <summary>
+        /// convenience method used by lighting
+        /// </summary>
+        /// <returns></returns>
+        public Vector2f GetCenter()
+        {
+            return new Vector2f(bulletSize.X / 2f + bulletSprite.Position.X, bulletSize.Y / 2f + bulletSprite.Position.Y);
+        }
+
 
     }
 

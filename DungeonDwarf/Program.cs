@@ -27,6 +27,7 @@ namespace DungeonDwarf
         static bool bewegungsrichtung = true;
         static RenderTexture lightMap;
         static RenderStates renderStateAdditive = RenderStates.Default, renderStateMult = RenderStates.Default;
+        static Texture lightTexture = new Texture("textures/light/lightball.png");
 
         static void Main(string[] args)
         {
@@ -323,9 +324,20 @@ namespace DungeonDwarf
             }
         }
 
-        private static Vector2f ConvertToLightPos(Vector2f position, Vector2f size)
+        private static Vector2f ConvertToLightPos(Sprite lightSprite, Vector2f inputPosition, Vector2f inputSize)
         {
-            return new Vector2f(position.X-Global.CURRENT_WINDOW_ORIGIN.X, lightMap.Size.Y-(position.Y+size.Y));
+            float newX = inputPosition.X;
+            float newY = lightMap.Size.Y - inputPosition.Y;
+
+            //align with input
+            newX -= (float)lightTexture.Size.X * lightSprite.Scale.X / 2f;
+            newY -= (float)lightTexture.Size.Y * lightSprite.Scale.Y / 2f;
+
+            //account for moving view
+            newX -= Global.CURRENT_WINDOW_ORIGIN.X;
+            newY += Global.CURRENT_WINDOW_ORIGIN.Y;
+
+            return new Vector2f(newX, newY);
         }
 
         /// <summary>
@@ -341,12 +353,18 @@ namespace DungeonDwarf
             currentRenderWindow.Clear(Color.Black);
             //add lighting
             lightMap.Clear(Color.Black);
-            Sprite newLightSprite=new Sprite(new Texture("textures/light/lightball.png"));
+            Sprite newLightSprite=new Sprite(lightTexture);
+            newLightSprite.Scale = new Vector2f(1f, 1f);
+            
+            //bullet lighting
             foreach (Bullet b in BulletList){
-                newLightSprite.Position = ConvertToLightPos(b.bulletPosition, b.bulletSize);
+                newLightSprite.Position = ConvertToLightPos(newLightSprite, b.GetCenter(), b.bulletSize);
                 lightMap.Draw(newLightSprite, renderStateAdditive);
             }
-            newLightSprite.Position = ConvertToLightPos(currentPlayer.playerPosition, currentPlayer.playerSize);
+
+            newLightSprite.Scale = new Vector2f(3f, 3f);
+            //player lighting
+            newLightSprite.Position = ConvertToLightPos(newLightSprite, currentPlayer.GetCenter(), currentPlayer.playerSize);
             lightMap.Draw(newLightSprite, renderStateAdditive);
 
             //apply view to window

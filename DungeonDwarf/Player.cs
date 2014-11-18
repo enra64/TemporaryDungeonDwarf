@@ -340,6 +340,7 @@ namespace DungeonDwarf
             win.Draw(healthBar);
             win.Draw(shieldBar);
             win.Draw(playerSprite);
+            DrawCollidingRect();
         }
 
         private void DrawCollidingRect()
