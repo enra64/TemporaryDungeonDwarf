@@ -27,6 +27,7 @@ namespace DungeonDwarf
         static bool BulletButton = false;
         static Stopwatch sw = new Stopwatch();
         static bool bewegungsrichtung = true;
+        static LightingEngine lightEngine;
 
         static void Main(string[] args)
         {
@@ -126,6 +127,11 @@ namespace DungeonDwarf
             //start tilemap update stopwatch
             tileMapUpdater.Start();
             
+            /*
+             LIGHTING ENGINE
+             */
+            lightEngine = new LightingEngine(currentRenderWindow);
+
             //initialize inventory, currently under heavy development (as in probably wont work)
             currentInventory = new Inventory(currentRenderWindow, new Vector2f(70, 70), new Vector2f(50, 50));
             //player and enemy init
@@ -188,6 +194,12 @@ namespace DungeonDwarf
             //hint:
             foreach (Enemy e in EnemyList)
                 e.Update(currentPlayer.playerPosition);
+
+            /*
+             LIGHTING
+             */
+            lightEngine.addLightSource(50, 50, 10);
+            lightEngine.Update();
         }
 
         private static void BulletCollision()
