@@ -46,7 +46,7 @@ namespace DungeonDwarf
         /// <summary>
         /// Gravity that is supposed to be used by everyone.
         /// </summary>
-        public const float GLOBAL_GRAVITY = 12f;
+        public const float GLOBAL_GRAVITY = 4f;
         /// <summary>
         /// DIS BE OF UTMOST IMPORTANCY. More readable in Global.cs.
         /// On each update and during the Initialization (e.g. dont worry about availability)

@@ -17,7 +17,7 @@ namespace DungeonDwarf
         private VertexArray lightMap;
         private Vector2f quadSize, quadCount;
         private RenderStates renderStates = RenderStates.Default;
-        private Color dark = new Color(50, 50, 50, 50);
+        private Color dark = new Color(0, 0, 0, 200);
         private List<float[]> lightList=new List<float[]>();
 
         public LightingEngine(RenderWindow _w)
@@ -67,17 +67,36 @@ namespace DungeonDwarf
              * need to rotate vector
              */
             CircleShape c=new CircleShape(size);
-            c.Position=center;
-            Transform rotation=new Transform();
-            Vector2f directionalCheck=new Vector2f(1,1);
-            for(int _size=1;_size<size;_size++){
-                directionalCheck*=_size;
-                for (int rot = 1; rot < 361; rot+=3 ){
-                    rotation.Rotate(rot, center);
-                    Vector2f currentCheck = directionalCheck.;
-                    Console.WriteLine(currentCheck);
+            c.Position = new Vector2f(center.X + c.Radius, center.Y + c.Radius);
+            long counter=0;
+            for (uint y = 0; y < quadCount.Y; y++){
+                for (uint x = 0; x < quadCount.X; x++){
+                    uint currentPosition = 4 * ((y * (uint)quadCount.X) + x);
+                    for(uint i=0; i<c.GetPointCount();i+=2){
+                        FloatRect quadCheck=new FloatRect(quadSize.X * x, quadSize.Y * y, quadSize.X * (x + 1), quadSize.Y * (y + 1));
+                        Vector2f pointCheck=c.GetPoint(i);
+                        if(quadCheck.Contains(pointCheck.X, pointCheck.Y))
+                            SetQuadBrightness(currentPosition, 0);
+                    }
                 }
             }
+        }
+
+        private void SetQuadBrightness(uint currentPosition, byte brightness)
+        {
+            //create new color
+            Color newColor = new Color(0, 0, 0, brightness);
+            //save old positions
+            Vector2f texCo1, texCo2, texCo3, texCo4;
+            texCo1 = lightMap[currentPosition + 0].TexCoords;
+            texCo2 = lightMap[currentPosition + 1].TexCoords;
+            texCo3 = lightMap[currentPosition + 2].TexCoords;
+            texCo4 = lightMap[currentPosition + 3].TexCoords;
+            //write new
+            lightMap[currentPosition + 0] = new Vertex(texCo1, newColor);//top left vertex
+            lightMap[currentPosition + 1] = new Vertex(texCo2, newColor);//top right vertex
+            lightMap[currentPosition + 2] = new Vertex(texCo3, newColor);//bot right vertex
+            lightMap[currentPosition + 3] = new Vertex(texCo4, newColor);//bot left vertex
         }
 
         public void Update()
@@ -87,19 +106,6 @@ namespace DungeonDwarf
                 float[] ls = lightList.ElementAt(i);
                 calculateLightCircles(new Vector2f(ls[0], ls[1]), ls[2]);
                 lightList.RemoveAt(i);
-            }
-            return;
-            for (uint y = 0; y < quadCount.Y; y++)
-            {
-                for (uint x = 0; x < quadCount.X; x++)
-                {
-                    //because: 4 vertexes/quad * (current y times how many x per view) * x
-                    uint currentPosition = 4 * ((y * (uint)quadCount.X) + x);
-                    lightMap[currentPosition + 0] = new Vertex(new Vector2f(quadSize.X * x, quadSize.Y * y), dark);//top left vertex
-                    lightMap[currentPosition + 1] = new Vertex(new Vector2f(quadSize.X * (x + 1), quadSize.Y * y), dark);//top right vertex
-                    lightMap[currentPosition + 2] = new Vertex(new Vector2f(quadSize.X * (x + 1), quadSize.Y * (y + 1)), dark);//bot right vertex
-                    lightMap[currentPosition + 3] = new Vertex(new Vector2f(quadSize.X * x, quadSize.Y * (y + 1)), dark);//bot left vertex
-                }
             }
         }
 
