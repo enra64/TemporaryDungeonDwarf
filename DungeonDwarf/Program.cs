@@ -42,7 +42,7 @@ namespace DungeonDwarf
             currentRenderWindow = new RenderWindow(new VideoMode(800, 600), "Dungeon Dwarf", Styles.Default);
             //currentRenderWindow = new RenderWindow(VideoMode.FullscreenModes[0], "Dungeon Dwarf", Styles.Fullscreen);
             //sets framerate to a maximum of 45; changing the value will likely result in bad things
-            currentRenderWindow.SetFramerateLimit(45);
+            currentRenderWindow.SetFramerateLimit(35);
             //add event handler for klicking the X icon
             currentRenderWindow.Closed += windowClosed;
             //vertical sync is enabled, because master graphics n shit
@@ -350,8 +350,10 @@ namespace DungeonDwarf
             currentRenderWindow.Display();
             sw.Stop();
             //fps counter in console, if I am thinking this through correctly it should be accurate to 99%
-            Console.WriteLine("FPS: " + 1000f / sw.ElapsedMilliseconds);
-            //Console.WriteLine(sw.ElapsedMilliseconds);
+            //now with more accuracy, tho :D
+            //i think rather than writing our own code we should stay with the lock we use now, and maybe lower the locked fps
+            double elapsedMicroseconds = (double)sw.ElapsedTicks/10d;
+            Console.WriteLine("FPS: " + 1f / ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency) + ", took " + (double)sw.ElapsedTicks / ((double)Stopwatch.Frequency/1000d)+"ms");
             sw.Reset();
         }
 
