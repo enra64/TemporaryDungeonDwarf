@@ -17,8 +17,9 @@ namespace DungeonDwarf
         private float xScale, yScale;
         private world.TileMap tileMap;
         int zaehler = 0;
+        bool spielerbewegung = true;
 
-        public Bullet(Vector2f poss, string texturePath, RenderWindow fenster1)
+        public Bullet(Vector2f poss, string texturePath, RenderWindow fenster1,bool bewegung)
         {
             bulletTexture = new Texture(texturePath);
             bulletSprite = new Sprite(bulletTexture);
@@ -29,6 +30,7 @@ namespace DungeonDwarf
             bulletPosition = poss;
 
             win = fenster1;
+            spielerbewegung = bewegung;
         }
 
         public void Draw()
@@ -40,8 +42,19 @@ namespace DungeonDwarf
 
         public void Update()
         {
-            bulletPosition.X += 1;
+            if (spielerbewegung== true){
+            bulletPosition.X += 4;
             bulletSprite.Position = bulletPosition;
+            }
+            else{
+              
+
+                bulletPosition.X -= 4;
+            bulletSprite.Position = bulletPosition;
+            }
+
+            zaehler++;
+           
         }
 
 

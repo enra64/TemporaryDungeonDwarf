@@ -27,7 +27,7 @@ namespace DungeonDwarf
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
         private Sprite playerSprite;
-        private float xScale = 0.1f, yScale = 1f;
+        private float xScale = 1f, yScale = 1f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
        
