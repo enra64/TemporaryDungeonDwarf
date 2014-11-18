@@ -25,6 +25,7 @@ namespace DungeonDwarf
         static bool debugInventory = false;
         static Bullet bullet1;
         static bool BulletButton = false;
+        static Stopwatch sw = new Stopwatch();
 
         static void Main(string[] args)
         {
@@ -159,6 +160,8 @@ namespace DungeonDwarf
         /// It is thus called in each main loop iteration.
         /// </summary>
         private static void Update(){
+            // stopwatch beginning 
+            sw.Start();
             //move view with player
             moveView();
             //update tilemap if due
@@ -301,8 +304,6 @@ namespace DungeonDwarf
         /// Draws everything. Called each game tick.
         /// </summary>
         private static void Draw(){
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             /*
              * HE WHO DOES NOT READ THE STARRY COMMENTS (aka oneliners are _mostly_ unimportant) SHALL BE SLAIN
              * TO DEATH
@@ -347,6 +348,8 @@ namespace DungeonDwarf
              */
             currentRenderWindow.Display();
             sw.Stop();
+            //fps counter in console, if I am thinking this through correctly it should be accurate to 99%
+            Console.WriteLine("FPS: " + 1000f / sw.ElapsedMilliseconds);
             //Console.WriteLine(sw.ElapsedMilliseconds);
             sw.Reset();
         }
