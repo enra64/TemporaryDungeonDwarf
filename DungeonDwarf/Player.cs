@@ -19,8 +19,8 @@ namespace DungeonDwarf
         RectangleShape healthBar = new RectangleShape();
         public int health = MAX_HEALTH;     // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
-        private const float MAX_SHIELD= 100;
-        private const float MIN_SHIELD= 0;
+        private const float MAX_SHIELD= 100f;
+        private const float MIN_SHIELD= 0f;
         RectangleShape shieldBar = new RectangleShape();
         public float shield = MAX_SHIELD;   // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
