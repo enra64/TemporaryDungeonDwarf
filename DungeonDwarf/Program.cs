@@ -42,7 +42,7 @@ namespace DungeonDwarf
             currentRenderWindow = new RenderWindow(new VideoMode(800, 600), "Dungeon Dwarf", Styles.Default);
             //currentRenderWindow = new RenderWindow(VideoMode.FullscreenModes[0], "Dungeon Dwarf", Styles.Fullscreen);
             //sets framerate to a maximum of 45; changing the value will likely result in bad things
-            currentRenderWindow.SetFramerateLimit(45);
+            //currentRenderWindow.SetFramerateLimit(45);
             //add event handler for klicking the X icon
             currentRenderWindow.Closed += windowClosed;
             //vertical sync is enabled, because master graphics n shit
@@ -68,16 +68,34 @@ namespace DungeonDwarf
             {
                 s.Update();
                 s.Draw();
-
             } 
 
             /*
              * shit be about to get real... starting main loop.
              */
+            //main timekeeping variable
+            double elapsed=0, maxTime=25;
+            Stopwatch frameController=new Stopwatch();
+            int timediff = 0;
             while (currentRenderWindow.IsOpen()){
-                //mandatory update and draw calls
-                Update();
-                Draw();
+                if (timediff < 25){
+                    frameController.Restart();
+                    //mandatory update and draw calls
+                    Update();
+                    Draw();
+                    frameController.Stop();
+                    timediff = (int)maxTime - (int)frameController.Elapsed.Milliseconds;
+                    if(timediff>0)
+                        System.Threading.Thread.Sleep(timediff);
+                }
+                else
+                {
+                    frameController.Restart();
+                    Update();
+                    frameController.Stop();
+                    timediff = (int)maxTime - (int)frameController.Elapsed.Milliseconds;
+                    System.Threading.Thread.Sleep(timediff);
+                }
                 //dispatch things like "i would like to close this window" and "someone clicked me".
                 //only important if you want to close the window. ever.
                 currentRenderWindow.DispatchEvents();
