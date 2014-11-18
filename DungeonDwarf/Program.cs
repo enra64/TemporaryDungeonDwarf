@@ -26,6 +26,7 @@ namespace DungeonDwarf
         static Bullet bullet1;
         static bool BulletButton = false;
         static Stopwatch sw = new Stopwatch();
+        static bool bewegungsrichtung = true;
 
         static void Main(string[] args)
         {
@@ -253,12 +254,20 @@ namespace DungeonDwarf
             //fire debouncing
             if (Keyboard.IsKeyPressed(Keyboard.Key.F)){
                 if (BulletButton == false){
-                    BulletList.Add(new Bullet(currentPlayer.playerPosition, "textures/weapons/arrow/Feuer.png", currentRenderWindow));
+                    BulletList.Add(new Bullet(currentPlayer.playerPosition, "textures/weapons/arrow/Feuer.png", currentRenderWindow,bewegungsrichtung));
                     BulletButton = true;
                 }
             }
             if (!Keyboard.IsKeyPressed(Keyboard.Key.F)){
                 BulletButton = false;
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.A))
+            {
+                bewegungsrichtung = false;
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.D))
+            {
+                bewegungsrichtung = true;
             }
         }
 
