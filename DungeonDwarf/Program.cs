@@ -284,7 +284,7 @@ namespace DungeonDwarf
             {
                 currentInventory.Show();
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Num1))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.T))
             {
                 TorchList.Add(new Torch(currentPlayer.playerPosition, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
             }

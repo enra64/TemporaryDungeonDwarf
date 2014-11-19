@@ -43,13 +43,13 @@ namespace DungeonDwarf
         public void Update()
         {
             if (spielerbewegung== true){
-            bulletPosition.X += 4;
+            bulletPosition.X += 15f;
             bulletSprite.Position = bulletPosition;
             }
             else{
               
 
-                bulletPosition.X -= 4;
+                bulletPosition.X -= 15f;
             bulletSprite.Position = bulletPosition;
             }
 
