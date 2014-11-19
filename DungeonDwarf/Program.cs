@@ -295,7 +295,10 @@ namespace DungeonDwarf
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.T))
             {
-                TorchList.Add(new Torch(currentPlayer.playerPosition, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
+                if(TorchList.Count >= 10)
+                    Console.WriteLine("Torches empty");
+                else
+                    TorchList.Add(new Torch(currentPlayer.playerPosition, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
             }
             //fire debouncing
             if (Keyboard.IsKeyPressed(Keyboard.Key.F))
