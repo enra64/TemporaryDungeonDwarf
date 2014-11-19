@@ -369,6 +369,15 @@ namespace DungeonDwarf.world
             return returnList;
         }
 
+        public List<Vector2f> GetAllTorches()
+        {
+            List<Vector2f> returnList = new List<Vector2f>();
+            uint xOffset = (uint)(Global.CURRENT_WINDOW_ORIGIN.X / currentQuadSize.X);
+            foreach (Vector2f v in torchPositions)
+                    returnList.Add(v);
+            return returnList;
+        }
+
         public void AnimationUpdate()
         {
             for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++)

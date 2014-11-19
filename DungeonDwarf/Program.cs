@@ -61,10 +61,10 @@ namespace DungeonDwarf
             //add mouse click handling for getting focus
             currentRenderWindow.MouseButtonPressed += mouseClick;
 
-            //first and only call to init, do everything else there
-            Initialize();
             //first and only call to load content, not mandatory to use
             LoadContent();
+            //first and only call to init, do everything else there
+            Initialize();
 
             //show startscreen
 
@@ -127,10 +127,9 @@ namespace DungeonDwarf
              * think twice before adding you calls before this comment
              */
             /*
-             LIGHTING
-             */
+            LIGHTING 1
+            */
             lightEngine = new Lighting(currentRenderWindow);
-            
             /*
              TILEMAP
              */
@@ -138,6 +137,12 @@ namespace DungeonDwarf
             tileMap = new world.TileMap(currentRenderWindow, lightEngine, new Vector2u(400, 10), "world/levels/lavatest.oel");
             //start tilemap update stopwatch
             tileMapUpdater.Start();
+            /*
+             LIGHTING 2
+             */
+            //get all map defined torches
+            foreach (Vector2f t in tileMap.GetAllTorches())
+                MapTorchList.Add(new Torch(t, torchTexture, currentRenderWindow, tileMap));
 
             //initialize inventory, currently under heavy development (as in probably wont work)
             currentInventory = new Inventory(currentRenderWindow, new Vector2f(70, 70), new Vector2f(50, 50));
@@ -225,17 +230,13 @@ namespace DungeonDwarf
             /*
              MAP TORCHING
              */
-            //clear the list, because we need to check the current viewable torches
-            //on each iteration
-            MapTorchList.Clear();
-            //add a torch for each position
-            foreach (Vector2f t in tileMap.GetCurrentTorches())
-                MapTorchList.Add(new Torch(t, torchTexture, currentRenderWindow, tileMap));
-            
             //add a light for each torch
             foreach (Torch t in MapTorchList){
-                t.Update(false);
-                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 102, 0));
+                if (tileMap.GetCurrentTorches().Contains(t.torchPosition))
+                {
+                    t.Update(false);
+                    lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 102, 0));
+                }
             }
             //calculate lighting. should stay last call
             lightEngine.Update();
