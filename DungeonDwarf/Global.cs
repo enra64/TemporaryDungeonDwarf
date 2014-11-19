@@ -39,6 +39,11 @@ namespace DungeonDwarf
             SPAWNTILE_3 = 7,
             TORCHTILE=8;
 
+        /// <summary>
+        /// convenient instance of the tilemap
+        /// </summary>
+        public static world.TileMap TILE_MAP;
+
         /*
          * GLOBAL CONFIGURATION VARIABLES
          * Hint: Due to the fact that these Variables are static, you neither can nor need to

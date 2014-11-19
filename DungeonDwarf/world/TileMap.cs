@@ -178,7 +178,7 @@ namespace DungeonDwarf.world
                 currentQuadSize.X, currentQuadSize.Y);
         }
 
-        private Vector2f GetXY(int x, int y)
+        public Vector2f GetXY(int x, int y)
         {
             return new Vector2f(currentQuadSize.X * x, currentQuadSize.Y * y);
         }

@@ -40,14 +40,14 @@ namespace DungeonDwarf
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
         private int i = 0;
 
-        public Enemy(String _enemyType, RenderWindow _win, Vector2f _playerPosition, world.TileMap _tileMap)
+        public Enemy(String _enemyType, RenderWindow _win, Vector2f _spawnPosition)
         {
             float xScale, yScale, _jumpspeed, _movementspeed;
             string texturePath;
             //moved enemy distinguishment here, b/c 7 constructor arguments and somehow the commit was broken
             switch (_enemyType)
             {
-                case "zeroEnemy":
+                case "enemy0":
                     texturePath="textures/enemies/zeroEnemy.png";
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
@@ -71,9 +71,6 @@ namespace DungeonDwarf
                     break;
             }
 
-            // where the enemy spawns
-            enemyPosition.X = _playerPosition.X-200;        
-            enemyPosition.Y = _playerPosition.Y-200;
 
             enemyTexture = new Texture(texturePath);
             enemySprite = new Sprite(enemyTexture);
@@ -81,33 +78,42 @@ namespace DungeonDwarf
             enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
             enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
 
+            // where the enemy spawns
+            //change it back if i am wrong, but why -200?
+            enemyPosition.X = _spawnPosition.X;
+            enemyPosition.Y = _spawnPosition.Y - enemySize.Y;
+
             //turned these around btw
             ENEMY_JUMP_SPEED = _jumpspeed;
             ENEMY_MOVEMENT_SPEED = _movementspeed;
 
-            tileMap = _tileMap;  // used for tile colliding in method update();
+            tileMap = Global.TILE_MAP;  // used for tile colliding in method update();
 
             win = _win;   // used for the draw function
         }
 
         public void Draw()
         {
-            enemySprite.Position = enemyPosition;
             win.Draw(enemySprite);
         }
 
         public void Update(Vector2f _playerPosition, Vector2f _playerSize)
         {
+            bool inView = true;
+            //only move in x direction if within the current view, otherwise all enemies would run towards the player
+            if (enemyPosition.X > Global.CURRENT_WINDOW_ORIGIN.X + win.Size.X || enemyPosition.X + enemySize.X < Global.CURRENT_WINDOW_ORIGIN.X)
+                inView = false;
+
             // simple movement logic
             if (!tileMap.Collides(enemyPosition, enemySize))    // check if enemy collides with tiles, if true dont move at all
             { 
                 //move to the left in direction of the player
-                if (enemyPosition.X - _playerSize.X > _playerPosition.X - enemySize.X)     
+                if (enemyPosition.X - _playerSize.X > _playerPosition.X - enemySize.X && inView)
                     if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f)))
                         enemyPosition.X -= ENEMY_MOVEMENT_SPEED;
 
                 //move to the right in direction of the player
-                if (enemyPosition.X < _playerPosition.X)      
+                if (enemyPosition.X < _playerPosition.X && inView)
                     if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)))
                         enemyPosition.X += ENEMY_MOVEMENT_SPEED;       
             }
@@ -125,6 +131,11 @@ namespace DungeonDwarf
                 enemyPosition.Y -= ENEMY_JUMP_SPEED;
 
             CorrectYPosLogic();
+
+
+
+            //this is an update call. unnecessary edit on my side, though
+            enemySprite.Position = enemyPosition;
         }
 
         // borrowed from Player.cs and adjusted for Enemy.cs, thanks Daniel lol ;) pff daniel xD thats my work :D

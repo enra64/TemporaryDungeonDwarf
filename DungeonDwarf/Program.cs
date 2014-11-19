@@ -28,7 +28,7 @@ namespace DungeonDwarf
         //bullet stuff
         static List<Bullet> BulletList = new List<Bullet>();
         static Texture bulletTexture;
-        static bool BulletButton = false, bewegungsrichtung = true;
+        static bool BulletButton = false, movingRight = true;
 
         //benchmark
         static Stopwatch sw = new Stopwatch();
@@ -133,8 +133,9 @@ namespace DungeonDwarf
              */
             //get lightengine
             lightEngine = new Lighting(currentRenderWindow);
-            //get tilemap
+            //get tilemap, add to global
             tileMap = new world.TileMap(currentRenderWindow, lightEngine, new Vector2u(400, 10), "world/levels/lavatest.oel");
+            Global.TILE_MAP = tileMap;
             //start tilemap animation stopwatch
             tileMapUpdater.Start();
             
@@ -142,8 +143,27 @@ namespace DungeonDwarf
             foreach (Vector2f t in tileMap.GetAllTorches())
                 TorchList.Add(new Torch(t, torchTexture, currentRenderWindow, tileMap));
 
-            //get all map defined enemies
-
+            //get all map defined enemies, tile x, y, enemytype
+            foreach(int[] f in tileMap.spawnPoints){
+                //provide valid start point
+                string enemyType = "enemy0";
+                switch(f[2]){
+                    case Global.SPAWNTILE_1:
+                        enemyType = "enemy0";
+                        break;
+                    case Global.SPAWNTILE_2:
+                        enemyType = "enemy1";
+                        break;
+                    case Global.SPAWNTILE_3:
+                        enemyType = "enemy2";
+                        break;
+                }
+                //convert xy to coordinates
+                Vector2f coords=tileMap.GetXY(f[0], f[1]);
+                coords.Y = tileMap.GetMinYAtX(coords.Y);
+                EnemyList.Add(new Enemy(enemyType, currentRenderWindow, coords));
+            }
+                
             //initialize inventory, currently under heavy development (as in probably wont work)
             currentInventory = new Inventory(currentRenderWindow, new Vector2f(70, 70), new Vector2f(50, 50));
             //player and enemy init
@@ -153,9 +173,9 @@ namespace DungeonDwarf
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
             // Konstructor mit Enemy(Gegnername, currenRenderWindow, currentPlayer.playerPosition, tileMap, Texturpath als String, x-Wert Scaling, y-Wert Scaling, Movementspeed, Jumpspeed));
-            EnemyList.Add(new Enemy("zeroEnemy", currentRenderWindow, currentPlayer.playerPosition, tileMap));
-            EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition, tileMap));
-            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap));
+            EnemyList.Add(new Enemy("enemy0", currentRenderWindow, currentPlayer.playerPosition));
+            EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition));
+            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition));
             #endregion
 
             //rectangle user can move in without changing view
@@ -313,24 +333,19 @@ namespace DungeonDwarf
                     Player.delayUtil(1000, () => torchBool = true);
                 }
             }
-            //fire debouncing
+            //bullet stuff
             if (Keyboard.IsKeyPressed(Keyboard.Key.F) && BulletButton == false)
             {
-                BulletList.Add(new Bullet(currentPlayer.playerPosition, bulletTexture, currentRenderWindow, bewegungsrichtung));
+                BulletList.Add(new Bullet(currentPlayer.playerPosition, bulletTexture, currentRenderWindow, movingRight));
                 BulletButton = true;
             }
             if (!Keyboard.IsKeyPressed(Keyboard.Key.F))
-            {
                 BulletButton = false;
-            }
             if (Keyboard.IsKeyPressed(Keyboard.Key.A))
-            {
-                bewegungsrichtung = false;
-            }
+                movingRight = false;
             if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-            {
-                bewegungsrichtung = true;
-            }
+                movingRight = true;
+            
         }
 
         /// <summary>
