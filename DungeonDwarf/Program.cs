@@ -215,7 +215,7 @@ namespace DungeonDwarf
             foreach (Torch t in TorchList)
             {
                 t.Update(false);
-                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 0, 0));
+                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 102, 0));
             }
             foreach (Enemy e in EnemyList)
                 e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
@@ -233,7 +233,7 @@ namespace DungeonDwarf
             
             //add a light for each torch
             foreach (Torch t in MapTorchList){
-                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 0, 0));
+                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 102, 0));
             }
             //calculate lighting. should stay last call
             lightEngine.Update();

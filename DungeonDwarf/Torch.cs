@@ -16,13 +16,13 @@ namespace DungeonDwarf
         private Sprite torchSprite;
         private RenderWindow win;
 
-        private float xScale, yScale;
         private world.TileMap tileMap;
 
         private bool move = false;
-
-
         public bool torchBool = true;
+
+        private bool anim = false;
+        private Vector2i textureVector = new Vector2i(0, 0);
 
         public Torch(Vector2f poss, Texture _torchTex, RenderWindow _win, world.TileMap _map)
         {
@@ -31,8 +31,8 @@ namespace DungeonDwarf
             torchSprite = new Sprite(_torchTex);
             torchSprite.Scale = new Vector2f(0.5f, 0.5f);
 
-            torchSize.X = _torchTex.Size.X * torchSprite.Scale.X;
-            torchSize.Y = _torchTex.Size.Y * torchSprite.Scale.Y;    
+            torchSize.X = (24) * torchSprite.Scale.X;
+            torchSize.Y = (83) * torchSprite.Scale.Y; 
             torchPosition = poss;
 
             win = _win;
@@ -48,6 +48,9 @@ namespace DungeonDwarf
         {
             if (!tileMap.CheckNextCollide(torchPosition, torchSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                 torchPosition.Y += Global.GLOBAL_GRAVITY;
+
+            
+             
         }
 
         public void Update(bool _move)
@@ -56,6 +59,16 @@ namespace DungeonDwarf
             if(move)
                 if (!tileMap.CheckNextCollide(torchPosition, torchSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     torchPosition.Y += Global.GLOBAL_GRAVITY;
+            
+            torchSprite.TextureRect = new IntRect(textureVector.X * 24, textureVector.Y * 83, 24, 83);
+
+            if (!anim)
+            {
+                anim = true;
+                Player.delayUtil(150, () => textureVector.X = 1);
+                Player.delayUtil(300, () => textureVector.X = 2);
+                Player.delayUtil(600, () => anim = false);
+            }
         }
 
 
