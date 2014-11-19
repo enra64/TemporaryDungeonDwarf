@@ -27,7 +27,7 @@ namespace DungeonDwarf
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
         private Sprite playerSprite;
-        private float xScale = 2f, yScale = 2f;
+        private float xScale = 1f, yScale = 1f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
        
@@ -124,9 +124,9 @@ namespace DungeonDwarf
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
-            playerSprite.TextureRect = new IntRect(textureVector.X * 30, textureVector.Y * 32, 30, 32);
-            playerSize.X = (30) * xScale;
-            playerSize.Y = (34) * yScale;
+            playerSprite.TextureRect = new IntRect(textureVector.X * 65, textureVector.Y * 64, 65, 64);
+            playerSize.X = (58) * xScale;
+            playerSize.Y = (60) * yScale;
 
            #region Movement
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
