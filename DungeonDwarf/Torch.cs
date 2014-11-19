@@ -57,7 +57,7 @@ namespace DungeonDwarf
                 if (!tileMap.CheckNextCollide(torchPosition, torchSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     torchPosition.Y += Global.GLOBAL_GRAVITY;
             
-            torchSprite.TextureRect = new IntRect(textureVector.X * 24, textureVector.Y * 83, 24, 83);
+            torchSprite.TextureRect = new IntRect(textureVector.X * 20, textureVector.Y * 80, 20, 80);
 
             if (!anim)
             {
