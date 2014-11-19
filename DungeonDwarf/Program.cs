@@ -170,7 +170,7 @@ namespace DungeonDwarf
         private static void LoadContent()
         {
             bulletTexture = new Texture("textures/weapons/arrow/Feuer.png");
-            torchTexture = new Texture("textures/light/torch_sprite.png");
+            torchTexture = new Texture("textures/light/torch_anim.png");
         }
 
         /// <summary>
