@@ -48,9 +48,6 @@ namespace DungeonDwarf
         {
             if (!tileMap.CheckNextCollide(torchPosition, torchSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                 torchPosition.Y += Global.GLOBAL_GRAVITY;
-
-            
-             
         }
 
         public void Update(bool _move)

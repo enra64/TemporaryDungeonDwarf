@@ -233,6 +233,7 @@ namespace DungeonDwarf
             
             //add a light for each torch
             foreach (Torch t in MapTorchList){
+                t.Update(false);
                 lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 102, 0));
             }
             //calculate lighting. should stay last call
