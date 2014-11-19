@@ -13,9 +13,7 @@ using System.Threading.Tasks;
  * 
  * Doesn't have a KI yet lol. -wulfihm
  * 
- * TODO:    loop for Enemylist in Program.update(); and Program.draw();
- *          fix bug: enemy goes/jumps through ceiling
- *          nicer jumping
+ * TODO:    nicer jumping
  *          cleaner spawning
  *          healthbar
  *          a somewhat decent KI for...(see above)
@@ -24,7 +22,8 @@ using System.Threading.Tasks;
  * 
  * DONE:
  *          load your enemies into a list
- * 
+ *          fix bug: enemy goes/jumps through ceiling
+ *          loop for Enemylist in Program.update(); and Program.draw();
  * ********/
 namespace DungeonDwarf
 {
@@ -40,7 +39,7 @@ namespace DungeonDwarf
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
         private int i = 0;
 
-        public Enemy(String _enemyType, RenderWindow _win, Vector2f _enemyPosition, world.TileMap _tileMap)
+        public Enemy(String _enemyType, RenderWindow _win, Vector2f _playerPosition, world.TileMap _tileMap)
         {
             float xScale, yScale, _jumpspeed, _movementspeed;
             string texturePath;
@@ -72,8 +71,8 @@ namespace DungeonDwarf
             }
 
             // where the enemy spawns
-            enemyPosition.X = _enemyPosition.X-200;        
-            enemyPosition.Y = _enemyPosition.Y-200;
+            enemyPosition.X = _playerPosition.X-200;        
+            enemyPosition.Y = _playerPosition.Y-200;
 
             enemyTexture = new Texture(texturePath);
             enemySprite = new Sprite(enemyTexture);
@@ -96,18 +95,18 @@ namespace DungeonDwarf
             win.Draw(enemySprite);
         }
 
-        public void Update(Vector2f playerPosition)
+        public void Update(Vector2f _playerPosition, Vector2f _playerSize)
         {
             // simple movement logic
             if (!tileMap.Collides(enemyPosition, enemySize))    // check if enemy collides with tiles, if true dont move at all
             { 
                 //move to the left in direction of the player
-                if (enemyPosition.X > playerPosition.X || enemyPosition.X - enemySize.X > playerPosition.X)     
+                if (enemyPosition.X > _playerPosition.X && enemyPosition.X - _playerSize.X > _playerPosition.X - enemySize.X)
                     if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f)))
                         enemyPosition.X -= ENEMY_MOVEMENT_SPEED;
 
                 //move to the right in direction of the player
-                if (enemyPosition.X < playerPosition.X || enemyPosition.X + enemySize.X < playerPosition.X)      
+                if (enemyPosition.X < _playerPosition.X)
                     if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)))
                         enemyPosition.X += ENEMY_MOVEMENT_SPEED;       
             }
@@ -119,7 +118,7 @@ namespace DungeonDwarf
             // enemy jumps if player is unreacheable and if enemy is colliding with tiles to the left or the right of the enemy
             // multiple of ENEMY_MOVEMENT_SPEED for CheckNextCollide so that it doesn't look like that the enemy is crawling up the wall i.e. the enemy is jumping some steps before the wall
             // jumping is endless as of now
-            if (enemyPosition.X != playerPosition.X && !tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(0f,-ENEMY_JUMP_SPEED)) && 
+            if (enemyPosition.X != _playerPosition.X && !tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(0f,-ENEMY_JUMP_SPEED)) && 
                                                         (tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)) ||
                                                         tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f))))
                 enemyPosition.Y -= ENEMY_JUMP_SPEED;
