@@ -41,7 +41,6 @@ namespace DungeonDwarf.world
             tileAmount = _tileAmount;
             tileTypes = new int[tileAmount.X, tileAmount.Y];
             Collidable = new bool[tileAmount.X, tileAmount.Y];
-            fillTileTypeArray(_levelLocation);
 
             //load texture for tilemap
             renderStates.Texture = textureMap;
@@ -57,6 +56,9 @@ namespace DungeonDwarf.world
 
             //initialize the current quad size
             currentQuadSize = idealQuadSize;
+
+            //fill the tile types
+            fillTileTypeArray(_levelLocation);
 
             //draw vertexicesarrays. y+5 for interpolating ground
             for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++){

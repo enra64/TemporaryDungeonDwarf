@@ -214,14 +214,15 @@ namespace DungeonDwarf
                 e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
             //tile lighting
             tileMap.Update();
-            //map torch generation
+            /*
+             MAP TORCHING
+             */
             MapTorchList.Clear();
             foreach (Vector2f t in tileMap.GetCurrentTorches())
             {
                 MapTorchList.Add(new Torch(t, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
             }
             foreach (Torch t in MapTorchList){
-                t.Update(false);
                 lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 0, 0));
             }
             //calculate lighting. should stay last call
