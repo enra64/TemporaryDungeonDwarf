@@ -37,7 +37,7 @@ namespace DungeonDwarf
         {
             bulletSprite.Position = bulletPosition;
             win.Draw(bulletSprite);
-            Console.WriteLine(zaehler);
+            //Console.WriteLine(zaehler);
         }
 
         public void Update()

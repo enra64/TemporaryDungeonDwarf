@@ -217,11 +217,14 @@ namespace DungeonDwarf
             /*
              MAP TORCHING
              */
+            //clear the list, because we need to check the current viewable torches
+            //on each iteration
             MapTorchList.Clear();
+            //add a torch for each position
             foreach (Vector2f t in tileMap.GetCurrentTorches())
-            {
                 MapTorchList.Add(new Torch(t, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
-            }
+            
+            //add a light for each torch
             foreach (Torch t in MapTorchList){
                 lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 0, 0));
             }
@@ -419,7 +422,7 @@ namespace DungeonDwarf
             //now with more accuracy, tho :D
             //i think rather than writing our own code we should stay with the lock we use now, and maybe lower the locked fps
             double elapsedMicroseconds = (double)sw.ElapsedTicks / 10d;
-            Console.WriteLine("FPS: " + 1f / ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency) + ", took " + (double)sw.ElapsedTicks / ((double)Stopwatch.Frequency / 1000d) + "ms");
+            //Console.WriteLine("FPS: " + 1f / ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency) + ", took " + (double)sw.ElapsedTicks / ((double)Stopwatch.Frequency / 1000d) + "ms");
             sw.Reset();
         }
 

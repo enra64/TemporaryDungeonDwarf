@@ -72,7 +72,7 @@ namespace DungeonDwarf
             newX -= (float)lightTexture.Size.X * lightSprite.Scale.X / 2f;
             newY -= (float)lightTexture.Size.Y * lightSprite.Scale.Y / 2f;
 
-            //account for moving view
+            //account for moving view, because the rendertexture is actually small
             newX -= Global.CURRENT_WINDOW_ORIGIN.X;
             newY += Global.CURRENT_WINDOW_ORIGIN.Y;
 

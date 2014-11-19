@@ -60,7 +60,7 @@ namespace DungeonDwarf
 
         public Vector2f GetCenter()
         {
-            return new Vector2f(torchSize.X / 2f + torchSprite.Position.X, torchSize.Y / 2f + torchSprite.Position.Y);
+            return new Vector2f(torchSize.X / 2f + torchPosition.X, torchSize.Y / 2f + torchPosition.Y);
         }
     }
 }
