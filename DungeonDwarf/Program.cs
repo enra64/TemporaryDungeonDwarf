@@ -25,9 +25,7 @@ namespace DungeonDwarf
         static bool BulletButton = false;
         static Stopwatch sw = new Stopwatch();
         static bool bewegungsrichtung = true;
-        static RenderTexture lightMap;
-        static RenderStates renderStateAdditive = RenderStates.Default, renderStateMult = RenderStates.Default;
-        static Texture lightTexture = new Texture("textures/light/lightball.png");
+        static Lighting lightEngine;
 
         static void Main(string[] args)
         {
@@ -125,15 +123,6 @@ namespace DungeonDwarf
             tileMap = new world.TileMap(currentRenderWindow, new Vector2u(400, 10), "world/levels/lavatest.oel");
             //start tilemap update stopwatch
             tileMapUpdater.Start();
-            
-            /*
-             LIGHTING ENGINE
-             */
-            //lightEngine = new LightingEngine(currentRenderWindow);
-            //v2, a bit more reasonable
-            lightMap = new RenderTexture(currentRenderWindow.Size.X, currentRenderWindow.Size.Y);
-            renderStateAdditive.BlendMode = BlendMode.Add;
-            renderStateMult.BlendMode = BlendMode.Multiply;
 
             //initialize inventory, currently under heavy development (as in probably wont work)
             currentInventory = new Inventory(currentRenderWindow, new Vector2f(70, 70), new Vector2f(50, 50));
@@ -156,6 +145,9 @@ namespace DungeonDwarf
             //this is said rectangle
             moveableRectangle = new FloatRect(tempCurrentPlayerCenter.X - currentRenderWindow.Size.X / 6, tempCurrentPlayerCenter.Y - currentRenderWindow.Size.Y / 4, currentRenderWindow.Size.X / 3, currentRenderWindow.Size.Y / 2);
             #endregion
+
+            //lighting
+            lightEngine = new Lighting(currentRenderWindow);
         }
 
         /// <summary>
@@ -189,19 +181,22 @@ namespace DungeonDwarf
             EnemyCollision();
             //moves the player
             currentPlayer.Update();
+            //let there be light
+            lightEngine.AddLight(currentPlayer.GetCenter(), currentPlayer.playerSize, new Vector2f(3f, 3f));
             //check for key input
             KeyCheck();
             //Moving Bullet
-            foreach (Bullet e in BulletList)
-                e.Update();
+            foreach (Bullet b in BulletList)
+            {
+                b.Update();
+                //adds a small light to the bullets
+                lightEngine.AddLight(b.GetCenter(), b.bulletSize, new Vector2f(1f, 1f));
+            }
             //hint:
             foreach (Enemy e in EnemyList)
                 e.Update(currentPlayer.playerPosition);
-
-            /*
-             LIGHTING
-             */
-            //lightEngine.addLightSource(100, 100, 10);
+            //calculate lighting. should stay last call
+            lightEngine.Update();
         }
 
         private static void BulletCollision()
@@ -324,22 +319,6 @@ namespace DungeonDwarf
             }
         }
 
-        private static Vector2f ConvertToLightPos(Sprite lightSprite, Vector2f inputPosition, Vector2f inputSize)
-        {
-            float newX = inputPosition.X;
-            float newY = lightMap.Size.Y - inputPosition.Y;
-
-            //align with input
-            newX -= (float)lightTexture.Size.X * lightSprite.Scale.X / 2f;
-            newY -= (float)lightTexture.Size.Y * lightSprite.Scale.Y / 2f;
-
-            //account for moving view
-            newX -= Global.CURRENT_WINDOW_ORIGIN.X;
-            newY += Global.CURRENT_WINDOW_ORIGIN.Y;
-
-            return new Vector2f(newX, newY);
-        }
-
         /// <summary>
         /// Draws everything. Called each game tick.
         /// </summary>
@@ -351,22 +330,6 @@ namespace DungeonDwarf
              */
             //clear window
             currentRenderWindow.Clear(Color.Black);
-            //add lighting
-            lightMap.Clear(Color.Black);
-            Sprite newLightSprite=new Sprite(lightTexture);
-            newLightSprite.Scale = new Vector2f(1f, 1f);
-            
-            //bullet lighting
-            foreach (Bullet b in BulletList){
-                newLightSprite.Position = ConvertToLightPos(newLightSprite, b.GetCenter(), b.bulletSize);
-                lightMap.Draw(newLightSprite, renderStateAdditive);
-            }
-
-            newLightSprite.Scale = new Vector2f(3f, 3f);
-            //player lighting
-            newLightSprite.Position = ConvertToLightPos(newLightSprite, currentPlayer.GetCenter(), currentPlayer.playerSize);
-            lightMap.Draw(newLightSprite, renderStateAdditive);
-
             //apply view to window
             currentRenderWindow.SetView(currentView);
             //draw map/level
@@ -401,10 +364,7 @@ namespace DungeonDwarf
             /* END YOUR CALLS HERE
              * Doing last call, do not call anything after this
              */
-            //draw light
-            Sprite lightSprite=new Sprite(lightMap.Texture);
-            lightSprite.Position = Global.CURRENT_WINDOW_ORIGIN;
-            currentRenderWindow.Draw(lightSprite, renderStateMult);
+            lightEngine.Draw();
             currentRenderWindow.Display();
             sw.Stop();
             //fps counter in console, if I am thinking this through correctly it should be accurate to 99%
