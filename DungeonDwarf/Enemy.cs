@@ -102,12 +102,12 @@ namespace DungeonDwarf
             if (!tileMap.Collides(enemyPosition, enemySize))    // check if enemy collides with tiles, if true dont move at all
             { 
                 //move to the left in direction of the player
-                if (enemyPosition.X > playerPosition.X || enemyPosition.X - enemySize.X > playerPosition.X)     
+                if (enemyPosition.X > playerPosition.X)     
                     if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(-ENEMY_MOVEMENT_SPEED, 0f)))
                         enemyPosition.X -= ENEMY_MOVEMENT_SPEED;
 
                 //move to the right in direction of the player
-                if (enemyPosition.X < playerPosition.X || enemyPosition.X + enemySize.X < playerPosition.X)      
+                if (enemyPosition.X < playerPosition.X)      
                     if (!tileMap.CheckNextCollide(enemyPosition, enemySize, new Vector2f(ENEMY_MOVEMENT_SPEED, 0f)))
                         enemyPosition.X += ENEMY_MOVEMENT_SPEED;       
             }
