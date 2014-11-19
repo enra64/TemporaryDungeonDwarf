@@ -208,9 +208,13 @@ namespace DungeonDwarf
             //check for key input
             KeyCheck();
             //Moving Bullet
-            foreach (Bullet b in BulletList)
+            for (int i = 0; i < BulletList.Count; i++ )
             {
+                Bullet b = BulletList[i];
                 b.Update();
+                //remove on tile collision
+                if(tileMap.Collides(b.GetRect()))
+                    BulletList.RemoveAt(i);
                 //adds a small light to the bullets; edgar, you can move this to your class (get the Lighting instance (lightEngine, that is) in your constructor,
                 //then you can control the color with the fourth parameter, and add a light per bullet with the command below
                 lightEngine.AddLight(b.GetCenter(), b.bulletSize, new Vector2f(1f, 1f), new Color(255, 0, 0));
@@ -271,7 +275,7 @@ namespace DungeonDwarf
         {
             if (currentPlayer.health > 0)  // prevents unnecessary code execution, just thought it might be useful, remove if you think its redundant
             {
-                FloatRect playerRect = new FloatRect(currentPlayer.playerPosition.X, currentPlayer.playerPosition.Y, currentPlayer.playerSize.X, currentPlayer.playerSize.Y);
+                FloatRect playerRect = currentPlayer.GetRect();
                 foreach (Enemy enem in EnemyList)
                 {
                     FloatRect enemyRect = new FloatRect(enem.enemyPosition.X, enem.enemyPosition.Y, enem.enemySize.X, enem.enemySize.Y);

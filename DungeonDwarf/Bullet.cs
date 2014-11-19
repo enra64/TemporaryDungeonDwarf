@@ -40,6 +40,11 @@ namespace DungeonDwarf
             //Console.WriteLine(zaehler);
         }
 
+        public FloatRect GetRect()
+        {
+            return new FloatRect(bulletPosition.X, bulletPosition.Y, bulletSize.X, bulletSize.Y);
+        }
+
         public void Update()
         {
             if (spielerbewegung== true){
