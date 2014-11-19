@@ -210,7 +210,7 @@ namespace DungeonDwarf
                 t.Update();
                 //adds a small light to the bullets; edgar, you can move this to your class (get the Lighting instance (lightEngine, that is) in your constructor,
                 //then you can control the color with the fourth parameter, and add a light per bullet with the command below
-                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(1f, 1f), new Color(255, 0, 0));
+                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 0, 0));
             }
             foreach (Enemy e in EnemyList)
                 e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
