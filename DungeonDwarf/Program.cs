@@ -37,7 +37,7 @@ namespace DungeonDwarf
             //ignore at this moment, because we are going to fuck up at first, and doing that in fullscreen is bad
             //creates fullscreen window at your maximum resolution
             //currentRenderWindow = new RenderWindow(VideoMode.FullscreenModes[0], "Dungeon Dwarf", Styles.Fullscreen);
-            
+
             //create window
             currentRenderWindow = new RenderWindow(new VideoMode(800, 600), "Dungeon Dwarf", Styles.Default);
             //currentRenderWindow = new RenderWindow(VideoMode.FullscreenModes[0], "Dungeon Dwarf", Styles.Fullscreen);
@@ -64,16 +64,17 @@ namespace DungeonDwarf
             //Arne, you forgot to push StartScreen.cs and Inventory.cs
             //http://bit.ly/19hKyY7
             StartScreen s = new StartScreen(currentRenderWindow);
-            while (!Keyboard.IsKeyPressed(Keyboard.Key.Space)&&currentRenderWindow.IsOpen())
+            while (!Keyboard.IsKeyPressed(Keyboard.Key.Space) && currentRenderWindow.IsOpen())
             {
                 s.Update();
                 s.Draw();
-            } 
+            }
 
             /*
              * shit be about to get real... starting main loop.
              */
-            while (currentRenderWindow.IsOpen()){
+            while (currentRenderWindow.IsOpen())
+            {
                 //mandatory update and draw calls
                 Update();
                 Draw();
@@ -96,7 +97,8 @@ namespace DungeonDwarf
             currentView.Size = new Vector2f(800, 600);
         }
 
-        private static void windowClosed(object sender, EventArgs e){
+        private static void windowClosed(object sender, EventArgs e)
+        {
             ((RenderWindow)sender).Close();
         }
 
@@ -104,7 +106,8 @@ namespace DungeonDwarf
         /// Called immediately after creating the window.
         /// Create or instance anything you think the main function needs here.
         /// </summary>
-        private static void Initialize(){
+        private static void Initialize()
+        {
             //set beginning view.
             currentView = new View(new FloatRect(0, 0, 800, 600));
             //set view origin and current in static global class
@@ -146,7 +149,7 @@ namespace DungeonDwarf
             //Init the rectangle the user can move in without changing view
             #region nomoverect
             //create a rectangle the player can move in without changing the view
-            Vector2f tempCurrentPlayerCenter=currentPlayer.GetCenter();
+            Vector2f tempCurrentPlayerCenter = currentPlayer.GetCenter();
             //this is said rectangle
             moveableRectangle = new FloatRect(tempCurrentPlayerCenter.X - currentRenderWindow.Size.X / 6, tempCurrentPlayerCenter.Y - currentRenderWindow.Size.Y / 4, currentRenderWindow.Size.X / 3, currentRenderWindow.Size.Y / 2);
             #endregion
@@ -157,7 +160,8 @@ namespace DungeonDwarf
         /// Would be nice to load textures you want to use a lot here,
         /// so you can use them in your class' constructors
         /// </summary>
-        private static void LoadContent(){
+        private static void LoadContent()
+        {
 
         }
 
@@ -165,18 +169,20 @@ namespace DungeonDwarf
         /// This method handles all mandatory update calls.
         /// It is thus called in each main loop iteration.
         /// </summary>
-        private static void Update(){
+        private static void Update()
+        {
             // stopwatch beginning 
             sw.Start();
             //move view with player
             moveView();
             //update tilemap if due
-            if (tileMapUpdater.ElapsedMilliseconds > 500){
+            if (tileMapUpdater.ElapsedMilliseconds > 500)
+            {
                 tileMapUpdater.Restart();
                 tileMap.AnimationUpdate();
             }
             //store current offset in global class
-            Global.CURRENT_WINDOW_ORIGIN=currentView.Center-Global.BEGIN_WINDOW_ORIGIN;
+            Global.CURRENT_WINDOW_ORIGIN = currentView.Center - Global.BEGIN_WINDOW_ORIGIN;
             /*
              * BEGIN YOUR CODE AFTER THIS
              */
@@ -217,7 +223,8 @@ namespace DungeonDwarf
                     FloatRect bulletRect = new FloatRect(b.bulletPosition.X, b.bulletPosition.Y, b.bulletSize.X, b.bulletSize.Y);
                     FloatRect enemyRect = new FloatRect(e.enemyPosition.X, e.enemyPosition.Y, e.enemySize.X, e.enemySize.Y);
                     //remove both on collision
-                    if (bulletRect.Intersects(enemyRect)){
+                    if (bulletRect.Intersects(enemyRect))
+                    {
                         BulletList.RemoveAt(i);
                         EnemyList.RemoveAt(j);
                         //avoid wrong indices
@@ -232,15 +239,15 @@ namespace DungeonDwarf
         private static void EnemyCollision()
         {
             if (currentPlayer.health > 0)  // prevents unnecessary code execution, just thought it might be useful, remove if you think its redundant
-            {    
+            {
                 FloatRect playerRect = new FloatRect(currentPlayer.playerPosition.X, currentPlayer.playerPosition.Y, currentPlayer.playerSize.X, currentPlayer.playerSize.Y);
                 foreach (Enemy enem in EnemyList)
                 {
-                   FloatRect enemyRect = new FloatRect(enem.enemyPosition.X, enem.enemyPosition.Y, enem.enemySize.X, enem.enemySize.Y);
-                   
-                   // what to do if collision = true (we should discuss what should happen if; for now it only sets the players shield on zero)
-                   if (playerRect.Intersects(enemyRect)) 
-                   {
+                    FloatRect enemyRect = new FloatRect(enem.enemyPosition.X, enem.enemyPosition.Y, enem.enemySize.X, enem.enemySize.Y);
+
+                    // what to do if collision = true (we should discuss what should happen if; for now it only sets the players shield on zero)
+                    if (playerRect.Intersects(enemyRect))
+                    {
                         currentPlayer.shield = 0;
                         //currentPlayer.health = 0;
                     }
@@ -264,17 +271,21 @@ namespace DungeonDwarf
             //easter egg or something
             if (Keyboard.IsKeyPressed(Keyboard.Key.N))
                 Console.WriteLine("batman");
-            if (Keyboard.IsKeyPressed(Keyboard.Key.I)){
+            if (Keyboard.IsKeyPressed(Keyboard.Key.I))
+            {
                 currentInventory.Show();
             }
             //fire debouncing
-            if (Keyboard.IsKeyPressed(Keyboard.Key.F)){
-                if (BulletButton == false){
-                    BulletList.Add(new Bullet(currentPlayer.playerPosition, "textures/weapons/arrow/Feuer.png", currentRenderWindow,bewegungsrichtung));
+            if (Keyboard.IsKeyPressed(Keyboard.Key.F))
+            {
+                if (BulletButton == false)
+                {
+                    BulletList.Add(new Bullet(currentPlayer.playerPosition, "textures/weapons/arrow/Feuer.png", currentRenderWindow, bewegungsrichtung));
                     BulletButton = true;
                 }
             }
-            if (!Keyboard.IsKeyPressed(Keyboard.Key.F)){
+            if (!Keyboard.IsKeyPressed(Keyboard.Key.F))
+            {
                 BulletButton = false;
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.A))
@@ -297,7 +308,8 @@ namespace DungeonDwarf
             //get player center
             Vector2f playerCenter = currentPlayer.GetCenter();
             //player is in the rectangle no more
-            if (!moveableRectangle.Contains(playerCenter.X, playerCenter.Y)){
+            if (!moveableRectangle.Contains(playerCenter.X, playerCenter.Y))
+            {
                 //create offset variable for easier handling
                 Vector2f offset = new Vector2f(0, 0);
                 //check below
@@ -314,7 +326,8 @@ namespace DungeonDwarf
                     offset.X -= Global.PLAYER_MOVEMENT_SPEED;
 
                 //only offset to lvl limits
-                if ((currentView.Center.X + offset.X) > 390){
+                if ((currentView.Center.X + offset.X) > 390)
+                {
                     //offset background
                     //Console.WriteLine("cvc: " + currentView.Center + " offset: " + offset.X);
                     //offset rectangle and view
@@ -328,7 +341,8 @@ namespace DungeonDwarf
         /// <summary>
         /// Draws everything. Called each game tick.
         /// </summary>
-        private static void Draw(){
+        private static void Draw()
+        {
             /*
              * HE WHO DOES NOT READ THE STARRY COMMENTS (aka oneliners are _mostly_ unimportant) SHALL BE SLAIN
              * TO DEATH
@@ -363,7 +377,7 @@ namespace DungeonDwarf
             //draw all current bullets
             foreach (Bullet e in BulletList)
                 e.Draw();
-            
+
             //MovementRectDebug();
 
 
@@ -376,8 +390,8 @@ namespace DungeonDwarf
             //fps counter in console, if I am thinking this through correctly it should be accurate to 99%
             //now with more accuracy, tho :D
             //i think rather than writing our own code we should stay with the lock we use now, and maybe lower the locked fps
-            double elapsedMicroseconds = (double)sw.ElapsedTicks/10d;
-            Console.WriteLine("FPS: " + 1f / ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency) + ", took " + (double)sw.ElapsedTicks / ((double)Stopwatch.Frequency/1000d)+"ms");
+            double elapsedMicroseconds = (double)sw.ElapsedTicks / 10d;
+            Console.WriteLine("FPS: " + 1f / ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency) + ", took " + (double)sw.ElapsedTicks / ((double)Stopwatch.Frequency / 1000d) + "ms");
             sw.Reset();
         }
 
