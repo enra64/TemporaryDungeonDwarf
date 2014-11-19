@@ -28,6 +28,8 @@ namespace DungeonDwarf
         static bool bewegungsrichtung = true;
         static Lighting lightEngine;
 
+        static bool torchBool = true;
+
         static void Main(string[] args)
         {
             /*
@@ -298,7 +300,15 @@ namespace DungeonDwarf
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.T))
             {
-                TorchList.Add(new Torch(currentPlayer.playerPosition, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
+
+                if (TorchList.Count >= 10 || !torchBool)
+                    Console.WriteLine("Torches empty || you torched too much");
+                else
+                {
+                    torchBool = false;
+                    TorchList.Add(new Torch(currentPlayer.playerPosition, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
+                    Player.delayUtil(1000, () => torchBool = true);
+                }
             }
             //fire debouncing
             if (Keyboard.IsKeyPressed(Keyboard.Key.F))
