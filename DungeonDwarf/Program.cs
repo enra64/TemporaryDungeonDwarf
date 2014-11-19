@@ -204,7 +204,7 @@ namespace DungeonDwarf
             }
             //hint:
             foreach (Enemy e in EnemyList)
-                e.Update(currentPlayer.playerPosition);
+                e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
             //tile lighting
             tileMap.Update();
             //calculate lighting. should stay last call
