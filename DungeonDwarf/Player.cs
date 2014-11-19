@@ -27,7 +27,7 @@ namespace DungeonDwarf
         //fenster, sprite, scale, map, viewchange
         private RenderWindow win;
         private Sprite playerSprite;
-        private float xScale = 1f, yScale = 1f;
+        private float xScale = 2f, yScale = 2f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
        
@@ -53,7 +53,7 @@ namespace DungeonDwarf
             win = _w;
             
             //add player texture and sprite
-            Texture playerTexture = new Texture("textures/player/player_spritesheet.png");
+            Texture playerTexture = new Texture("textures/player/dwarfy_sprite.png");
             playerSprite = new Sprite(playerTexture);
             //xScale = yScale = Global.GLOBAL_SCALE;
             
@@ -124,9 +124,9 @@ namespace DungeonDwarf
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
-            playerSprite.TextureRect = new IntRect(textureVector.X * 59, textureVector.Y * 57, 59, 57);
-            playerSize.X = (59) * xScale;
-            playerSize.Y = (57) * yScale;
+            playerSprite.TextureRect = new IntRect(textureVector.X * 26, textureVector.Y * 58, 26, 58);
+            playerSize.X = (27) * xScale;
+            playerSize.Y = (58) * yScale;
 
            #region Movement
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
@@ -163,11 +163,10 @@ namespace DungeonDwarf
                 #region LeftAnim
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
-                        delayUtil(150, () => textureVector.X = 1);
-                        delayUtil(300, () => textureVector.X = 2);
-                        delayUtil(450, () => textureVector.X = 3);
-                        delayUtil(600, () => textureVector.X = 0);
-                        delayUtil(600, () => isAnim= false);
+                        delayUtil(150, () => textureVector.X = 0);
+                        delayUtil(300, () => textureVector.X = 1);
+                        delayUtil(450, () => textureVector.X = 2);
+                        delayUtil(450, () => isAnim= false);
                 }
                 #endregion
 
@@ -183,11 +182,10 @@ namespace DungeonDwarf
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
                     {
                         isAnim = true;
-                        delayUtil(150, () => textureVector.X = 1);
-                        delayUtil(300, () => textureVector.X = 2);
-                        delayUtil(450, () => textureVector.X = 3);
-                        delayUtil(600, () => textureVector.X = 0);
-                        delayUtil(600, () => isAnim = false);
+                        delayUtil(150, () => textureVector.X = 2);
+                        delayUtil(300, () => textureVector.X = 1);
+                        delayUtil(450, () => textureVector.X = 0);
+                        delayUtil(450, () => isAnim = false);
                     }
                 #endregion
                 
@@ -340,7 +338,7 @@ namespace DungeonDwarf
             win.Draw(healthBar);
             win.Draw(shieldBar);
             win.Draw(playerSprite);
-            DrawCollidingRect();
+            //DrawCollidingRect();
         }
 
         private void DrawCollidingRect()
