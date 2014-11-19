@@ -143,10 +143,10 @@ namespace DungeonDwarf
             //instance player
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
-            //begin instances of enemy in enemy list
-            //EnemyList.Add(new Enemy("zeroEnemy", currentRenderWindow, currentPlayer.playerPosition, tileMap));
+            // Konstructor mit Enemy(Gegnername, currenRenderWindow, currentPlayer.playerPosition, tileMap, Texturpath als String, x-Wert Scaling, y-Wert Scaling, Movementspeed, Jumpspeed));
+            EnemyList.Add(new Enemy("zeroEnemy", currentRenderWindow, currentPlayer.playerPosition, tileMap));
             EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition, tileMap));
-            //EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap));
+            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap));
             #endregion
 
             //Init the rectangle the user can move in without changing view
@@ -196,7 +196,7 @@ namespace DungeonDwarf
                 e.Update();
             //hint:
             foreach (Enemy e in EnemyList)
-                e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
+                e.Update(currentPlayer.playerPosition);
 
             /*
              LIGHTING
