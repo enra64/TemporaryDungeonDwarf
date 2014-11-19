@@ -22,6 +22,9 @@ namespace DungeonDwarf
 
         private bool move = false;
 
+
+        public bool torchBool = true;
+
         public Torch(Vector2f poss, string texturePath, RenderWindow _win, world.TileMap _map)
         {
             tileMap = _map;

@@ -80,7 +80,7 @@ namespace DungeonDwarf
         /// After 1 sec it does any Action
         /// </summary>
         /// <returns></returns>
-        private void delayUtil(int delay, Action action)
+        public static void delayUtil(int delay, Action action)
         {
             Timer timer = new Timer();
             timer.Interval = delay;
