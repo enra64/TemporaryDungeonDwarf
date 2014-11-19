@@ -14,7 +14,6 @@ namespace DungeonDwarf
     {
         public Vector2f torchPosition, torchSize;
         private Sprite torchSprite;
-        private Texture torchTexture;
         private RenderWindow win;
 
         private float xScale, yScale;
@@ -25,16 +24,15 @@ namespace DungeonDwarf
 
         public bool torchBool = true;
 
-        public Torch(Vector2f poss, string texturePath, RenderWindow _win, world.TileMap _map)
+        public Torch(Vector2f poss, Texture _torchTex, RenderWindow _win, world.TileMap _map)
         {
             tileMap = _map;
 
-            torchTexture = new Texture(texturePath);
-            torchSprite = new Sprite(torchTexture);
-            torchSprite.Scale = new Vector2f(0.5f, 0.5f);   
+            torchSprite = new Sprite(_torchTex);
+            torchSprite.Scale = new Vector2f(0.5f, 0.5f);
 
-            torchSize.X = torchTexture.Size.X * torchSprite.Scale.X;
-            torchSize.Y = torchTexture.Size.Y * torchSprite.Scale.Y;    
+            torchSize.X = _torchTex.Size.X * torchSprite.Scale.X;
+            torchSize.Y = _torchTex.Size.Y * torchSprite.Scale.Y;    
             torchPosition = poss;
 
             win = _win;

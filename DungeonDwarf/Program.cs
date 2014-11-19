@@ -23,11 +23,15 @@ namespace DungeonDwarf
         static List<Bullet> BulletList = new List<Bullet>();
         static List<Torch> TorchList = new List<Torch>(), MapTorchList = new List<Torch>();
         static Inventory currentInventory;
+
+        static Texture bulletTexture;
         static bool BulletButton = false;
-        static Stopwatch sw = new Stopwatch();
         static bool bewegungsrichtung = true;
+
+        static Stopwatch sw = new Stopwatch();
         static Lighting lightEngine;
 
+        static Texture torchTexture;
         static bool torchBool = true;
 
         static void Main(string[] args)
@@ -165,7 +169,8 @@ namespace DungeonDwarf
         /// </summary>
         private static void LoadContent()
         {
-
+            bulletTexture = new Texture("textures/weapons/arrow/Feuer.png");
+            torchTexture = new Texture("textures/light/torch_sprite.png");
         }
 
         /// <summary>
@@ -224,7 +229,7 @@ namespace DungeonDwarf
             MapTorchList.Clear();
             //add a torch for each position
             foreach (Vector2f t in tileMap.GetCurrentTorches())
-                MapTorchList.Add(new Torch(t, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
+                MapTorchList.Add(new Torch(t, torchTexture, currentRenderWindow, tileMap));
             
             //add a light for each torch
             foreach (Torch t in MapTorchList){
@@ -306,7 +311,7 @@ namespace DungeonDwarf
                 else
                 {
                     torchBool = false;
-                    TorchList.Add(new Torch(currentPlayer.playerPosition, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
+                    TorchList.Add(new Torch(currentPlayer.playerPosition, torchTexture, currentRenderWindow, tileMap));
                     Player.delayUtil(1000, () => torchBool = true);
                 }
             }
@@ -315,7 +320,7 @@ namespace DungeonDwarf
             {
                 if (BulletButton == false)
                 {
-                    BulletList.Add(new Bullet(currentPlayer.playerPosition, "textures/weapons/arrow/Feuer.png", currentRenderWindow, bewegungsrichtung));
+                    BulletList.Add(new Bullet(currentPlayer.playerPosition, bulletTexture, currentRenderWindow, bewegungsrichtung));
                     BulletButton = true;
                 }
             }

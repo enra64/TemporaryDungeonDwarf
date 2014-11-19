@@ -19,9 +19,9 @@ namespace DungeonDwarf
         int zaehler = 0;
         bool spielerbewegung = true;
 
-        public Bullet(Vector2f poss, string texturePath, RenderWindow fenster1,bool bewegung)
+        public Bullet(Vector2f poss, Texture _tex, RenderWindow fenster1,bool bewegung)
         {
-            bulletTexture = new Texture(texturePath);
+            bulletTexture = _tex;
             bulletSprite = new Sprite(bulletTexture);
             bulletSprite.Scale = new Vector2f(0.5f,0.5f);   // changes the scale of the sprite
 
