@@ -304,7 +304,7 @@ namespace DungeonDwarf
                 {
                     torchBool = false;
                     TorchList.Add(new Torch(currentPlayer.playerPosition, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
-                    Player.delayUtil(2000, () => torchBool = true);
+                    Player.delayUtil(1000, () => torchBool = true);
                 }
             }
             //fire debouncing
