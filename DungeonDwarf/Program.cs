@@ -307,7 +307,7 @@ namespace DungeonDwarf
             {
 
                 if (TorchList.Count >= 10 || !torchBool)
-                    Console.WriteLine("Torches empty || you torched too much");
+                    torchBool = false;
                 else
                 {
                     torchBool = false;
