@@ -21,6 +21,7 @@ namespace DungeonDwarf
         static List<Sprite> backgroundList = new List<Sprite>();
         static List<Enemy> EnemyList = new List<Enemy>();
         static List<Bullet> BulletList = new List<Bullet>();
+        static List<Torch> TorchList = new List<Torch>();
         static Inventory currentInventory;
         static bool BulletButton = false;
         static Stopwatch sw = new Stopwatch();
@@ -203,6 +204,14 @@ namespace DungeonDwarf
                 lightEngine.AddLight(b.GetCenter(), b.bulletSize, new Vector2f(1f, 1f), new Color(255, 0, 0));
             }
             //hint:
+            //torch update
+            foreach (Torch t in TorchList)
+            {
+                t.Update();
+                //adds a small light to the bullets; edgar, you can move this to your class (get the Lighting instance (lightEngine, that is) in your constructor,
+                //then you can control the color with the fourth parameter, and add a light per bullet with the command below
+                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(1f, 1f), new Color(255, 0, 0));
+            }
             foreach (Enemy e in EnemyList)
                 e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
             //tile lighting
@@ -274,6 +283,10 @@ namespace DungeonDwarf
             if (Keyboard.IsKeyPressed(Keyboard.Key.I))
             {
                 currentInventory.Show();
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Num1))
+            {
+                TorchList.Add(new Torch(currentPlayer.playerPosition, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
             }
             //fire debouncing
             if (Keyboard.IsKeyPressed(Keyboard.Key.F))
@@ -377,6 +390,10 @@ namespace DungeonDwarf
             //draw all current bullets
             foreach (Bullet e in BulletList)
                 e.Draw();
+
+            //draw all torches
+            foreach (Torch t in TorchList)
+                t.Draw();
 
             //MovementRectDebug();
 
