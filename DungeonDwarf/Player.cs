@@ -53,7 +53,7 @@ namespace DungeonDwarf
             win = _w;
             
             //add player texture and sprite
-            Texture playerTexture = new Texture("textures/player/dwarfy_sprite.png");
+            Texture playerTexture = new Texture("textures/player/dwarf.png");
             playerSprite = new Sprite(playerTexture);
             //xScale = yScale = Global.GLOBAL_SCALE;
             
@@ -124,9 +124,9 @@ namespace DungeonDwarf
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
-            playerSprite.TextureRect = new IntRect(textureVector.X * 26, textureVector.Y * 58, 26, 58);
-            playerSize.X = (27) * xScale;
-            playerSize.Y = (58) * yScale;
+            playerSprite.TextureRect = new IntRect(textureVector.X * 30, textureVector.Y * 32, 30, 32);
+            playerSize.X = (30) * xScale;
+            playerSize.Y = (34) * yScale;
 
            #region Movement
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
