@@ -15,6 +15,7 @@ namespace DungeonDwarf
         private RenderStates renderStateAdditive = RenderStates.Default, renderStateMult = RenderStates.Default;
         private Texture lightTexture = new Texture("textures/light/lightball.png");
         private List<Vector2f[]> lightList = new List<Vector2f[]>();
+        private List<Color> lightColorList=new List<Color>();
 
         public Lighting(RenderWindow _w)
         {
@@ -27,6 +28,13 @@ namespace DungeonDwarf
         public void AddLight(Vector2f inputCenter, Vector2f inputSize, Vector2f lightScale)
         {
             lightList.Add(new Vector2f[] { inputCenter, inputSize, lightScale });
+            lightColorList.Add(Color.White);
+        }
+
+        public void AddLight(Vector2f inputCenter, Vector2f inputSize, Vector2f lightScale, Color tint)
+        {
+            lightList.Add(new Vector2f[] { inputCenter, inputSize, lightScale });
+            lightColorList.Add(tint);
         }
 
         public void Update()
@@ -34,9 +42,12 @@ namespace DungeonDwarf
             //add lighting
             lightMap.Clear(Color.Black);
             Sprite newLightSprite = new Sprite(lightTexture);
+            int colorPosition = 0;
 
             foreach(Vector2f[] p in lightList){
+                Color tintColor = lightColorList[colorPosition++];
                 newLightSprite.Scale = p[2];
+                newLightSprite.Color = tintColor;
                 newLightSprite.Position = ConvertToLightPos(newLightSprite, p[0], p[1]);
                 lightMap.Draw(newLightSprite, renderStateAdditive);
             }

@@ -32,9 +32,11 @@ namespace DungeonDwarf.world
         private VertexArray tileMap;
         private RenderStates renderStates = RenderStates.Default;
         private const int EARTHTILEOFFSET=100, EARTHTOPTILEOFFSET=200, AIROFFSET=0, LAVA1OFFSET=300, LAVA2OFFSET=500, LAVA1TOPOFFSET=400, LAVA2TOPOFFSET=600;
+        private Lighting lightEngine;
 
-        public TileMap(RenderWindow _w, Vector2u _tileAmount, string _levelLocation){
+        public TileMap(RenderWindow _w, Lighting _l, Vector2u _tileAmount, string _levelLocation){
             win = _w;
+            lightEngine = _l;
             tileAmount = _tileAmount;
             tileTypes = new int[tileAmount.X, tileAmount.Y];
             Collidable = new bool[tileAmount.X, tileAmount.Y];
@@ -119,6 +121,23 @@ namespace DungeonDwarf.world
                     tileMap[currentPosition + 3] = new Vertex(new Vector2f(idealQuadSize.X * x, idealQuadSize.Y * (y + 1)), new Vector2f(xOffset+0, 100));//bot left vertex
                 }
             }
+        }
+
+        public List<Vector2f> TilesOfType(int type)
+        {
+            List<Vector2f> returnList=new List<Vector2f>();
+            //draw vertexicesarrays. y+5 for interpolating ground
+            for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++)
+            {
+                for (uint x = 0; x < tileAmount.X; x++)
+                {
+                    //because: 4 vertexes/quad * (current y times how many x per view) * x
+                    uint currentPosition = 4 * ((y * tileAmount.X) + x);
+                    if (tileTypes[x, y] == type)
+                        returnList.Add(new Vector2f(currentQuadSize.X * x + currentQuadSize.X / 2f , currentQuadSize.Y * y + currentQuadSize.Y / 2f));
+                }
+            }
+            return returnList;
         }
 
         /// <summary>
@@ -309,6 +328,21 @@ namespace DungeonDwarf.world
         }
 
         public void Update()
+        {
+            //get x we are at
+            uint xOffset = (uint)(Global.CURRENT_WINDOW_ORIGIN.X / currentQuadSize.X);
+            Color lavaColor=new Color(207, 128, 16);
+            for (uint y = 0; y < tileAmount.Y; y++)
+            {
+                for (uint x = xOffset; x < tileAmount.X; x++)
+                {
+                    if(tileTypes[x, y]==Global.LAVA_TOP_TILE || tileTypes[x, y]==Global.LAVATILE)
+                        lightEngine.AddLight(new Vector2f(Global.CURRENT_WINDOW_ORIGIN.X + ((x - xOffset) * currentQuadSize.X), y * currentQuadSize.Y), currentQuadSize, new Vector2f(1.5f, 1.5f), lavaColor);
+                }
+            }
+        }
+
+        public void AnimationUpdate()
         {
             for (uint y = 0; y < tileAmount.Y + yInterpolationDuration; y++)
             {

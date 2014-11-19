@@ -117,10 +117,15 @@ namespace DungeonDwarf
              * think twice before adding you calls before this comment
              */
             /*
+             LIGHTING
+             */
+            lightEngine = new Lighting(currentRenderWindow);
+            
+            /*
              TILEMAP
              */
             //init tile map
-            tileMap = new world.TileMap(currentRenderWindow, new Vector2u(400, 10), "world/levels/lavatest.oel");
+            tileMap = new world.TileMap(currentRenderWindow, lightEngine, new Vector2u(400, 10), "world/levels/lavatest.oel");
             //start tilemap update stopwatch
             tileMapUpdater.Start();
 
@@ -146,8 +151,6 @@ namespace DungeonDwarf
             moveableRectangle = new FloatRect(tempCurrentPlayerCenter.X - currentRenderWindow.Size.X / 6, tempCurrentPlayerCenter.Y - currentRenderWindow.Size.Y / 4, currentRenderWindow.Size.X / 3, currentRenderWindow.Size.Y / 2);
             #endregion
 
-            //lighting
-            lightEngine = new Lighting(currentRenderWindow);
         }
 
         /// <summary>
@@ -170,7 +173,7 @@ namespace DungeonDwarf
             //update tilemap if due
             if (tileMapUpdater.ElapsedMilliseconds > 500){
                 tileMapUpdater.Restart();
-                tileMap.Update();
+                tileMap.AnimationUpdate();
             }
             //store current offset in global class
             Global.CURRENT_WINDOW_ORIGIN=currentView.Center-Global.BEGIN_WINDOW_ORIGIN;
@@ -189,12 +192,15 @@ namespace DungeonDwarf
             foreach (Bullet b in BulletList)
             {
                 b.Update();
-                //adds a small light to the bullets
-                lightEngine.AddLight(b.GetCenter(), b.bulletSize, new Vector2f(1f, 1f));
+                //adds a small light to the bullets; edgar, you can move this to your class (get the Lighting instance (lightEngine, that is) in your constructor,
+                //then you can control the color with the fourth parameter, and add a light per bullet with the command below
+                lightEngine.AddLight(b.GetCenter(), b.bulletSize, new Vector2f(1f, 1f), new Color(255, 0, 0));
             }
             //hint:
             foreach (Enemy e in EnemyList)
                 e.Update(currentPlayer.playerPosition);
+            //tile lighting
+            tileMap.Update();
             //calculate lighting. should stay last call
             lightEngine.Update();
         }
