@@ -36,7 +36,8 @@ namespace DungeonDwarf
             LAVATILE = 4,
             SPAWNTILE_1 = 5,
             SPAWNTILE_2 = 6,
-            SPAWNTILE_3 = 7;
+            SPAWNTILE_3 = 7,
+            TORCHTILE=8;
 
         /*
          * GLOBAL CONFIGURATION VARIABLES

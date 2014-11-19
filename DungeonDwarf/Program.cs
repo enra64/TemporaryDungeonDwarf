@@ -21,7 +21,7 @@ namespace DungeonDwarf
         static List<Sprite> backgroundList = new List<Sprite>();
         static List<Enemy> EnemyList = new List<Enemy>();
         static List<Bullet> BulletList = new List<Bullet>();
-        static List<Torch> TorchList = new List<Torch>();
+        static List<Torch> TorchList = new List<Torch>(), MapTorchList = new List<Torch>();
         static Inventory currentInventory;
         static bool BulletButton = false;
         static Stopwatch sw = new Stopwatch();
@@ -214,6 +214,16 @@ namespace DungeonDwarf
                 e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
             //tile lighting
             tileMap.Update();
+            //map torch generation
+            MapTorchList.Clear();
+            foreach (Vector2f t in tileMap.GetCurrentTorches())
+            {
+                MapTorchList.Add(new Torch(t, "textures/light/torch_sprite.png", currentRenderWindow, tileMap));
+            }
+            foreach (Torch t in MapTorchList){
+                t.Update(false);
+                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 0, 0));
+            }
             //calculate lighting. should stay last call
             lightEngine.Update();
         }
@@ -391,6 +401,8 @@ namespace DungeonDwarf
 
             //draw all torches
             foreach (Torch t in TorchList)
+                t.Draw();
+            foreach (Torch t in MapTorchList)
                 t.Draw();
 
             //MovementRectDebug();

@@ -17,6 +17,7 @@ namespace DungeonDwarf.world
         public RenderWindow win;
         public Vector2u tileAmount, tilesPerView=new Vector2u(20, 10);
         public List<int[]> spawnPoints=new List<int[]>();
+        public List<Vector2f> torchPositions = new List<Vector2f>();
 
         //tile specific variables
         private int[,] tileTypes;
@@ -175,6 +176,11 @@ namespace DungeonDwarf.world
                 currentQuadSize.X, currentQuadSize.Y);
         }
 
+        private Vector2f GetXY(int x, int y)
+        {
+            return new Vector2f(currentQuadSize.X * x, currentQuadSize.Y * y);
+        }
+
         /// <summary>
         /// fills tile type array using maps created by ogmo
         /// </summary>
@@ -191,6 +197,7 @@ namespace DungeonDwarf.world
                 S1 = s.Element("spawn1").Value,
                 S2 = s.Element("spawn2").Value,
                 S3 = s.Element("spawn3").Value,
+                TORCH = s.Element("torch").Value,
                 AIR = s.Element("air").Value
             }).FirstOrDefault();
             //get strings from array, removing all linebreaks
@@ -202,6 +209,7 @@ namespace DungeonDwarf.world
             string spawn1 = query.S1.Replace("\n", String.Empty);
             string spawn2 = query.S2.Replace("\n", String.Empty);
             string spawn3 = query.S3.Replace("\n", String.Empty);
+            string torch = query.TORCH.Replace("\n", String.Empty);
             //get byte arrays from strings
             System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
             byte[] earthArray = enc.GetBytes(earth);
@@ -212,6 +220,7 @@ namespace DungeonDwarf.world
             byte[] spawn1Array = enc.GetBytes(spawn1);
             byte[] spawn2Array = enc.GetBytes(spawn2);
             byte[] spawn3Array = enc.GetBytes(spawn3);
+            byte[] torchArray = enc.GetBytes(torch);
             //get tiles from byte arrays
             //somewhat dirty implementation, we can only define tile priority
             for(int y=0;y<tileAmount.Y;y++){
@@ -235,6 +244,10 @@ namespace DungeonDwarf.world
                         tileTypes[x, y] = Global.SPAWNTILE_2;
                     if (spawn3Array[oneDimensionalArrayPosition] == 49)//ASCII one: spawn 3
                         tileTypes[x, y] = Global.SPAWNTILE_3;
+                    //torches, handled seperatly
+                    if (torchArray[oneDimensionalArrayPosition] == 49){//ASCII one: spawn 3
+                        torchPositions.Add(GetXY(x, y));
+                    }
                 }
             }
         }
@@ -340,6 +353,17 @@ namespace DungeonDwarf.world
                         lightEngine.AddLight(new Vector2f(Global.CURRENT_WINDOW_ORIGIN.X + ((x - xOffset) * currentQuadSize.X), y * currentQuadSize.Y), currentQuadSize, new Vector2f(1.5f, 1.5f), lavaColor);
                 }
             }
+        }
+
+        public List<Vector2f> GetCurrentTorches()
+        {
+            List<Vector2f> returnList=new List<Vector2f>();
+            uint xOffset = (uint)(Global.CURRENT_WINDOW_ORIGIN.X / currentQuadSize.X);
+            foreach(Vector2f v in torchPositions)
+                if (v.X < Global.CURRENT_WINDOW_ORIGIN.X + win.Size.X && v.X > Global.CURRENT_WINDOW_ORIGIN.X){
+                    returnList.Add(v);
+                }
+            return returnList;
         }
 
         public void AnimationUpdate()
