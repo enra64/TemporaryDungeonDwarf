@@ -341,6 +341,10 @@ namespace DungeonDwarf
             //DrawCollidingRect();
         }
 
+        public FloatRect GetRect(){
+            return new FloatRect(playerPosition.X, playerPosition.Y, playerSize.X, playerSize.Y);
+        }
+
         private void DrawCollidingRect()
         {
             RectangleShape colliderRect = new RectangleShape();

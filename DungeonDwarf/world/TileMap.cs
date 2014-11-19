@@ -274,6 +274,17 @@ namespace DungeonDwarf.world
             return false;
         }
 
+        public bool Collides(FloatRect aRect)
+        {
+            //check intersection for each tile
+            for (int y = 0; y < tileAmount.Y; y++)
+                for (int x = 0; x < tileAmount.X; x++)
+                    //check each rectangles' position
+                    if (aRect.Intersects(GetRectangle(x, y)) && Collidable[x, y])
+                        return true;
+            return false;
+        }
+
         /// <summary>
         /// This is a convenience function that adds the nextmove on top of the position parameter,
         /// so you can easily check for intersections after the next move.
