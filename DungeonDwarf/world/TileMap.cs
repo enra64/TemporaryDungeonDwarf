@@ -368,18 +368,6 @@ namespace DungeonDwarf.world
             }
         }
 
-        public List<Vector2f> GetCurrentTorches()
-        {
-            List<Vector2f> returnList=new List<Vector2f>();
-            uint xOffset = (uint)(Global.CURRENT_WINDOW_ORIGIN.X / currentQuadSize.X);
-            foreach(Vector2f v in torchPositions)
-                // in boundaries of right view edg                       and in boundaries of left view edge
-                if (v.X - 400f < Global.CURRENT_WINDOW_ORIGIN.X + win.Size.X && v.X + 400f > Global.CURRENT_WINDOW_ORIGIN.X){
-                    returnList.Add(v);
-                }
-            return returnList;
-        }
-
         public List<Vector2f> GetAllTorches()
         {
             List<Vector2f> returnList = new List<Vector2f>();

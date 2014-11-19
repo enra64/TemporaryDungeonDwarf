@@ -12,27 +12,34 @@ namespace DungeonDwarf
 {
     class Program
     {
-        static RenderWindow currentRenderWindow;
-        static View currentView;
-        static world.TileMap tileMap;
+        //fein säuberlich sortiert für daniel ;)
+        //player, enemy
         static Player currentPlayer;
-        static FloatRect moveableRectangle;
-        static Stopwatch tileMapUpdater = new Stopwatch();
-        static List<Sprite> backgroundList = new List<Sprite>();
         static List<Enemy> EnemyList = new List<Enemy>();
-        static List<Bullet> BulletList = new List<Bullet>();
-        static List<Torch> TorchList = new List<Torch>(), MapTorchList = new List<Torch>();
         static Inventory currentInventory;
 
+        //tilemap and view
+        static RenderWindow currentRenderWindow;
+        static View currentView;
+        static FloatRect moveableRectangle;
+        static world.TileMap tileMap;
+        static Stopwatch tileMapUpdater = new Stopwatch();
+
+        //bullet stuff
+        static List<Bullet> BulletList = new List<Bullet>();
         static Texture bulletTexture;
-        static bool BulletButton = false;
-        static bool bewegungsrichtung = true;
+        static bool BulletButton = false, bewegungsrichtung = true;
 
+        //benchmark
         static Stopwatch sw = new Stopwatch();
+        
+        //lighting
         static Lighting lightEngine;
-
+        //torches
+        static List<Torch> TorchList = new List<Torch>();
         static Texture torchTexture;
         static bool torchBool = true;
+        static uint currentUserTorchCount = 0;
 
         static void Main(string[] args)
         {
@@ -71,8 +78,8 @@ namespace DungeonDwarf
             //Arne, you forgot to push StartScreen.cs and Inventory.cs
             //http://bit.ly/19hKyY7
             StartScreen s = new StartScreen(currentRenderWindow);
-            while (!Keyboard.IsKeyPressed(Keyboard.Key.Space) && currentRenderWindow.IsOpen())
-            {
+
+            while (!Keyboard.IsKeyPressed(Keyboard.Key.Space) && currentRenderWindow.IsOpen()){
                 s.Update();
                 s.Draw();
             }
@@ -91,14 +98,12 @@ namespace DungeonDwarf
             }
         }
 
-        private static void mouseClick(object sender, MouseButtonEventArgs e)
-        {
+        private static void mouseClick(object sender, MouseButtonEventArgs e){
             Console.WriteLine(e.X + ": x, y: " + e.Y);
             currentInventory.Click(e.X, e.Y);
         }
 
-        private static void windowResized(object sender, SizeEventArgs e)
-        {
+        private static void windowResized(object sender, SizeEventArgs e){
             //update tile count
             tileMap.UpdateWindowResize();
             currentView.Size = new Vector2f(800, 600);
@@ -126,23 +131,18 @@ namespace DungeonDwarf
              * rule number two, by the way, is: Sometimes I do do mistakes, but please
              * think twice before adding you calls before this comment
              */
-            /*
-            LIGHTING 1
-            */
+            //get lightengine
             lightEngine = new Lighting(currentRenderWindow);
-            /*
-             TILEMAP
-             */
-            //init tile map
+            //get tilemap
             tileMap = new world.TileMap(currentRenderWindow, lightEngine, new Vector2u(400, 10), "world/levels/lavatest.oel");
-            //start tilemap update stopwatch
+            //start tilemap animation stopwatch
             tileMapUpdater.Start();
-            /*
-             LIGHTING 2
-             */
+            
             //get all map defined torches
             foreach (Vector2f t in tileMap.GetAllTorches())
-                MapTorchList.Add(new Torch(t, torchTexture, currentRenderWindow, tileMap));
+                TorchList.Add(new Torch(t, torchTexture, currentRenderWindow, tileMap));
+
+            //get all map defined enemies
 
             //initialize inventory, currently under heavy development (as in probably wont work)
             currentInventory = new Inventory(currentRenderWindow, new Vector2f(70, 70), new Vector2f(50, 50));
@@ -158,7 +158,7 @@ namespace DungeonDwarf
             EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition, tileMap));
             #endregion
 
-            //Init the rectangle the user can move in without changing view
+            //rectangle user can move in without changing view
             #region nomoverect
             //create a rectangle the player can move in without changing the view
             Vector2f tempCurrentPlayerCenter = currentPlayer.GetCenter();
@@ -220,28 +220,19 @@ namespace DungeonDwarf
                 lightEngine.AddLight(b.GetCenter(), b.bulletSize, new Vector2f(1f, 1f), new Color(255, 0, 0));
             }
             //hint:
-            //torch update
+            //torch update, now all torches only get drawn if on screen
             foreach (Torch t in TorchList)
             {
-                t.Update(false);
-                lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 102, 0));
+                if (t.torchPosition.X - 400f < Global.CURRENT_WINDOW_ORIGIN.X + currentRenderWindow.Size.X && t.torchPosition.X + 400f > Global.CURRENT_WINDOW_ORIGIN.X){
+                    t.Update(false);
+                    lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 102, 0));
+                }
             }
 
             foreach (Enemy e in EnemyList)
                 e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
             //tile lighting
             tileMap.Update();
-            /*
-             MAP TORCHING
-             */
-            //add a light for each torch
-            foreach (Torch t in MapTorchList){
-                if (tileMap.GetCurrentTorches().Contains(t.torchPosition))
-                {
-                    t.Update(false);
-                    lightEngine.AddLight(t.GetCenter(), t.torchSize, new Vector2f(5f, 5f), new Color(255, 102, 0));
-                }
-            }
             //calculate lighting. should stay last call
             lightEngine.Update();
         }
@@ -313,23 +304,20 @@ namespace DungeonDwarf
             if (Keyboard.IsKeyPressed(Keyboard.Key.T))
             {
 
-                if (TorchList.Count >= 10 || !torchBool)
+                if (currentUserTorchCount >= 10 || !torchBool)
                     torchBool = false;
-                else
-                {
+                else{
                     torchBool = false;
+                    currentUserTorchCount++;
                     TorchList.Add(new Torch(currentPlayer.playerPosition, torchTexture, currentRenderWindow, tileMap));
                     Player.delayUtil(1000, () => torchBool = true);
                 }
             }
             //fire debouncing
-            if (Keyboard.IsKeyPressed(Keyboard.Key.F))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.F) && BulletButton == false)
             {
-                if (BulletButton == false)
-                {
-                    BulletList.Add(new Bullet(currentPlayer.playerPosition, bulletTexture, currentRenderWindow, bewegungsrichtung));
-                    BulletButton = true;
-                }
+                BulletList.Add(new Bullet(currentPlayer.playerPosition, bulletTexture, currentRenderWindow, bewegungsrichtung));
+                BulletButton = true;
             }
             if (!Keyboard.IsKeyPressed(Keyboard.Key.F))
             {
@@ -395,11 +383,10 @@ namespace DungeonDwarf
              * TO DEATH
              * AND STUFF
              */
-            //clear window
+            //clear window and apply view to window
             currentRenderWindow.Clear(Color.Black);
-            //apply view to window
             currentRenderWindow.SetView(currentView);
-            //draw map/level
+            //draw tilemap
             tileMap.Draw();
 
             /*
@@ -428,31 +415,26 @@ namespace DungeonDwarf
             //draw all torches
             foreach (Torch t in TorchList)
                 t.Draw();
-            foreach (Torch t in MapTorchList)
-                t.Draw();
 
             //MovementRectDebug();
-
 
             /* END YOUR CALLS HERE
              * Doing last call, do not call anything after this
              */
             lightEngine.Draw();
             currentRenderWindow.Display();
-            sw.Stop();
             //fps counter in console, if I am thinking this through correctly it should be accurate to 99%
             //now with more accuracy, tho :D
             //i think rather than writing our own code we should stay with the lock we use now, and maybe lower the locked fps
+            sw.Stop();
             double elapsedMicroseconds = (double)sw.ElapsedTicks / 10d;
             //Console.WriteLine("FPS: " + 1f / ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency) + ", took " + (double)sw.ElapsedTicks / ((double)Stopwatch.Frequency / 1000d) + "ms");
             sw.Reset();
         }
 
-        //you can ignore this function
+        //debugging function
         private static void MovementRectDebug()
         {
-            //Debug
-            //DEBUG
             float t = currentRenderWindow.GetView().Center.X;
             Vector2f offset = currentRenderWindow.GetView().Center - Global.BEGIN_WINDOW_ORIGIN;
             //Console.WriteLine("X: " + offset.X + ", Y: " + offset.Y);
