@@ -14,10 +14,11 @@ using System.Threading.Tasks;
  * Doesn't have a KI yet lol. -wulfihm
  * 
  * TODO:    nicer jumping
- *          cleaner spawning
+ *          cleaner spawning (spawn tiles)
  *          healthbar
+ *          dropclass (fackeln)
  *          a somewhat decent KI for...(see above)
- *          enemy uses weapons
+ *          enemy uses weapons/schießen
  *          ...and whatever there is to do ;)
  * 
  * DONE:    load your enemies into a list
