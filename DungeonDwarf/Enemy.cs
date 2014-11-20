@@ -14,7 +14,7 @@ using System.Threading.Tasks;
  * Doesn't have a KI yet lol. -wulfihm
  * 
  * TODO:    nicer jumping
- *          cleaner spawning (spawn tiles)
+ *          cleaner spawning (spawn tiles) //done
  *          healthbar
  *          dropclass (fackeln)
  *          a somewhat decent KI for...(see above)
@@ -39,6 +39,10 @@ namespace DungeonDwarf
         private float ENEMY_MOVEMENT_SPEED = Global.PLAYER_MOVEMENT_SPEED / 2f;
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
         private int i = 0;
+        public float health = 99;//99 because -33
+
+        //healthbar
+        RectangleShape healthBar = new RectangleShape();
 
         public Enemy(String _enemyType, RenderWindow _win, Vector2f _spawnPosition)
         {
@@ -51,13 +55,15 @@ namespace DungeonDwarf
                     texturePath="textures/enemies/zeroEnemy.png";
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
+                    health = 99;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 1.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 5f;
                     break;
                 case "enemy1":
                     texturePath="textures/world/earthTileTop.png";
-                    xScale=.2f;
-                    yScale=.2f;
+                    xScale=.4f;
+                    yScale=.4f;
+                    health = 33;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 8f;
                     break;
@@ -66,6 +72,7 @@ namespace DungeonDwarf
                     texturePath = "textures/world/earthTile.png";
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
+                    health = 66;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 10f;
                     break;
@@ -77,6 +84,11 @@ namespace DungeonDwarf
             enemySprite.Scale = new Vector2f(xScale, yScale);   // changes the scale of the sprite
             enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
             enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
+
+            //healthbar
+            healthBar.FillColor = Color.Red;
+            healthBar.OutlineColor = Color.Transparent;
+            healthBar.OutlineThickness = 0.01f;
 
             // where the enemy spawns
             //change it back if i am wrong, but why -200?
@@ -92,13 +104,25 @@ namespace DungeonDwarf
             win = _win;   // used for the draw function
         }
 
+        public void subtractHealth(){
+            health -= 33;
+        }
+        public void increaseHealth(){
+            health += 33;
+        }
+
         public void Draw()
         {
+            //win.Draw(healthBar);
             win.Draw(enemySprite);
         }
 
         public void Update(Vector2f _playerPosition, Vector2f _playerSize)
         {
+            //do healthbar
+            //health
+            healthBar.Size = new Vector2f(health * 1.2f, 5f);
+            healthBar.Position = new Vector2f(enemyPosition.X, enemyPosition.Y - 50f);
             bool inView = true;
             //only move in x direction if within the current view, otherwise all enemies would run towards the player
             if (enemyPosition.X > Global.CURRENT_WINDOW_ORIGIN.X + win.Size.X || enemyPosition.X + enemySize.X < Global.CURRENT_WINDOW_ORIGIN.X)

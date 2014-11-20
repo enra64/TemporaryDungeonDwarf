@@ -62,6 +62,11 @@ namespace DungeonDwarf
             playerPosition = new Vector2f(270f, 270f);
             playerSprite.Position = playerPosition;
             
+            //health, shield
+            healthBar.FillColor = Color.Red;
+            healthBar.OutlineColor = Color.Transparent;
+            shieldBar.FillColor = Color.Blue;
+            shieldBar.OutlineColor = Color.Transparent;
         }
 
         /// <summary>
@@ -99,30 +104,21 @@ namespace DungeonDwarf
         /// <returns></returns>
         public void Update()
         {
-            #region Health
+            //get offset
+            currentOffset = Global.CURRENT_WINDOW_ORIGIN;
+
+            #region HealthAndShield
             //health
-            healthBar.Size = new Vector2f(health * 1.2f, 20f);
-            healthBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 50f);
-            healthBar.FillColor = Color.Red;
-            healthBar.OutlineColor = Color.Transparent;
-            healthBar.OutlineThickness = 0.01f;
+            healthBar.Size = new Vector2f(health * 2.0f, 17f);
+            healthBar.Position = new Vector2f(currentOffset.X + 20f, currentOffset.Y + win.Size.Y - 40f);
 
             //Console.WriteLine(health);
-            #endregion
-
-            #region Shield
             //shield
-           shieldBar.Size = new Vector2f(shield * 1.2f, 20f);
-           shieldBar.Position = new Vector2f(playerPosition.X, playerPosition.Y - 80f);
-           shieldBar.FillColor = Color.Blue;
-           shieldBar.OutlineColor = Color.Transparent;
-           shieldBar.OutlineThickness = 0.01f;
+            shieldBar.Size = new Vector2f(shield * 2.0f, 17f);
+            shieldBar.Position = new Vector2f(currentOffset.X + 20f, currentOffset.Y + win.Size.Y - 70f);
 
             //Console.WriteLine(shield);
             #endregion
-
-            //get offset
-            currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
             playerSprite.TextureRect = new IntRect(textureVector.X * 65, textureVector.Y * 64, 65, 64);
             playerSize.X = (58) * xScale;
@@ -132,7 +128,6 @@ namespace DungeonDwarf
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
            if (health > MIN_HEALTH){
-               
                //shield gets back up
                if (shield < MAX_SHIELD)
                    shield += 0.25f;
@@ -157,7 +152,6 @@ namespace DungeonDwarf
                         textureVector.Y = 0;
                         isLeft = true;
                         isRight = false;
-
                     }
 
                 #region LeftAnim
@@ -188,12 +182,6 @@ namespace DungeonDwarf
                         delayUtil(450, () => isAnim = false);
                     }
                 #endregion
-                
-                //debug key: output current player bott vs ground top diff
-                if (Keyboard.IsKeyPressed(Keyboard.Key.O))
-                {
-                    Console.WriteLine(playerPosition.Y);
-                }
 
                 /*
                  * Jump Logic
@@ -206,7 +194,10 @@ namespace DungeonDwarf
                 //Highly advanced realtime physics calculation
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
-            
+                
+                //kill on map leave
+                if (playerPosition.Y > 4000f)
+                    health = 0;
                 //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
              }
            }
@@ -335,10 +326,15 @@ namespace DungeonDwarf
         #endregion
 
         public void Draw(){
-            win.Draw(healthBar);
-            win.Draw(shieldBar);
             win.Draw(playerSprite);
             //DrawCollidingRect();
+        }
+
+        public void PriorityDraw()
+        {
+            //draw on top of shadows
+            win.Draw(healthBar);
+            win.Draw(shieldBar);
         }
 
         public FloatRect GetRect(){

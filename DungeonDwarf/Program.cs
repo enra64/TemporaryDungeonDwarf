@@ -183,7 +183,8 @@ namespace DungeonDwarf
             //create a rectangle the player can move in without changing the view
             Vector2f tempCurrentPlayerCenter = currentPlayer.GetCenter();
             //this is said rectangle
-            moveableRectangle = new FloatRect(tempCurrentPlayerCenter.X - currentRenderWindow.Size.X / 6, tempCurrentPlayerCenter.Y - currentRenderWindow.Size.Y / 4, currentRenderWindow.Size.X / 3, currentRenderWindow.Size.Y / 2);
+            moveableRectangle = new FloatRect(tempCurrentPlayerCenter.X - currentRenderWindow.Size.X / 10, tempCurrentPlayerCenter.Y - currentRenderWindow.Size.Y / 4, 
+                currentRenderWindow.Size.X / 2, currentRenderWindow.Size.Y / 2);
             #endregion
 
         }
@@ -224,7 +225,7 @@ namespace DungeonDwarf
             //moves the player
             currentPlayer.Update();
             //let there be light
-            lightEngine.AddLight(currentPlayer.GetCenter(), currentPlayer.playerSize, new Vector2f(3f, 3f));
+            lightEngine.AddLight(currentPlayer.GetCenter(), currentPlayer.playerSize, new Vector2f(4f, 4f));
             //check for key input
             KeyCheck();
             //Moving Bullet
@@ -257,6 +258,9 @@ namespace DungeonDwarf
             lightEngine.Update();
         }
 
+        /// <summary>
+        /// do bullet collision with enemy health
+        /// </summary>
         private static void BulletCollision()
         {
             for (int i = 0; i < BulletList.Count; i++)
@@ -272,7 +276,9 @@ namespace DungeonDwarf
                     if (bulletRect.Intersects(enemyRect))
                     {
                         BulletList.RemoveAt(i);
-                        EnemyList.RemoveAt(j);
+                        e.subtractHealth();
+                        if(e.health<=0)
+                            EnemyList.RemoveAt(j);
                         //avoid wrong indices
                         break;
                     }
@@ -295,7 +301,7 @@ namespace DungeonDwarf
                     if (playerRect.Intersects(enemyRect))
                     {
                         currentPlayer.shield = 0;
-                        //currentPlayer.health = 0;
+                        currentPlayer.health -= 1;
                     }
                 }
             }
@@ -306,21 +312,11 @@ namespace DungeonDwarf
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                 currentRenderWindow.Close();
-            if (Keyboard.IsKeyPressed(Keyboard.Key.K))
-            {
-                currentView.Zoom(.99f);
-            }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.L))
-            {
-                currentView.Zoom(1.01f);
-            }
             //easter egg or something
             if (Keyboard.IsKeyPressed(Keyboard.Key.N))
                 Console.WriteLine("batman");
             if (Keyboard.IsKeyPressed(Keyboard.Key.I))
-            {
                 currentInventory.Show();
-            }
             if (Keyboard.IsKeyPressed(Keyboard.Key.T))
             {
 
@@ -378,8 +374,6 @@ namespace DungeonDwarf
                 //only offset to lvl limits
                 if ((currentView.Center.X + offset.X) > 390)
                 {
-                    //offset background
-                    //Console.WriteLine("cvc: " + currentView.Center + " offset: " + offset.X);
                     //offset rectangle and view
                     currentView.Move(offset);
                     moveableRectangle.Top += offset.Y;
@@ -437,6 +431,8 @@ namespace DungeonDwarf
              * Doing last call, do not call anything after this
              */
             lightEngine.Draw();
+            //draw gui on top of shadow
+            currentPlayer.PriorityDraw();
             currentRenderWindow.Display();
             //fps counter in console, if I am thinking this through correctly it should be accurate to 99%
             //now with more accuracy, tho :D
