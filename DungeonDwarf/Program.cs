@@ -414,16 +414,16 @@ namespace DungeonDwarf
             foreach (Enemy e in EnemyList)
                 e.Draw();
 
+            //draw all torches
+            foreach (Torch t in TorchList)
+                t.Draw();
+            
             //draw player
             currentPlayer.Draw();
 
             //draw all current bullets
             foreach (Bullet e in BulletList)
                 e.Draw();
-
-            //draw all torches
-            foreach (Torch t in TorchList)
-                t.Draw();
 
             //MovementRectDebug();
 
