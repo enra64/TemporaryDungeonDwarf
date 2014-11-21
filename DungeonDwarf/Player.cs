@@ -217,7 +217,7 @@ namespace DungeonDwarf
            #endregion
 
            //draw sprite slightly below position to simulate correct sprite cutting
-           playerSprite.Position = new Vector2f(playerPosition.X, playerPosition.Y + 5f); ;
+           playerSprite.Position = new Vector2f(playerPosition.X, playerPosition.Y + 0f); ;
         }
 
         //reset player position if he is just above ground
