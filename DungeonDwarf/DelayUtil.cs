@@ -12,7 +12,7 @@ namespace DungeonDwarf
         //confusing stuff -> timer "=>" what is this doing???
         /// <summary>
         /// int delay 1000 = 1 sec
-        /// After 1 sec it does any Action
+        /// After delay it does any Action
         /// </summary>
         /// <returns></returns>
         public static void delayUtil(int delay, Action action)

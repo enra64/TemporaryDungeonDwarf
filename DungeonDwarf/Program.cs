@@ -12,7 +12,7 @@ namespace DungeonDwarf
 {
     class Program
     {
-        //fein säuberlich sortiert für daniel ;)
+        //fein säuberlich sortiert für daniel ;) Danke :D 
         //player, enemy
         static Player currentPlayer;
         static List<Enemy> EnemyList = new List<Enemy>();
