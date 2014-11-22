@@ -157,9 +157,9 @@ namespace DungeonDwarf
                 #region LeftAnim
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
-                        delayUtil(150, () => textureVector.X = 0);
-                        delayUtil(300, () => textureVector.X = 1);
-                        delayUtil(450, () => textureVector.X = 2);
+                        delayUtil(150, () => textureVector.X = 1);
+                        delayUtil(300, () => textureVector.X = 2);
+                        delayUtil(450, () => textureVector.X = 0);
                         delayUtil(450, () => isAnim= false);
                 }
                 #endregion
@@ -176,9 +176,9 @@ namespace DungeonDwarf
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
                     {
                         isAnim = true;
-                        delayUtil(150, () => textureVector.X = 2);
+                        delayUtil(150, () => textureVector.X = 0);
                         delayUtil(300, () => textureVector.X = 1);
-                        delayUtil(450, () => textureVector.X = 0);
+                        delayUtil(450, () => textureVector.X = 2);
                         delayUtil(450, () => isAnim = false);
                     }
                 #endregion
