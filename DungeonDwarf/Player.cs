@@ -14,7 +14,7 @@ namespace DungeonDwarf
         public Vector2f playerPosition, playerSize;
         
         //player stats
-        private const int MAX_HEALTH = 100;
+        private const int MAX_HEALTH = 10000000;
         private const int MIN_HEALTH = 0;
         RectangleShape healthBar = new RectangleShape();
         public int health = MAX_HEALTH;     // hm.wulfi~ I changed it to public for Program.EnemyCollision();
@@ -118,7 +118,7 @@ namespace DungeonDwarf
                int[] currentTile = tileMap.GetCurrentTile(new Vector2f(playerPosition.X, playerSize.Y + playerPosition.Y + 30f));
                if (tileMap.GetTileType(currentTile[0], currentTile[1]) == Global.LAVA_TOP_TILE)
                {
-                   if (shield > MIN_HEALTH)
+                   if (shield > MIN_SHIELD)
                     shield -= 5;
                    else
                     health -= 10;
