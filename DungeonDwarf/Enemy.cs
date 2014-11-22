@@ -54,18 +54,18 @@ namespace DungeonDwarf
                     //horrorblob
                 case "enemy0":
                     texturePath="textures/enemies/horror.png";
-                    xScale=Global.GLOBAL_SCALE*2;
-                    yScale=Global.GLOBAL_SCALE*2;
-                    health = 99;
+                    xScale=1.5f;
+                    yScale=1.5f;
+                    health = 100;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 1.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 5f;
                     break;
                 //squid thing 
                 case "enemy1":
                     texturePath="textures/enemies/squid.png";
-                    xScale=2f;
-                    yScale=2f;
-                    health = 33;
+                    xScale=1.5f;
+                    yScale=1.5f;
+                    health = 200;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 8f;
                     break;
@@ -75,7 +75,7 @@ namespace DungeonDwarf
                     texturePath = "textures/enemies/crystalenemy.png";
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
-                    health = 660;
+                    health = 1000;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 10f;
                     break;
