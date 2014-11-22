@@ -51,6 +51,7 @@ namespace DungeonDwarf
             //moved enemy distinguishment here, b/c 7 constructor arguments and somehow the commit was broken
             switch (_enemyType)
             {
+                    //horrorblob
                 case "enemy0":
                     texturePath="textures/enemies/horror.png";
                     xScale=Global.GLOBAL_SCALE*2;
@@ -60,7 +61,7 @@ namespace DungeonDwarf
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 5f;
                     break;
                 case "enemy1":
-                    texturePath="textures/world/earthTileTop.png";
+                    texturePath="textures/enemies/zeroEnemy.png";
                     xScale=.4f;
                     yScale=.4f;
                     health = 33;
@@ -68,11 +69,12 @@ namespace DungeonDwarf
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 8f;
                     break;
                 //do this when case is enemy2 or if no other case fit
+               //living crystal :O
                 default: case "enemy2":
-                    texturePath = "textures/world/earthTile.png";
+                    texturePath = "textures/enemies/crystalenemy.png";
                     xScale=Global.GLOBAL_SCALE;
                     yScale=Global.GLOBAL_SCALE;
-                    health = 66;
+                    health = 660;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 10f;
                     break;
