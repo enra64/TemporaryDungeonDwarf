@@ -326,7 +326,7 @@ namespace DungeonDwarf
                     torchBool = false;
                     currentUserTorchCount++;
                     TorchList.Add(new Torch(currentPlayer.playerPosition, torchTexture, currentRenderWindow, tileMap));
-                    Player.delayUtil(1000, () => torchBool = true);
+                    DelayUtil.delayUtil(1000, () => torchBool = true);
                 }
             }
             //bullet stuff

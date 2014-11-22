@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bullet.cs" />
+    <Compile Include="DelayUtil.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Inventory.cs" />

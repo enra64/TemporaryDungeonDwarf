@@ -78,25 +78,6 @@ namespace DungeonDwarf
             return new Vector2f(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
         }
         
-        #region DelayUtil
-        //confusing stuff -> timer "=>" what is this doing???
-        /// <summary>
-        /// int delay 1000 = 1 sec
-        /// After 1 sec it does any Action
-        /// </summary>
-        /// <returns></returns>
-        public static void delayUtil(int delay, Action action)
-        {
-            Timer timer = new Timer();
-            timer.Interval = delay;
-            timer.Elapsed += (s, e) =>
-            {
-                action();
-                timer.Stop();
-            };
-            timer.Start();
-        }
-        #endregion
         
         /// <summary>
         /// Update for Player
@@ -157,10 +138,10 @@ namespace DungeonDwarf
                 #region LeftAnim
                 if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
                         isAnim = true;
-                        delayUtil(150, () => textureVector.X = 1);
-                        delayUtil(300, () => textureVector.X = 2);
-                        delayUtil(450, () => textureVector.X = 0);
-                        delayUtil(450, () => isAnim= false);
+                        DelayUtil.delayUtil(150, () => textureVector.X = 1);
+                        DelayUtil.delayUtil(300, () => textureVector.X = 2);
+                        DelayUtil.delayUtil(450, () => textureVector.X = 0);
+                        DelayUtil.delayUtil(450, () => isAnim = false);
                 }
                 #endregion
 
@@ -176,10 +157,10 @@ namespace DungeonDwarf
                 if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
                     {
                         isAnim = true;
-                        delayUtil(150, () => textureVector.X = 0);
-                        delayUtil(300, () => textureVector.X = 1);
-                        delayUtil(450, () => textureVector.X = 2);
-                        delayUtil(450, () => isAnim = false);
+                        DelayUtil.delayUtil(150, () => textureVector.X = 0);
+                        DelayUtil.delayUtil(300, () => textureVector.X = 1);
+                        DelayUtil.delayUtil(450, () => textureVector.X = 2);
+                        DelayUtil.delayUtil(450, () => isAnim = false);
                     }
                 #endregion
 

@@ -62,10 +62,10 @@ namespace DungeonDwarf
             if (!anim)
             {
                 anim = true;
-                Player.delayUtil(250, () => textureVector.X = 1);
-                Player.delayUtil(500, () => textureVector.X = 2);
-                Player.delayUtil(750, () => textureVector.X = 0);
-                Player.delayUtil(750, () => anim = false);
+                DelayUtil.delayUtil(250, () => textureVector.X = 1);
+                DelayUtil.delayUtil(500, () => textureVector.X = 2);
+                DelayUtil.delayUtil(750, () => textureVector.X = 0);
+                DelayUtil.delayUtil(750, () => anim = false);
             }
         }
 
