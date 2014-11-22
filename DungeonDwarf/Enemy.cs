@@ -51,7 +51,8 @@ namespace DungeonDwarf
             //moved enemy distinguishment here, b/c 7 constructor arguments and somehow the commit was broken
             switch (_enemyType)
             {
-                    //horrorblob
+                //changed enemies! bugs? -> http://bit.ly/1za1szq -daniel-
+                //horrorblob
                 case "enemy0":
                     texturePath="textures/enemies/horror.png";
                     xScale=1.5f;
