@@ -60,10 +60,11 @@ namespace DungeonDwarf
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 1.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 5f;
                     break;
+                //squid thing 
                 case "enemy1":
-                    texturePath="textures/enemies/zeroEnemy.png";
-                    xScale=.4f;
-                    yScale=.4f;
+                    texturePath="textures/enemies/squid.png";
+                    xScale=2f;
+                    yScale=2f;
                     health = 33;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 8f;
