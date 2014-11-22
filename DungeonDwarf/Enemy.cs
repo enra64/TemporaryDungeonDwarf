@@ -52,9 +52,9 @@ namespace DungeonDwarf
             switch (_enemyType)
             {
                 case "enemy0":
-                    texturePath="textures/enemies/zeroEnemy.png";
-                    xScale=Global.GLOBAL_SCALE;
-                    yScale=Global.GLOBAL_SCALE;
+                    texturePath="textures/enemies/horror.png";
+                    xScale=Global.GLOBAL_SCALE*2;
+                    yScale=Global.GLOBAL_SCALE*2;
                     health = 99;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 1.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 5f;

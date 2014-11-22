@@ -109,6 +109,9 @@
     <Content Include="openal32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="textures\enemies\horror.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="textures\enemies\zeroEnemy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
