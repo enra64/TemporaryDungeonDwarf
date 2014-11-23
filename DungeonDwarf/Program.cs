@@ -232,20 +232,15 @@ namespace DungeonDwarf
             //Moving Bullet
             for (int i = 0; i < BulletList.Count; i++ )
             {
-
                 bulletLifeTime = BulletList[i].BulletLife();        // importiert die bulletlifeTime aus der Bullet
-             
-                    Bullet b = BulletList[i];
-                    b.Update();
-                    //remove on tile collision
-                    if (tileMap.Collides(b.GetRect()))
-                        BulletList.RemoveAt(i);
-                     else if (bulletLifeTime >= 20)                 // entfernt die Bullet bei Frame 20 falls es sie noch gibt
-                {
-                         BulletList.RemoveAt(i);
-                }
-
-               
+                Bullet b = BulletList[i];
+                b.Update();
+                //remove on tile collision
+                if (tileMap.Collides(b.GetRect()))
+                    BulletList.RemoveAt(i);
+                else if (bulletLifeTime >= 20)                 // entfernt die Bullet bei Frame 20 falls es sie noch gibt
+                    BulletList.RemoveAt(i);
+                
                 //adds a small light to the bullets; edgar, you can move this to your class (get the Lighting instance (lightEngine, that is) in your constructor,
                 //then you can control the color with the fourth parameter, and add a light per bullet with the command below
                 lightEngine.AddLight(b.GetCenter(), b.bulletSize, new Vector2f(1f, 1f), new Color(255, 0, 0));
