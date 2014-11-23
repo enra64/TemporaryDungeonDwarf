@@ -16,7 +16,7 @@ namespace DungeonDwarf
         private RenderWindow win;
         private float xScale, yScale;
         private world.TileMap tileMap;
-        int zaehler = 0;
+        int bulletLifeTime = 0;
         bool spielerbewegung = true;
 
         public Bullet(Vector2f poss, Texture _tex, RenderWindow fenster1,bool bewegung)
@@ -58,7 +58,7 @@ namespace DungeonDwarf
             bulletSprite.Position = bulletPosition;
             }
 
-            zaehler++;
+            bulletLifeTime++;
            
         }
 
@@ -70,8 +70,11 @@ namespace DungeonDwarf
         {
             return new Vector2f(bulletSize.X / 2f + bulletSprite.Position.X, bulletSize.Y / 2f + bulletSprite.Position.Y);
         }
-
-
+        public int BulletLife()
+        {
+            return bulletLifeTime;
+        }
+        
     }
 
 }
