@@ -1,4 +1,5 @@
-﻿using SFML.Window;
+﻿using SFML.Graphics;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 
@@ -43,6 +44,9 @@ namespace DungeonDwarf
         /// convenient instance of the tilemap
         /// </summary>
         public static world.TileMap TILE_MAP;
+
+        //enemy etxtures for avoiding loading time
+        public static Texture e0, e1, e2;
 
         /*
          * GLOBAL CONFIGURATION VARIABLES

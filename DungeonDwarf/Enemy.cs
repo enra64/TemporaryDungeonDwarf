@@ -54,36 +54,34 @@ namespace DungeonDwarf
                 //changed enemies! bugs? -> http://bit.ly/1za1szq -daniel-
                 //horrorblob
                 case "enemy0":
-                    texturePath="textures/enemies/horror.png";
-                    xScale=1.5f;
-                    yScale=1.5f;
+                    enemyTexture = Global.e0;
+                    xScale = 1.5f;
+                    yScale = 1.5f;
                     health = 100;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 1.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 5f;
                     break;
                 //squid thing 
                 case "enemy1":
-                    texturePath="textures/enemies/squid.png";
-                    xScale=1.5f;
-                    yScale=1.5f;
+                    enemyTexture = Global.e1;
+                    xScale = 1.5f;
+                    yScale = 1.5f;
                     health = 200;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 8f;
                     break;
                 //do this when case is enemy2 or if no other case fit
-               //living crystal :O
-                default: case "enemy2":
-                    texturePath = "textures/enemies/crystalenemy.png";
-                    xScale=Global.GLOBAL_SCALE;
-                    yScale=Global.GLOBAL_SCALE;
+                //living crystal :O
+                default:
+                case "enemy2":
+                    enemyTexture = Global.e2;
+                    xScale = Global.GLOBAL_SCALE;
+                    yScale = Global.GLOBAL_SCALE;
                     health = 1000;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 2.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 10f;
                     break;
             }
-
-
-            enemyTexture = new Texture(texturePath);
             enemySprite = new Sprite(enemyTexture);
             enemySprite.Scale = new Vector2f(xScale, yScale);   // changes the scale of the sprite
             enemySize.X = enemyTexture.Size.X * enemySprite.Scale.X;      // used for tile colliding in method update();
@@ -129,9 +127,13 @@ namespace DungeonDwarf
             healthBar.Size = new Vector2f(health * healthMultiplicator, 5f);
             healthBar.Position = new Vector2f(enemyPosition.X, enemyPosition.Y - 50f);
             bool inView = true;
+            enemySprite.Position = enemyPosition;
             //only move in x direction if within the current view, otherwise all enemies would run towards the player
             if (enemyPosition.X > Global.CURRENT_WINDOW_ORIGIN.X + win.Size.X || enemyPosition.X + enemySize.X < Global.CURRENT_WINDOW_ORIGIN.X)
-                inView = false;
+            {
+
+                return;
+            }
 
             // simple movement logic
             if (!tileMap.Collides(enemyPosition, enemySize))    // check if enemy collides with tiles, if true dont move at all
@@ -160,11 +162,6 @@ namespace DungeonDwarf
                 enemyPosition.Y -= ENEMY_JUMP_SPEED;
 
             CorrectYPosLogic();
-
-
-
-            //this is an update call. unnecessary edit on my side, though
-            enemySprite.Position = enemyPosition;
         }
 
         // borrowed from Player.cs and adjusted for Enemy.cs, thanks Daniel lol ;) pff daniel xD thats my work :D

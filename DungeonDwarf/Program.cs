@@ -196,6 +196,9 @@ namespace DungeonDwarf
         /// </summary>
         private static void LoadContent()
         {
+            Global.e0 = new Texture("textures/enemies/horror.png");
+            Global.e1 = new Texture("textures/enemies/squid.png");
+            Global.e2 = new Texture("textures/enemies/crystalenemy.png");
             bulletTexture = new Texture("textures/weapons/arrow/Feuer.png");
             torchTexture = new Texture("textures/light/torch_anim.png");
         }
@@ -274,21 +277,23 @@ namespace DungeonDwarf
                 for (int j = 0; j < EnemyList.Count; j++)
                 {
                     Enemy e = EnemyList.ElementAt(j);
-                    //actual collision check
-                    FloatRect bulletRect = new FloatRect(b.bulletPosition.X, b.bulletPosition.Y, b.bulletSize.X, b.bulletSize.Y);
-                    FloatRect enemyRect = new FloatRect(e.enemyPosition.X, e.enemyPosition.Y, e.enemySize.X, e.enemySize.Y);
-                    //remove both on collision
-                    if (bulletRect.Intersects(enemyRect))
+                    if (!(e.enemyPosition.X > Global.CURRENT_WINDOW_ORIGIN.X + currentRenderWindow.Size.X || e.enemyPosition.X + e.enemySize.X < Global.CURRENT_WINDOW_ORIGIN.X))
                     {
-                        BulletList.RemoveAt(i);
-                        e.subtractHealth();
-                        if(e.health<=0)
-                            EnemyList.RemoveAt(j);
+                        //actual collision check
+                        FloatRect bulletRect = new FloatRect(b.bulletPosition.X, b.bulletPosition.Y, b.bulletSize.X, b.bulletSize.Y);
+                        FloatRect enemyRect = new FloatRect(e.enemyPosition.X, e.enemyPosition.Y, e.enemySize.X, e.enemySize.Y);
+                        //remove both on collision
+                        if (bulletRect.Intersects(enemyRect))
+                        {
+                            BulletList.RemoveAt(i);
+                            e.subtractHealth();
+                            if (e.health <= 0)
+                                EnemyList.RemoveAt(j);
 
-                        //avoid wrong indices
-                        break;
+                            //avoid wrong indices
+                            break;
+                        }
                     }
-
                 }
             }
         }
@@ -301,13 +306,16 @@ namespace DungeonDwarf
                 FloatRect playerRect = currentPlayer.GetRect();
                 foreach (Enemy enem in EnemyList)
                 {
-                    FloatRect enemyRect = new FloatRect(enem.enemyPosition.X, enem.enemyPosition.Y, enem.enemySize.X, enem.enemySize.Y);
-
-                    // what to do if collision = true (we should discuss what should happen if; for now it only sets the players shield on zero)
-                    if (playerRect.Intersects(enemyRect))
+                    if (!(enem.enemyPosition.X > Global.CURRENT_WINDOW_ORIGIN.X + currentRenderWindow.Size.X || enem.enemyPosition.X + enem.enemySize.X < Global.CURRENT_WINDOW_ORIGIN.X))
                     {
-                        currentPlayer.shield = 0;
-                        currentPlayer.health -= 1;
+                        FloatRect enemyRect = new FloatRect(enem.enemyPosition.X, enem.enemyPosition.Y, enem.enemySize.X, enem.enemySize.Y);
+
+                        // what to do if collision = true (we should discuss what should happen if; for now it only sets the players shield on zero)
+                        if (playerRect.Intersects(enemyRect))
+                        {
+                            currentPlayer.shield = 0;
+                            currentPlayer.health -= 1;
+                        }
                     }
                 }
             }
