@@ -88,7 +88,7 @@ namespace DungeonDwarf
             /*
              * shit be about to get real... starting main loop.
              */
-            while (currentRenderWindow.IsOpen())
+            while (currentRenderWindow.IsOpen() && Global.CURRENT_WINDOW_ORIGIN.Y < currentRenderWindow.Size.Y+80f)
             {
                 //mandatory update and draw calls
                 Update();
