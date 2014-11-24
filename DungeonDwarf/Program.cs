@@ -313,8 +313,14 @@ namespace DungeonDwarf
                         // what to do if collision = true (we should discuss what should happen if; for now it only sets the players shield on zero)
                         if (playerRect.Intersects(enemyRect))
                         {
-                            currentPlayer.shield = 0;
-                            currentPlayer.health -= 1;
+
+                            if (currentPlayer.shield <= 0)
+                            {
+                                currentPlayer.health -= 1;
+                            }
+                            else
+                                currentPlayer.shield -= 2.5f;
+
                         }
                     }
                 }

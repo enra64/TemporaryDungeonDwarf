@@ -55,8 +55,8 @@ namespace DungeonDwarf
                 //horrorblob
                 case "enemy0":
                     enemyTexture = Global.e0;
-                    xScale = 1.5f;
-                    yScale = 1.5f;
+                    xScale = 1f;
+                    yScale = 1f;
                     health = 100;
                     _jumpspeed = Global.PLAYER_JUMP_SPEED / 1.5f;
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 5f;
