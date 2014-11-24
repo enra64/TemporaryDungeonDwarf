@@ -71,7 +71,7 @@ namespace DungeonDwarf
                     _movementspeed = Global.PLAYER_MOVEMENT_SPEED / 8f;
                     break;
                 //do this when case is enemy2 or if no other case fit
-                //living crystal :O
+               //living crystal :O
                 default:
                 case "enemy2":
                     enemyTexture = Global.e2;
