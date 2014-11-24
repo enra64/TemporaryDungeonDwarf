@@ -39,9 +39,9 @@ namespace DungeonDwarf
         private float ENEMY_MOVEMENT_SPEED = Global.PLAYER_MOVEMENT_SPEED / 2f;
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
         private int i = 0;
-        public float health = 99;//99 because -33
+        public float health = 99, healthMultiplicator;//99 because -33
 
-        //healthbar
+        //healthbarli
         RectangleShape healthBar = new RectangleShape();
 
         public Enemy(String _enemyType, RenderWindow _win, Vector2f _spawnPosition)
@@ -90,6 +90,7 @@ namespace DungeonDwarf
             enemySize.Y = enemyTexture.Size.Y * enemySprite.Scale.Y;      // ---- || ----
 
             //healthbar
+            healthMultiplicator = enemySize.X / health;
             healthBar.FillColor = Color.Red;
             healthBar.OutlineColor = Color.Transparent;
             healthBar.OutlineThickness = 0.01f;
@@ -117,7 +118,7 @@ namespace DungeonDwarf
 
         public void Draw()
         {
-            //win.Draw(healthBar);
+            win.Draw(healthBar);
             win.Draw(enemySprite);
         }
 
@@ -125,7 +126,7 @@ namespace DungeonDwarf
         {
             //do healthbar
             //health
-            healthBar.Size = new Vector2f(health * 1.2f, 5f);
+            healthBar.Size = new Vector2f(health * healthMultiplicator, 5f);
             healthBar.Position = new Vector2f(enemyPosition.X, enemyPosition.Y - 50f);
             bool inView = true;
             //only move in x direction if within the current view, otherwise all enemies would run towards the player
