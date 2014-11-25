@@ -12,15 +12,15 @@ namespace DungeonDwarf
     class Player
     {
         public Vector2f playerPosition, playerSize;
-        
+
         //player stats
         private const int MAX_HEALTH = 100;
         private const int MIN_HEALTH = 0;
         RectangleShape healthBar = new RectangleShape();
         public int health = MAX_HEALTH;     // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
-        private const float MAX_SHIELD= 100f;
-        private const float MIN_SHIELD= 0f;
+        private const float MAX_SHIELD = 100f;
+        private const float MIN_SHIELD = 0f;
         RectangleShape shieldBar = new RectangleShape();
         public float shield = MAX_SHIELD;   // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
@@ -30,7 +30,7 @@ namespace DungeonDwarf
         private float xScale = 1f, yScale = 1f;
         private world.TileMap tileMap;
         private Vector2f currentOffset, originalOffset;
-       
+
         //jump logic variables
         private bool hasJumped = false;
         private int jumpCount = 0;
@@ -51,17 +51,17 @@ namespace DungeonDwarf
 
             //renderwindow 
             win = _w;
-            
+
             //add player texture and sprite
             Texture playerTexture = new Texture("textures/player/dwarf.png");
             playerSprite = new Sprite(playerTexture);
             //xScale = yScale = Global.GLOBAL_SCALE;
-            
+
             //scale
             playerSprite.Scale = new Vector2f(xScale, yScale);
             playerPosition = new Vector2f(270f, 270f);
             playerSprite.Position = playerPosition;
-            
+
             //health, shield
             healthBar.FillColor = Color.Red;
             healthBar.OutlineColor = Color.Transparent;
@@ -77,8 +77,8 @@ namespace DungeonDwarf
         {
             return new Vector2f(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
         }
-        
-        
+
+
         /// <summary>
         /// Update for Player
         /// </summary>
@@ -105,56 +105,59 @@ namespace DungeonDwarf
             playerSize.X = (58) * xScale;
             playerSize.Y = (60) * yScale;
 
-           #region Movement
+            #region Movement
             //movement !!Now with brilliant stuff added because I tried this THINKING thingy!!
             //xD :D
-           if (health > MIN_HEALTH){
-               //shield gets back up
-               if (shield < MAX_SHIELD)
-                   shield += 0.25f;
+            if (health > MIN_HEALTH)
+            {
+                //shield gets back up
+                if (shield < MAX_SHIELD)
+                    shield += 0.25f;
 
-               #region Lava_Death
-               //lava
-               int[] currentTile = tileMap.GetCurrentTile(new Vector2f(playerPosition.X, playerSize.Y + playerPosition.Y + 30f));
-               if (tileMap.GetTileType(currentTile[0], currentTile[1]) == Global.LAVA_TOP_TILE)
-               {
-                   if (shield > MIN_SHIELD)
-                    shield -= 5;
-                   else
-                    health -= 10;
-               }
-               #endregion
-               
-               if (!tileMap.Collides(playerPosition, playerSize)){       
-                if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f))) 
-                    { 
-                        playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
-                        textureVector.Y = 0;
-                        isLeft = true;
-                        isRight = false;
-                    }
+                #region Lava_Death
+                //lava
+                int[] currentTile = tileMap.GetCurrentTile(new Vector2f(playerPosition.X, playerSize.Y + playerPosition.Y + 30f));
+                if (tileMap.GetTileType(currentTile[0], currentTile[1]) == Global.LAVA_TOP_TILE)
+                {
+                    if (shield > MIN_SHIELD)
+                        shield -= 5;
+                    else
+                        health -= 10;
+                }
+                #endregion
 
-                #region LeftAnim
-                if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim ){
+                if (!tileMap.Collides(playerPosition, playerSize))
+                {
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.A) && playerPosition.X > currentOffset.X)
+                        if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(-Global.PLAYER_MOVEMENT_SPEED, 0f)))
+                        {
+                            playerPosition.X -= Global.PLAYER_MOVEMENT_SPEED;
+                            textureVector.Y = 0;
+                            isLeft = true;
+                            isRight = false;
+                        }
+
+                    #region LeftAnim
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.A) && !isAnim)
+                    {
                         isAnim = true;
                         DelayUtil.delayUtil(150, () => textureVector.X = 1);
                         DelayUtil.delayUtil(300, () => textureVector.X = 2);
                         DelayUtil.delayUtil(450, () => textureVector.X = 0);
                         DelayUtil.delayUtil(450, () => isAnim = false);
-                }
-                #endregion
-
-                if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f))) 
-                    { 
-                        playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
-                        textureVector.Y = 1;
-                        isRight = true; 
-                        isLeft = false;
                     }
-                #region RightAnim
-                if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim) 
+                    #endregion
+
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.D) && playerPosition.X < (win.Size.X + currentOffset.X) - playerSize.X)
+                        if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(Global.PLAYER_MOVEMENT_SPEED, 0f)))
+                        {
+                            playerPosition.X += Global.PLAYER_MOVEMENT_SPEED;
+                            textureVector.Y = 1;
+                            isRight = true;
+                            isLeft = false;
+                        }
+                    #region RightAnim
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.D) && !isAnim)
                     {
                         isAnim = true;
                         DelayUtil.delayUtil(150, () => textureVector.X = 0);
@@ -162,59 +165,62 @@ namespace DungeonDwarf
                         DelayUtil.delayUtil(450, () => textureVector.X = 2);
                         DelayUtil.delayUtil(450, () => isAnim = false);
                     }
-                #endregion
+                    #endregion
 
-                /*
+                    /*
                  * Jump Logic
                  */
-                JumpLogic();
-            
-                //logic for resetting player y if he hovers above ground
-                CorrectYPosLogic();
-                
-                //Highly advanced realtime physics calculation
-                if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
-                    playerPosition.Y += Global.GLOBAL_GRAVITY;
-                
-                //kill on map leave
-                if (playerPosition.Y > 4000f)
-                    health = 0;
-                //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
-             }
-           }
+                    JumpLogic();
+
+                    //logic for resetting player y if he hovers above ground
+                    CorrectYPosLogic();
+
+                    //Highly advanced realtime physics calculation
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
+                        playerPosition.Y += Global.GLOBAL_GRAVITY;
+
+                    //kill on map leave
+                    if (playerPosition.Y > 4000f)
+                        health = 0;
+                    //Console.WriteLine("(Player) Tex Vector: "+textureVector.X);
+                }
+            }
             #endregion
 
-           #region Death
-           else
-           {
-               Texture deathTex = new Texture("textures/player/death.png"); 
-               playerSprite = new Sprite(deathTex);
-               textureVector.X = 2;
-               textureVector.Y = 0;
-               if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
+            #region Death
+            else
+            {
+                Texture deathTex = new Texture("textures/player/death.png");
+                playerSprite = new Sprite(deathTex);
+                textureVector.X = 2;
+                textureVector.Y = 0;
+                if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
 
-           }
-           #endregion
+            }
+            #endregion
 
-           //draw sprite slightly below position to simulate correct sprite cutting
-           playerSprite.Position = new Vector2f(playerPosition.X, playerPosition.Y + 0f); ;
+            //draw sprite slightly below position to simulate correct sprite cutting
+            playerSprite.Position = new Vector2f(playerPosition.X, playerPosition.Y + 0f); ;
         }
 
         //reset player position if he is just above ground
         #region ResetYPosition
-        public void CorrectYPosLogic(){
+        public void CorrectYPosLogic()
+        {
             //get difference between player left bottom and ground top
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.MinY(playerPosition);
 
             //calc maximum distance from ground, scale by gravity
             float gravityScale = 9f / Global.GLOBAL_GRAVITY;
-            if (yDiffLeft > -10 / gravityScale && yDiffLeft < 60 && yDiffLeft != 0){
+            if (yDiffLeft > -10 / gravityScale && yDiffLeft < 60 && yDiffLeft != 0)
+            {
                 //Console.WriteLine(playerPosition.Y);
                 //avoid getting put above the game
                 if (playerPosition.Y < -10)
                     playerPosition.Y = 0;
-                else{
+                else
+                {
                     //Console.WriteLine(yDiffLeft);
                     //get current left and right highest positions
                     float leftTopPosition = tileMap.MinY(playerPosition);
@@ -239,25 +245,28 @@ namespace DungeonDwarf
         {
             //after pressing space, the further jumping is now no longer user controllable.
             bool abortJump = false;
-            if (jumpCount < 10 && hasJumped==true && !abortJump)
+            if (jumpCount < 10 && hasJumped == true && !abortJump)
             {
                 jumpCount++;
-                abortJump=JumpIntelligent(Global.PLAYER_JUMP_SPEED - jumpCount * 3f);
+                abortJump = JumpIntelligent(Global.PLAYER_JUMP_SPEED - jumpCount * 3f);
             }
 
             //reset jump boolean on ground touch
             float yDiffLeft = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X);
             float yDiffRight = playerPosition.Y + playerSize.Y - tileMap.GetMinYAtX(playerPosition.X + playerSize.X);
-            if ((yDiffLeft == 0 || yDiffRight == 0) )
+            if ((yDiffLeft == 0 || yDiffRight == 0))
                 hasJumped = false;
-            
+
 
             //only jump if jump sequence is not already initiated
-            if (hasJumped == false){
+            if (hasJumped == false)
+            {
                 //jump at key press
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Space)){
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Space))
+                {
                     //jump if there is enough space above
-                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED))){
+                    if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
+                    {
                         //set hasJumped to avoid flickering
                         hasJumped = true;
                         //set upwards traveling variable to enable higher jump heights
@@ -265,22 +274,25 @@ namespace DungeonDwarf
                         JumpIntelligent(Global.PLAYER_JUMP_SPEED);
 
                         //change texture
-                        if (isRight){
+                        if (isRight)
+                        {
                             textureVector.X = 1;
                             textureVector.Y = 1;
                         }
-                        else if (isLeft){
+                        else if (isLeft)
+                        {
                             textureVector.X = 1;
                             textureVector.Y = 0;
                         }
-                        else{
+                        else
+                        {
                             textureVector.X = 1;
                             textureVector.Y = 1;
                         }
-                        
+
                     }
                 }
-               
+
             }
         }
         #endregion
@@ -296,7 +308,8 @@ namespace DungeonDwarf
             Vector2f testingPosition = playerPosition;
             testingPosition.Y -= amount;
             //decrease jump amount until no collision appears
-            while (tileMap.Collides(testingPosition, playerSize)){
+            while (tileMap.Collides(testingPosition, playerSize))
+            {
                 testingPosition.Y += .2f;
                 abortedJump = true;
                 //Console.WriteLine("decrease jumping to " + testingPosition.Y);
@@ -306,7 +319,8 @@ namespace DungeonDwarf
         }
         #endregion
 
-        public void Draw(){
+        public void Draw()
+        {
             win.Draw(playerSprite);
             //DrawCollidingRect();
         }
@@ -318,7 +332,8 @@ namespace DungeonDwarf
             win.Draw(shieldBar);
         }
 
-        public FloatRect GetRect(){
+        public FloatRect GetRect()
+        {
             return new FloatRect(playerPosition.X, playerPosition.Y, playerSize.X, playerSize.Y);
         }
 
