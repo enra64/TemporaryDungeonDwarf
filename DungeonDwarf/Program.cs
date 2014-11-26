@@ -174,9 +174,9 @@ namespace DungeonDwarf
             currentPlayer = new Player(currentRenderWindow, 10f, tileMap);
 
             // Konstructor mit Enemy(Gegnername, currenRenderWindow, currentPlayer.playerPosition, tileMap, Texturpath als String, x-Wert Scaling, y-Wert Scaling, Movementspeed, Jumpspeed));
-            EnemyList.Add(new Enemy("enemy0", currentRenderWindow, currentPlayer.playerPosition));
-            EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition));
-            EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition));
+            //EnemyList.Add(new Enemy("enemy0", currentRenderWindow, currentPlayer.playerPosition));
+            //EnemyList.Add(new Enemy("enemy1", currentRenderWindow, currentPlayer.playerPosition));
+            //EnemyList.Add(new Enemy("enemy2", currentRenderWindow, currentPlayer.playerPosition));
             #endregion
 
             //rectangle user can move in without changing view
