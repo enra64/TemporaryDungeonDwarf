@@ -110,9 +110,6 @@
     <Content Include="openal32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="sound\background.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="sound\fireball.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
