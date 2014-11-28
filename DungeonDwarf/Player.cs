@@ -2,6 +2,8 @@
 using SFML.Graphics;
 using SFML.Window;
 using DungeonDwarf.world;
+using SFML.Audio;
+
 
 using System;
 using System.Text;
@@ -41,6 +43,14 @@ namespace DungeonDwarf
         bool isRight = false;
         bool isLeft = false;
 
+        static SoundBuffer jumpS = new SoundBuffer("sound/jump.wav");
+        static SoundBuffer deathS = new SoundBuffer("sound/fireball.wav");
+
+
+        //sound
+        Sound jump = new Sound(jumpS);
+        Sound death = new Sound(deathS);
+
 
         //constructor
         public Player(RenderWindow _w, float _s, world.TileMap _map)
@@ -67,6 +77,8 @@ namespace DungeonDwarf
             healthBar.OutlineColor = Color.Transparent;
             shieldBar.FillColor = Color.Blue;
             shieldBar.OutlineColor = Color.Transparent;
+
+
         }
 
         /// <summary>
@@ -78,6 +90,7 @@ namespace DungeonDwarf
             return new Vector2f(playerPosition.X + playerSize.X / 2, playerPosition.Y + playerSize.Y / 2);
         }
 
+        
 
         /// <summary>
         /// Update for Player
@@ -85,6 +98,9 @@ namespace DungeonDwarf
         /// <returns></returns>
         public void Update()
         {
+            
+
+
             //get offset
             currentOffset = Global.CURRENT_WINDOW_ORIGIN;
 
@@ -196,7 +212,7 @@ namespace DungeonDwarf
                 textureVector.Y = 0;
                 if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, Global.GLOBAL_GRAVITY)))
                     playerPosition.Y += Global.GLOBAL_GRAVITY;
-
+                //death.Play();
             }
             #endregion
 
@@ -267,6 +283,7 @@ namespace DungeonDwarf
                     //jump if there is enough space above
                     if (!tileMap.CheckNextCollide(playerPosition, playerSize, new Vector2f(0f, -Global.PLAYER_JUMP_SPEED)))
                     {
+                        jump.Play();
                         //set hasJumped to avoid flickering
                         hasJumped = true;
                         //set upwards traveling variable to enable higher jump heights

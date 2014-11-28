@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SFML;
 using SFML.Graphics;
 using SFML.Window;
+using SFML.Audio;
 using System.Diagnostics;
 
 namespace DungeonDwarf
@@ -41,6 +42,11 @@ namespace DungeonDwarf
         static Texture torchTexture;
         static bool torchBool = true;
         static uint currentUserTorchCount = 0;
+
+        static SoundBuffer shootS = new SoundBuffer("sound/fireball.wav");
+        static Sound shoot = new Sound(shootS);
+
+        static Music background = new Music("sound/background.wav");
 
         static void Main(string[] args)
         {
@@ -84,6 +90,9 @@ namespace DungeonDwarf
                 s.Update();
                 s.Draw();
             }
+            background.Play();
+            background.Loop = true;
+            background.Volume = 8f;
 
             /*
              * shit be about to get real... starting main loop.
@@ -121,6 +130,7 @@ namespace DungeonDwarf
         /// </summary>
         private static void Initialize()
         {
+
             //set beginning view.
             currentView = new View(new FloatRect(0, 0, 800, 600));
             //set view origin and current in static global class
@@ -260,6 +270,7 @@ namespace DungeonDwarf
 
             foreach (Enemy e in EnemyList)
                 e.Update(currentPlayer.playerPosition, currentPlayer.playerSize);
+
             //tile lighting
             tileMap.Update();
             //calculate lighting. should stay last call
@@ -353,6 +364,7 @@ namespace DungeonDwarf
             if (Keyboard.IsKeyPressed(Keyboard.Key.F) && BulletButton == false)
             {
                 BulletList.Add(new Bullet(currentPlayer.playerPosition, bulletTexture, currentRenderWindow, movingRight));
+                shoot.Play();
                 BulletButton = true;
             }
             if (!Keyboard.IsKeyPressed(Keyboard.Key.F))
