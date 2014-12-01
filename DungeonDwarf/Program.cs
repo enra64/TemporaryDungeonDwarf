@@ -107,6 +107,11 @@ namespace DungeonDwarf
                 //only important if you want to close the window. ever.
                 currentRenderWindow.DispatchEvents();
             }
+            while (Global.CURRENT_WINDOW_ORIGIN.Y > currentRenderWindow.Size.Y + 80f)
+            {
+                e.Update();
+                e.Draw();
+            }
         }
 
         private static void mouseClick(object sender, MouseButtonEventArgs e){
