@@ -14,12 +14,12 @@ namespace DungeonDwarf
     {
         
         private RenderWindow win;
-        private Sprite background, startText;
+        private Sprite background;
 
         public EndScreen(RenderWindow _w)
         {
             win = _w;
-            Texture bg = new Texture("textures/menu/EndBG.png");
+            Texture bg = new Texture("textures/menu/endBG.png");
             bg.Smooth = true;
             background = new Sprite(bg);
             background.Scale = new Vector2f((float)win.Size.X / (float)bg.Size.X, (float)win.Size.Y / (float)bg.Size.Y);
