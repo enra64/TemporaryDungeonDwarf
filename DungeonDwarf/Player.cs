@@ -16,12 +16,12 @@ namespace DungeonDwarf
         public Vector2f playerPosition, playerSize;
 
         //player stats
-        private const int MAX_HEALTH = 100;
+        private const int MAX_HEALTH = 50;
         private const int MIN_HEALTH = 0;
         RectangleShape healthBar = new RectangleShape();
         public int health = MAX_HEALTH;     // hm.wulfi~ I changed it to public for Program.EnemyCollision();
 
-        private const float MAX_SHIELD = 100f;
+        private const float MAX_SHIELD = 50f;
         private const float MIN_SHIELD = 0f;
         RectangleShape shieldBar = new RectangleShape();
         public float shield = MAX_SHIELD;   // hm.wulfi~ I changed it to public for Program.EnemyCollision();
@@ -128,7 +128,7 @@ namespace DungeonDwarf
             {
                 //shield gets back up
                 if (shield < MAX_SHIELD)
-                    shield += 0.25f;
+                    shield += 0.1f;
 
                 #region Lava_Death
                 //lava
