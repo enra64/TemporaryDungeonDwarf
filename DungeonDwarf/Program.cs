@@ -85,6 +85,7 @@ namespace DungeonDwarf
             //Arne, you forgot to push StartScreen.cs and Inventory.cs
             //http://bit.ly/19hKyY7
             StartScreen s = new StartScreen(currentRenderWindow);
+            EndScreen e = new EndScreen(currentRenderWindow);
 
             while (!Keyboard.IsKeyPressed(Keyboard.Key.Space) && currentRenderWindow.IsOpen()){
                 s.Update();

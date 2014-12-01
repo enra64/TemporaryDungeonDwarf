@@ -24,7 +24,7 @@ namespace DungeonDwarf
             Texture text = new Texture("textures/menu/startButton.png");
             startText = new Sprite(text);
             startText.Scale = background.Scale;
-            startText.Position = new Vector2f(win.Size.X / 2 - startText.GetGlobalBounds().Left / 2, win.Size.Y / 2 - startText.GetGlobalBounds().Top / 2);
+            startText.Position = new Vector2f(win.Size.X / 2 - startText.GetGlobalBounds().Left / 2, win.Size.Y / 2 - startText.GetGlobalBounds().Top / 2 + 30f);
         }
 
         public void Update(){

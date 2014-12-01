@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Bullet.cs" />
     <Compile Include="DelayUtil.cs" />
+    <Compile Include="EndScreen.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Inventory.cs" />
@@ -136,6 +137,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="textures\light\torch_anim.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="textures\menu\endBG.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="textures\player\dwarf.png">
