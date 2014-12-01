@@ -107,7 +107,7 @@ namespace DungeonDwarf
                 //only important if you want to close the window. ever.
                 currentRenderWindow.DispatchEvents();
 
-                while ((Keyboard.IsKeyPressed(Keyboard.Key.F1) && currentRenderWindow.IsOpen()) || (currentRenderWindow.IsOpen() && Global.CURRENT_WINDOW_ORIGIN.Y > currentRenderWindow.Size.Y + 40f))
+                while ((Keyboard.IsKeyPressed(Keyboard.Key.F1) && currentRenderWindow.IsOpen()) || (currentRenderWindow.IsOpen() && Global.CURRENT_WINDOW_ORIGIN.Y > currentRenderWindow.Size.Y && !Keyboard.IsKeyPressed(Keyboard.Key.Escape) ))
                 {
                     e.Update();
                     e.Draw();
