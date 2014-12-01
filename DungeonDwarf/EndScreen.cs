@@ -16,6 +16,8 @@ namespace DungeonDwarf
         private RenderWindow win;
         private Sprite background;
 
+        
+
         public EndScreen(RenderWindow _w)
         {
             win = _w;
@@ -27,6 +29,8 @@ namespace DungeonDwarf
 
         public void Update(){
             win.DispatchEvents();
+            Vector2f backgroundPosition = new Vector2f(Global.CURRENT_WINDOW_ORIGIN.X, Global.CURRENT_WINDOW_ORIGIN.Y);
+            background.Position = backgroundPosition;
         }
 
         public void Draw()

@@ -98,7 +98,7 @@ namespace DungeonDwarf
             /*
              * shit be about to get real... starting main loop.
              */
-            while (currentRenderWindow.IsOpen() && Global.CURRENT_WINDOW_ORIGIN.Y < currentRenderWindow.Size.Y+80f)
+            while (currentRenderWindow.IsOpen() && Global.CURRENT_WINDOW_ORIGIN.Y < currentRenderWindow.Size.Y+40f)
             {
                 //mandatory update and draw calls
                 Update();
@@ -106,12 +106,14 @@ namespace DungeonDwarf
                 //dispatch things like "i would like to close this window" and "someone clicked me".
                 //only important if you want to close the window. ever.
                 currentRenderWindow.DispatchEvents();
+
+                while ((Keyboard.IsKeyPressed(Keyboard.Key.F1) && currentRenderWindow.IsOpen()) || (currentRenderWindow.IsOpen() && Global.CURRENT_WINDOW_ORIGIN.Y > currentRenderWindow.Size.Y + 40f))
+                {
+                    e.Update();
+                    e.Draw();
+                }
             }
-            while (Global.CURRENT_WINDOW_ORIGIN.Y > currentRenderWindow.Size.Y + 80f)
-            {
-                e.Update();
-                e.Draw();
-            }
+            
         }
 
         private static void mouseClick(object sender, MouseButtonEventArgs e){
