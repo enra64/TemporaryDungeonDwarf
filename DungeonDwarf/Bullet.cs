@@ -14,8 +14,8 @@ namespace DungeonDwarf
         private Sprite bulletSprite;
         private Texture bulletTexture;
         private RenderWindow win;
-        private float xScale, yScale;
-        private world.TileMap tileMap;
+        //private float xScale, yScale;
+        //private world.TileMap tileMap;
         int bulletLifeTime = 0;
         bool spielerbewegung = true;
 

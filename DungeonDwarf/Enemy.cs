@@ -39,7 +39,7 @@ namespace DungeonDwarf
         private float ENEMY_MOVEMENT_SPEED = Global.PLAYER_MOVEMENT_SPEED / 2f;
         private float ENEMY_JUMP_SPEED = Global.PLAYER_JUMP_SPEED / 1.5f;
         private int i = 0;
-        public float health = 99, healthMultiplicator;//99 because -33
+        public float health = 100, healthMultiplicator;
 
         //healthbarli
         RectangleShape healthBar = new RectangleShape();
@@ -108,7 +108,7 @@ namespace DungeonDwarf
         }
 
         public void subtractHealth(){
-            health -= 33;
+            health -= 10;
         }
         public void increaseHealth(){
             health += 33;
